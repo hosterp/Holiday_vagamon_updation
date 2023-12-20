@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+		
+		
+
+
+		<record id="view_collection_and_expense_form" model="ir.ui.view">
+			<field name="name">view.collection.and.expense.form</field>
+			<field name="model">collection.and.expense</field>
+			<field name="arch" type="xml">
+				<form string="Collection And Expense">
+					
+					<sheet>
+						<header>
+							<button name="action_close" string="Close" type="object"/>
+							<field name="state" widget="statusbar"/>
+						</header>
+						<group string="Collection and Expense">
+
+
+							<field name="date_collect" />
+							</group>
+							<newline />
+							<group string="Collections">
+							<field name="collection_ids">
+									<tree editable="bottom">
+										<field name="desc"/>
+										<field name="amount"/>
+									</tree>
+									<form>
+										<group col="4">
+											<field name="desc"/>
+										    <field name="amount"/>
+
+										</group>
+								    </form>
+
+							</field>
+						</group>
+							<newline />
+							<group string="Expenses">
+							<field name="expense_ids">
+									<tree editable="bottom">
+										<field name="desc"/>
+										<field name="amount"/>
+									</tree>
+									<form>
+										<group col="4">
+											<field name="desc"/>
+										    <field name="amount"/>
+
+										</group>
+
+
+
+								    </form>
+								    
+							</field>
+						</group>
+							
+							<group col="2" class="text-right">
+
+									<field name="total_collection"/>
+									<field name="total_expense"/>
+									<field name="total"/>
+
+
+							</group>
+							
+						
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_collection_and_expense_tree" model="ir.ui.view">
+			<field name="name">view.collection.and.expense.tree</field>
+			<field name="model">collection.and.expense</field>
+			<field name="arch" type="xml">
+				<tree string="Collections And Expenses">
+					<field name="date_collect" />
+					
+					<field name="total_collection"/>
+					<field name="total_expense"/>
+					<field name="total"/>
+					<field name="state"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="collections_and_expense_action" model="ir.actions.act_window">
+			<field name="name">Collection and Expenses</field>
+			<field name="res_model">collection.and.expense</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" eval="False"/>
+			<!-- <field name="target">new</field> -->
+		</record>
+
+
+
+		<menuitem name="Collection and Expense" id="menu_collection_and_expense_parent" 
+			parent="hotel.hotel_management_menu" action="collections_and_expense_action"/>
+
+		<menuitem id="menu_collections_and_expense" name="Collection and Expense"
+			parent="hrms.menu_front_office" sequence="15"
+			action="collections_and_expense_action"/>
+  </data>
+</openerp>

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<template id="report_order_bill7">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					
+					<div class="page">
+						<div class="row text-center">
+							<strong>
+								<p style="font-size:16px">
+									<span t-field="o.company_id.name" />
+								</p>
+								</strong>
+								<p style="font-size:12px">
+									
+									<span>
+										<t t-if="o.company_id.street">
+										<span t-field="o.company_id.street" />
+										</t>
+										<t t-if="o.company_id.street2">
+										<span t-field="o.company_id.street2" />
+										</t>
+										<t t-if="o.company_id.city">
+										<span t-field="o.company_id.city" />
+										</t>
+										<t t-if="o.company_id.state_id">
+										<span t-field="o.company_id.state_id.name" />
+										</t>
+										<br />
+										<t t-if="o.company_id.website">
+										<span t-field="o.company_id.website" />
+										</t>
+										<t t-if="o.company_id.phone">
+										<span t-field="o.company_id.phone" />
+										</t>
+									</span>
+								</p>
+								<p style="font-size:12px">
+									<span>
+										<t t-if="o.company_id.gst_no">
+										GST : <span t-field="o.company_id.gst_no" />
+										</t>
+									</span>
+								</p>
+								<!-- <hr style="margin: 0%;border-color: black;border-width: initial" /> -->
+							
+						</div>
+						<table
+							style="width: 100%; font-size: 12px;border-bottom: outset;border-top: outset;">
+							<tr>
+								<td style="width: 42%;">
+									Bill No:
+									<span t-field="o.bill_no" />
+								</td>
+								<td style="text-align: right;">
+									Date:
+									<span t-field="o.o_date_new" />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									TABLE:
+									<t t-foreach="o.table_no" t-as="t">
+										<span t-field="t.name" />
+									</t>
+								</td>
+								<t t-if="o.waiter_name.name">
+									<td style="text-align: right;">
+										Waiter:
+										<span t-field="o.waiter_name.name" />
+									</td>
+								</t>
+							</tr>
+							<tr>
+								<td>
+									Guest:
+									<span t-field="o.cname.name" />
+								</td>
+								<td></td>
+							</tr>
+							<tr>
+								<t t-if="o.room_no.name">
+									<td>
+										Room No:
+										<span t-field="o.room_no.name" />
+									</td>
+								</t>
+								<td></td>
+
+								<t t-if="o.kot_number">
+									<td>
+										Kitchen Order Ticket Number:
+										<span t-field="o.kot_number" />
+									</td>
+								</t>
+								<td></td>
+
+							</tr>
+						</table>
+						<table
+							style="width: 100%;font-size: 12px;border-top: outset;margin-top: 3%;">
+							<tr style="border-bottom: outset;">
+								<th>S#</th>
+								<th>ITEM NAME</th>
+								<th>Qty</th>
+								<th>Rate</th>
+								<th style="text-align: right;">AMOUNT</th>
+							</tr>
+							<t t-set="sl_no" t-value="1" />
+							<t t-set="total" t-value="0" />
+							<t t-foreach="o.order_list" t-as="l">
+								<tr>
+									<td style="width: 8%;">
+										<t t-esc="sl_no" />
+										<t t-set="sl_no" t-value="sl_no+1" />
+									</td>
+									<td style="width: 57%;">
+										<span t-field="l.name.name" />
+									</td>
+									<td style="width: 10%;">
+										<span t-field="l.item_qty" />
+									</td>
+									<td style="width: 10%;">
+										<span t-field="l.item_rate" />
+									</td>
+									<td style="text-align: right;width: 15%;">
+										<span t-esc="round((l.price_subtotal),2)" />
+										<t t-set="total" t-value="total+l.price_subtotal" />
+									</td>
+								</tr>
+							</t>
+						</table>
+						<t t-set="tax" t-value="0" />
+						<table
+							style="width: 100%; font-size: 12px;border-bottom: outset;border-top: outset;">
+							<tr height="10">
+								<td style="width: 45%;">
+									Total Items:
+									<t t-esc="sl_no-1" />
+								</td>
+								<td style="width: 20%;text-align: right;">Total : </td>
+								<td style="width: 20%;text-align: right;"></td>
+								<td style="text-align: right;width: 15%;">
+									<span t-esc="round(o.amount_subtotal,2)" />
+								</td>
+							</tr>
+							<tr>
+								<t t-foreach="o.tax_id" t-as="line">
+                                	<t t-set="tax" t-value="tax+line.amount" />
+                                </t>
+								<td style="width: 45%;"></td>
+								<td style="width: 20%;text-align: right;">SGST :</td>
+								<td style="text-align: right;width: 20%;">
+									<span t-esc="(tax*100)/2" />%
+								</td>
+								<td style="text-align: right;width: 15%;">
+									<span t-esc="round(o.sgst,2)" />
+								</td>
+							</tr>
+							
+							<tr>
+								<td style="width: 45%;"></td>
+								<td style="width: 20%;text-align: right;">CGST : </td>
+								<td style="text-align: right;width: 20%;">
+									<span t-esc="(tax*100)/2" />%
+								</td>
+								<td style="text-align: right;width: 15%;">
+									<span t-esc="round(o.cgst,2)" />
+								</td>
+							</tr>
+						
+							<tr>
+								<td style="width: 45%;"></td>
+								<td style="width: 20%;text-align: right;">Discount% : </td>
+								<td style="text-align: right;width: 20%;">
+									<span t-esc="o.discount_percent" />%
+								</td>
+								<td style="text-align: right;width: 15%;">
+									<span t-esc="round(o.discount_amt,2)" />
+								</td>
+							</tr>
+							
+							<tr>
+								<td style="width: 45%;">
+									Guest's Signature
+								</td>
+								<td style="width: 20%;text-align: right;">Coinage :</td>
+								<td style="width: 20%;"></td>
+								<td style="text-align: right;width: 15%;">
+									<t t-set="coinage" t-value="o.amount_total+o.discount_amt-o.amount_subtotal-o.amount_tax" />
+									<!-- <span t-esc="round(coinage,2)" /> -->
+									<span t-field="o.coinage"/>
+								</td>
+							</tr>
+							<table style="width: 100%;">
+								<tr height="15">
+									<td></td>
+									<td></td>
+									<td colspan="3" style="text-align: right;font-size: x-medium;font-weight: bolder;">
+										NET AMOUNT : <span t-field="o.amount_total" />
+									</td>
+								</tr>
+								
+							</table>
+							<table style="width: 100%;border-top: outset;font-size:10px;">
+								<tr height="10">
+									<td></td>
+									<td>
+										PLEASE DO NOT SIGN IF PAYING BY CASH.
+									</td>
+								</tr>
+							</table>
+
+						</table>
+					</div>
+                    
+                    <!-- <div class="footer"> -->
+
+					
+					<!-- </div> -->
+				</t>
+			</t>
+		</template>
+
+	</data>
+</openerp>

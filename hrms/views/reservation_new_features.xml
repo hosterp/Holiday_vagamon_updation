@@ -1,0 +1,909 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+
+		<record model="ir.ui.view" id="view_hotel_room_type_form_changed">
+			<field name="name">hotel.room_type.form.changed</field>
+			<field name="model">hotel.room.type</field>
+			<field name="inherit_id" ref="hotel.view_hotel_room_type_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//group/field[@name='parent_id']" position="replace">
+					<field name="rate" />
+					<field name="room_no" />
+					<field name="tax_ids" options="{'no_create':1}" widget="many2many_tags" />
+					<field name="capacity" />
+					<field name="extra_adult" />
+					<field name="extra_child" />
+				</xpath>
+				<xpath expr="//group[1]" position="after">
+					<notebook>
+						<page string="Rooms">
+							<field name="product_ids">
+								<tree create="0">
+									<field name="name" />
+								</tree>
+							</field>
+						</page>
+						<page string="Reservations">
+							<field name="reservation_ids" readonly="1">
+								<tree>
+									<field name="check_in" />
+									<field name="check_out" />
+									<field name="nos" />
+									<field name="state" />
+								</tree>
+							</field>
+						</page>
+					</notebook>
+				</xpath>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_hotel_room_type_tree_hiworth">
+			<field name="name">hotel.room_type.tree.hiworth</field>
+			<field name="model">hotel.room.type</field>
+			<field name="inherit_id" ref="hotel.view_hotel_room_type_tree" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='complete_name']" position="after">
+					<field name="company_id" />
+				</xpath>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_hotel_room_tree_hiworth">
+			<field name="name">hotel.room.tree.hiworth</field>
+			<field name="model">hotel.room</field>
+			<field name="inherit_id" ref="hotel.view_hotel_room_tree" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='categ_id']" position="after">
+					<field name="company_id" />
+				</xpath>
+			</field>
+		</record>
+
+
+		<record model="ir.ui.view" id="view_hotel_room_form_hiworth">
+			<field name="name">hotel.room.form.hiworth</field>
+			<field name="model">hotel.room</field>
+			<field name="inherit_id" ref="hotel.view_hotel_room_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//div[1]" position="inside">
+					<field name="company_id" readonly="1" />
+				</xpath>
+				<xpath expr="//notebook/page/group/field[@name='list_price']"
+					position="replace">
+				</xpath>
+
+				<xpath expr="//notebook/page/group/field[@name='categ_id']"
+					position="replace">
+					<field name="categ_id" select="1" domain="[('isroomtype','=',True)]"
+						string="Room Type" />
+				</xpath>
+				<xpath expr="//notebook/page/separator[@string='Supplier Taxes']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//notebook/page/field[@name='supplier_taxes_id']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//notebook/page/separator[@string='Customer Taxes']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//notebook/page/field[@name='taxes_id']"
+					position="replace">
+				</xpath>
+				<xpath expr="//notebook/page[@string='Procurement']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//notebook/page[@string='Descriptions']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//notebook/page[@string='Folio Room Reservations']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//div/label[@string='Status']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//div/h2/field[@name='status']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//notebook/page/group/field[@name='capacity']"
+					position="before">
+					
+						<field name="extra_adult" /> 
+						<field name="extra_child" />
+						<field name="taxes_id" string="Tax" widget="many2many_tags"
+						options='{"no_open": True,"no_create": 1, "no_create_edit": 1}' invisible="1" />
+						<field name="list_price" string="Room Rate" invisible="1" />
+				</xpath>
+				<xpath expr="//notebook/page/field[@name='room_amenities']"
+					position="after">
+					<field name="room_amenities_new">
+						<tree editable="top">
+							<field name="amenities_id"/>
+							<field name="brand"/>
+							<field name="quantity"/>
+							<field name="remarks"/>
+						</tree>
+					</field>
+				</xpath>
+				
+				<xpath expr="//notebook/page/field[@name='room_amenities']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//form/header" position="replace">
+					
+					 <button name="%(action_maintenance_wizard)d" string="Maintenance" type="action" />
+
+					<header>
+					<field name="status" widget="statusbar"/>
+					</header>
+				</xpath>
+			</field>
+		</record>
+
+		<!-- <record model="ir.ui.view" id="view_hotel_amenities_new_tree_hiworth">
+			<field name="name">hotel.room.amenities.new.tree.hiworth</field>
+			<field name="model">hotel.room.amenities.new</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="new_id" />
+					<field name="amenities_id" />
+					<field name="brand" />
+					<field name="quantity" />
+					<field name="remarks" />
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_hotel_amenities_new_form_hiworth">
+			<field name="name">hotel.room.amenities.new.form.hiworth</field>
+			<field name="model">hotel.room.amenities.new</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<group>
+							<field name="new_id" />
+							<field name="amenities_id" />
+							<field name="brand" />
+							<field name="quantity" />
+							<field name="remarks" />
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_hotel_amenities_new_hiworth" model="ir.actions.act_window">
+			<field name="name">Aaaaaaaaaaaaa</field>
+			<field name="res_model">hotel.room.amenities.new</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form,tree</field>
+			<field name="view_id" ref="view_hotel_amenities_new_tree_hiworth" />
+		</record>
+
+		<menuitem string="Amenitiessssssssssssssss" action="action_hotel_amenities_new_hiworth"
+			id="menu_hotel_amenities_new_hiworth" parent="hotel_reservation.menu_hotel_reservation" /> -->
+
+
+		<record model="ir.ui.view" id="view_hotel_room_amenities_list1">
+			<field name="name">hotel.room.amenities.tree.hiworth</field>
+			<field name="model">hotel.room.amenities</field>
+			<field name="inherit_id" ref="hotel.view_hotel_room_amenities_list" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='categ_id']" position="after">
+					<field name="room_id" widget='many2many_tags' />
+				</xpath>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_hotel_room_amenities_form1">
+			<field name="name">hotel.room.amenities.tree.hiworth</field>
+			<field name="model">hotel.room.amenities</field>
+			<field name="inherit_id" ref="hotel.view_hotel_room_amenities_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='default_code']" position="after">
+					<field name="room_id" widget='many2many_tags' />
+				</xpath>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_hotel_services_tree_hiworth">
+			<field name="name">hotel.services.tree.hiworth</field>
+			<field name="model">hotel.services</field>
+			<field name="inherit_id" ref="hotel.view_hotel_services_tree" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='categ_id']" position="after">
+					<field name="company_id" readonly="1" />
+				</xpath>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_hotel_services_form_hiworth">
+			<field name="name">.hotel.services.form.hiworth</field>
+			<field name="model">hotel.services</field>
+			<field name="inherit_id" ref="hotel.view_hotel_services_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//group/field[@name='default_code']" position="after">
+					<field name="company_id" readonly="1" />
+				</xpath>
+
+
+			</field>
+		</record>
+
+		<!-- <function name="fix_er_role" model="ir.rule"/> -->
+
+		<record model="ir.ui.view" id="view_hotel_room_search_hiworth">
+			<field name="name">hotel.room.search.hiworth</field>
+			<field name="model">hotel.room</field>
+			<field name="inherit_id" ref="hotel.view_hotel_room_search" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='state']" position="after">
+					<field name="company_id" />
+				</xpath>
+				<xpath expr="//filter[@string='Reserved']" position="after">
+					<filter string="Company" domain="[]" context="{'group_by':'company_id'}" />
+				</xpath>
+			</field>
+		</record>
+
+
+		<record id="view_company_form_hiworth" model="ir.ui.view">
+			<field name="name">res.company.form.hiworth</field>
+			<field name="model">res.company</field>
+			<field name="inherit_id" ref="base.view_company_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//group/field[@name='parent_id']" position="before">
+					<field name="code" required="1" />
+				</xpath>
+				<xpath expr="//notebook/page[@string='General Information']"
+					position="after">
+					<page string="Email Features">
+						<group>
+							<field name="signature" string="Reservation Mail signature" />
+							<field name="filename" string="File Name" invisible="1" />
+							<field name="menu_card" filename="filename" />
+
+						</group>
+					</page>
+				</xpath>
+				<xpath expr="//notebook/page/group/group/field[@name='website']"
+					position="after">
+					<field name="gst_no" />
+					<field name="pan_no" />
+					<!-- <field name="grc_no" /> -->
+					<field name="cutoff_date" />
+				</xpath>
+				<xpath expr="//notebook/page/group/group/field[@name='company_registry']"
+					position="after">
+					<field name="restaurant_tax_id"
+						string="Restaurant Default Tax" />
+					<field name="round_odd_account"  />
+					<field name="restaurant_income_account" string="Restaurant Default Income Account" />
+					<field name="invoice_declaration" invisible="1" />
+				</xpath>
+
+			</field>
+		</record>
+
+
+		<!-- <record id="set_to_draft_action" model="ir.actions.server"> <field
+			name="name">Set to Draft</field> <field name="model_id" ref="model_hotel_reservation"
+			/> <field name="state">code</field> <field name="condition">True</field>
+			<field name="code">if object: self.browse(cr,uid,context.get('active_ids',
+			[])).set_to_draft_reservation() </field> </record> <record id="set_to_draft"
+			model="ir.values"> <field name="name">Draft</field> <field name="model">hotel.reservation</field>
+			<field name="key">action</field> <field name="key2">client_action_multi</field>
+			<field name="value" eval="'ir.actions.server,%d'%set_to_draft_action" />
+			<field name="value" eval="'ir.actions.server,' + str(ref('set_to_draft_action'))"
+			/> <field name="object" eval="True" /> </record> <record id="cancel_reservation_action"
+			model="ir.actions.server"> <field name="name">Cancel Reservation</field>
+			<field name="model_id" ref="model_hotel_reservation" /> <field name="state">code</field>
+			<field name="condition">True</field> <field name="code">if object: self.browse(cr,uid,context.get('active_ids',
+			[])).cancel_reservation() </field> </record> <record id="cancel_reservation"
+			model="ir.values"> <field name="name">Cancel</field> <field name="model">hotel.reservation</field>
+			<field name="key">action</field> <field name="key2">client_action_multi</field>
+			<field name="value" eval="'ir.actions.server,%d'%cancel_reservation_action"
+			/> <field name="value" eval="'ir.actions.server,' + str(ref('cancel_reservation_action'))"
+			/> <field name="object" eval="True" /> </record> -->
+
+
+		<record model="ir.ui.view" id="view_hotel_reservation_order_tree_hiworth">
+			<field name="name">hotel_reservation_order.tree.hiworth</field>
+			<field name="model">hotel.reservation.order</field>
+			<field name="inherit_id"
+				ref="hotel_restaurant.view_hotel_reservation_order_tree" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='reservationno']" position="replace">
+					<field name="reservation_id" string="GRC No."/>
+					<field name="partner_id" />
+				</xpath>
+				<xpath expr="//field[@name='waitername']" position="replace">
+				</xpath>
+				<xpath expr="//field[@name='table_no']" position="replace">
+				</xpath>
+			</field>
+		</record>
+
+
+		<record model="ir.ui.view" id="view_hotel_reservation_order_form_hiworth">
+			<field name="name">hotel_reservation_order.form.hiworth</field>
+			<field name="model">hotel.reservation.order</field>
+			<field name="inherit_id"
+				ref="hotel_restaurant.view_hotel_reservation_order_form" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//button[@name='reservation_generate_kot']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//button[@name='reservation_update_kot']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//button[@name='done_kot']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//button[@string='generate Bill']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//button[@name='reservation_generate_kot']"
+					position="after">
+					<button string="Generate Order" name="reservation_generate_order"
+						class="oe_highlight" type="object" icon="gtk-go-forward"
+						attrs="{'invisible':[('order_generated','=',True)]}" />
+
+				</xpath>
+				<xpath expr="//field[@name='state']" position="replace">
+					<field name="state" widget="statusbar" statusbar_visible="draft,done" />
+				</xpath>
+
+				<xpath expr="//field[@name='reservationno']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//field[@name='reservationno']" position="after">
+					<field name="reservation_id" invisible="1" />
+					<field name="order_generated" invisible="1" />
+				</xpath>
+
+
+			</field>
+		</record>
+
+		<!-- <menuitem action="base.action_res_company_form" id="menu_action_res_company_form_hiworth"
+			parent="hotel.hotel_configuration_menu" sequence="51" />
+ -->
+		<menuitem id="reservation_invoice" name="Invoices"
+			parent="hotel.hotel_management_menu" sequence="6" />
+
+
+		<menuitem name="Master Invoice" id="menu_account_action_invoice_tree1"
+			action="account.action_invoice_tree1" parent="reservation_invoice"
+			sequence="5" />
+
+		<record model="ir.ui.view" id="service_invoice_form">
+			<field name="name">service.invoice.form</field>
+			<field name="model">service.invoice</field>
+			<field name="arch" type="xml">
+				<form string="Service Invoice">
+					<header>
+						<button string="Paid" name="done_paid" states="draft" type="object"
+							class="oe_highlight" />
+						<button string="Credit" name="done_credited" type="object"
+							attrs="{'invisible' : ['|',('is_hotel_guest','!=', True),('state','not in',['draft'])]}"
+							class="oe_highlight" />
+						<button string="Cancel" name="action_cancel" type="object"
+							states="paid,credited" icon="gtk-cancel" />
+						<field name="state" widget="statusbar" statusbar_visible="draft,cancel" />
+					</header>
+					<div class="oe_title" style="width: 390px;">
+						<h2>
+							<field name="name" readonly="1" />
+						</h2>
+					</div>
+					<group>
+						<field name="is_hotel_guest" attrs="{'readonly' : [('state','not in',['draft'])]}" />
+					</group>
+					<group>
+						<group>
+							<field name="date" required="1"
+								attrs="{'readonly' : [('state','not in',['draft'])]}" />
+							<field name="room_no"
+								options="{'no_quick_create':True,'no_create_edit':True}"
+								attrs="{'invisible':[('is_hotel_guest','!=', True)], 'required':[('is_hotel_guest','=', True)], 'readonly' : [('state','not in',['draft'])]}" />
+							<field name="partner_id" required="1"
+								attrs="{'readonly' : [('state','not in',['draft'])], 'readonly' : [('state','not in',['draft'])]}" />
+						</group>
+						<group>
+							<field name="type" attrs="{'readonly' : [('state','not in',['draft'])]}" />
+							<field name="folio_id"
+								attrs="{'readonly' : [('state','not in',['draft'])], 'readonly' : [('state','not in',['draft'])]}" />
+						</group>
+					</group>
+					<!-- <group>
+						<group>
+							<field name="therapist1" attrs="{'readonly' : [('state','not in',['draft'])]}" />
+						</group>
+						<group>
+							<field name="therapist2" attrs="{'readonly' : [('state','not in',['draft'])]}" />
+						</group>
+					</group> -->
+					<group>
+						<field name="line_ids" nolabel="1"
+							attrs="{'readonly' : [('state','not in',['draft'])]}">
+							<tree editable="bottom">
+								<field name="product_id" required="1"
+									options='{"no_open": True,"no_create": 1, "no_create_edit": 1}' />
+								<field name="qty" required="1" />
+								<field name="price_unit" />
+								<field name="tax_ids" string="Tax" widget="many2many_tags"
+									options='{"no_open": True,"no_create": 1, "no_create_edit": 1}' />
+								<field name="sub_total" sum="Total" />
+								<field name="cgst" sum="Total" />
+								<field name="sgst" sum="Total" />
+								<field name="total" sum="Total" />
+							</tree>
+						</field>
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="service_invoice_tree">
+			<field name="name">service.invoice.tree</field>
+			<field name="model">service.invoice</field>
+			<field name="arch" type="xml">
+				<tree string="Service Invoice">
+					<field name="name" />
+					<field name="date" />
+					<field name="partner_id" />
+					<field name="folio_id" />
+					<field name="room_no" />
+					<!-- <field name="therapist1" />
+					<field name="therapist2" /> -->
+					<field name="type" />
+					<field name="total_amount" />
+					<field name="state" />
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="service_invoice_search">
+			<field name="name">service.invoice.search</field>
+			<field name="model">service.invoice</field>
+			<field name="arch" type="xml">
+				<search string="Service Invoice">
+					<field name="date" />
+					<field name="partner_id" />
+					<field name="folio_id" />
+					<field name="room_no" />
+					<!-- <field name="therapist1" />
+					<field name="therapist2" /> -->
+					<field name="state" />
+					<filter string="Paid" domain="[('state','=','paid')]" />
+					<filter string="Credited" domain="[('state','=','credited')]" />
+					<filter string="Not Checked Out" name="not_checked_out"
+                        domain="[('status','in',['done'])]" />
+
+					<group expand="0" string="Group By">
+						<filter string="Month" domain="[]" context="{'group_by':'date'}" />
+						<filter string="Folio No" domain="[]" context="{'group_by':'folio_id'}" />
+						<filter string="Room No" domain="[]" context="{'group_by':'room_no'}" />
+						<filter string="Customer" domain="[]"
+							context="{'group_by':'partner_id'}" />
+						<!-- <filter string="Therapist-1" domain="[]"
+							context="{'group_by':'therapist1'}" />
+						<filter string="Therapist-2" domain="[]"
+							context="{'group_by':'therapist2'}" /> -->
+						<filter string="State" domain="[]" context="{'group_by':'state'}" />
+					</group>
+				</search>
+			</field>
+		</record>
+
+
+		<record model="ir.actions.act_window" id="action_service_invoice">
+			<field name="name">Service Invoice</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">service.invoice</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{"search_default_not_checked_out":1}
+            </field>
+			<field name="view_id" ref="service_invoice_tree" />
+		</record>
+
+
+		<menuitem name="Service Invoice" id="menu_service_invoice"
+			action="action_service_invoice" parent="reservation_invoice"
+			sequence="15" />
+
+
+		<report id="report_service_invoice5" model="service.invoice"
+			string="Invoice" name="hrms.report_service_invocie_template2" file="hrms.report_service_invocie_template2"
+			report_type="qweb-pdf" />
+
+		<record id="paperformat_report_service_invoice2" model="report.paperformat">
+			<field name="name">Landscape</field>
+			<field name="default" eval="True" />
+			<field name="format">A4</field>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">70</field>
+			<field name="margin_bottom">135</field>
+			<field name="margin_left">20</field>
+			<field name="margin_right">20</field>
+			<field name="header_line" eval="False" />
+			<field name="header_spacing">30</field>
+			<field name="dpi">90</field>
+		</record>
+
+
+		<record id="hrms.report_service_invoice5" model="ir.actions.report.xml">
+			<field name="paperformat_id" ref="hrms.paperformat_report_service_invoice2" />
+		</record>
+
+
+		<record model="ir.ui.view" id="reservation_advance_tree">
+			<field name="name">reservation.advance.tree</field>
+			<field name="model">reservation.advance</field>
+			<field name="arch" type="xml">
+				<tree string="Advance" create="false">
+					<field name="date" />
+					<field name="reservation_id" />
+					<field name="partner_id" />
+					<field name="room_no_list" />
+					<field name="mode" />
+					<field name="amount" />
+					<field name="state" />
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="reservation_advance_search">
+			<field name="name">reservation.advance.search</field>
+			<field name="model">reservation.advance</field>
+			<field name="arch" type="xml">
+				<search string="Advance Details">
+					<field name="date" />
+					<field name="partner_id" />
+					<field name="reservation_id" string="GRC No."/>
+					<field name="room_no_list" />
+					<field name="amount" />
+					<filter string="Bank" domain="[('mode','=','bank')]" help="Transaction Through Bank" />
+					<filter string="Card" domain="[('mode','=','card')]" help="Transaction Through Card" />
+					<filter string="Cash" domain="[('mode','=','cash')]" help="Transaction Through Cash" />
+
+					<filter string="Check In" domain="[('state','=','done')]"
+						name="check_in" />
+
+					<group expand="0" string="Group By">
+						<filter string="Month" domain="[]" context="{'group_by':'date'}" />
+						<filter string="Reservation No" domain="[]"
+							context="{'group_by':'reservation_id'}" />
+						<filter string="Transaction Mode" domain="[]"
+							context="{'group_by':'mode'}" />
+						<filter string="Customer" domain="[]"
+							context="{'group_by':'partner_id'}" />
+					</group>
+				</search>
+			</field>
+		</record>
+
+
+		<record model="ir.actions.act_window" id="action_reservation_advance">
+			<field name="name">Advance Details</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">reservation.advance</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree</field>
+			<field name="context">{"search_default_check_in":1}
+			</field>
+			<field name="view_id" ref="reservation_advance_tree" />
+		</record>
+
+		<menuitem id="menu_reservation_advance_main" name="Advances"
+			parent="hotel.hotel_management_menu" sequence="3" />
+
+
+		<menuitem name="Advance" id="menu_reservation_advance"
+			action="action_reservation_advance" parent="menu_reservation_advance_main"
+			sequence="10" />
+
+
+
+		<!-- ==================================table order lines====================================== -->
+
+		<record model="ir.ui.view" id="restaurant_order_line_tree">
+			<field name="name">restaurant.order.line.tree</field>
+			<field name="model">hotel.restaurant.order.list</field>
+			<field name="arch" type="xml">
+				<tree string="Restaurant Order Items List" create="false">
+					<field name="date" />
+					<field name="bill_no" />
+					<field name="name" />
+					<field name="complimentary" />
+					<field name="item_qty" />
+					<field name="item_rate" />
+					<field name="price_subtotal" />
+					<field name="state" />
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="restaurant_order_line_search">
+			<field name="name">restaurant.order.line.search</field>
+			<field name="model">hotel.restaurant.order.list</field>
+			<field name="arch" type="xml">
+				<search string="Restaurant Order Items List">
+					<field name="name" />
+					<field name="date" />
+					<field name="bill_no" />
+					<filter domain="[('state','=','draft')]" string="Draft" />
+					<filter domain="[('state','=','done')]" string="Done" />
+					<filter domain="[('state','=','paid')]" string="Paid" />
+					<filter domain="[('state','=','credited')]" string="Credited" />
+					<filter name="today"
+						domain="[('date','=',datetime.datetime.now().replace(hour=0, minute=0, second=0))]"
+						string="Today's Orders" />
+					<group expand="0" string="Group By">
+						<filter string="Month" domain="[]" context="{'group_by':'date'}" />
+						<filter string="Bill No" domain="[]" context="{'group_by':'bill_no'}" />
+						<filter string="Item" domain="[]" context="{'group_by':'name'}" />
+						<filter string="Status" domain="[]" context="{'group_by':'state'}" />
+
+					</group>
+				</search>
+			</field>
+		</record>
+
+
+		<record model="ir.actions.act_window" id="action_restaurant_order_line">
+			<field name="name">Order Lines</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hotel.restaurant.order.list</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="restaurant_order_line_tree" />
+		</record>
+
+
+		<menuitem name="Order Lines" id="menu_restaurant_order_line"
+			action="action_restaurant_order_line" parent="hotel_restaurant.hotel_restaurant_menu"
+			sequence="20" />
+
+
+
+
+
+		<menuitem name="Reservations Summary"
+			id="hotel_reservation.menu_action_hotel_reservation_summary" action="hotel_reservation.action_hotel_reservation_summary"
+			parent="hotel_reservation.menu_hotel_reservation" sequence="1" />
+
+
+
+
+view_warning_message_form
+
+<record model="ir.ui.view" id="view_warning_message_form">
+        <field name="name">Warning</field>
+        <field name="model">warning.attachment</field>
+        <field name="arch" type="xml">
+            <form string="Warning Message">
+                <group>
+                    <field name="message"/>
+        </group>
+        <footer>
+                        <button name="warning_ok" string="Ok" type="object" class="oe_highlight" />
+
+                    </footer>
+            </form>
+        </field>
+    </record>
+
+
+	<record model="ir.ui.view" id="view_wizard_check_summary">
+        <field name="name">CheckIn/CheckOut Summary1</field>
+        <field name="model">checkin.checkout.summary</field>
+        <field name="arch" type="xml">
+            <form string="CheckIn/CheckOut Summary">
+                <group col="4">
+                    <field name="date_from"/>
+                <field name="date_to"/>
+        </group>
+        <footer>
+                        <button name="check_summary" string="View" type="object" class="oe_highlight" />
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+            </form>
+        </field>
+    </record>
+
+
+        <record id="action_wizard_check_summary" model="ir.actions.act_window">
+            <field name="name">CheckIn/CheckOut Summary</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">checkin.checkout.summary</field>
+            <field name="view_id" ref="view_wizard_check_summary"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+			<!-- <menuitem name="Check In/Out Summary"
+			id="menu_action_hotel_checkin_checkout_summary" action="action_wizard_check_summary"
+			parent="hotel_reservation.menu_hotel_reservation" sequence="2" /> -->
+
+
+
+
+
+
+
+
+
+
+
+    <menuitem  id="hotel_reservation.menu_hotel_reservation" name="Reservations" parent="hotel.hotel_management_menu" sequence="38"/>
+    <menuitem id="hotel_housekeeping.menu_housekeeping" name="Housekeeping Services"
+        parent="hotel.hotel_management_menu" sequence="4" />
+
+
+
+
+
+
+
+
+
+		<record model="ir.actions.act_window" id="action_hotel_reservation_not_checked_in">
+			<field name="name">Reservations</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hotel.reservation</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,gantt</field>
+			<field name="context">{"search_default_not_checked_in":1}
+			</field>
+		</record>
+
+
+		<record model="ir.actions.act_window" id="action_hotel_direct_walking">
+            <field name="name">Direct Walking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hotel.reservation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,gantt</field>
+            <field name="domain">[('direct_walking','=',True)]</field>
+            <field name="context">{'default_direct_walking':True}</field>
+        </record>
+
+
+		<menuitem name="Reservations"
+			id="hotel_reservation.menu_action_hotel_reservation_tree_all" action="action_hotel_reservation_not_checked_in"
+			parent="hotel_reservation.menu_hotel_reservation" sequence="2" />
+
+		<menuitem name="Direct Walking"
+			id="menu_hotel_direct_walking" action="action_hotel_direct_walking"
+			parent="hrms.menu_front_office" sequence="2"
+			groups="hrms.hotel_receptionist"/>
+
+		<record model="ir.actions.act_window" id="action_hotel_reservation_new_form">
+			<field name="name">New</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hotel.reservation</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="hotel_reservation1_form2" />
+		</record>
+
+
+		<menuitem name="New" id="menu_hotel_reservation_new_form"
+			action="action_hotel_reservation_new_form" parent="hotel_reservation.menu_hotel_reservation"
+			sequence="5" groups="hrms.hotel_receptionist,hrms.hotel_reservation"/>
+
+
+		<record model="ir.actions.act_window" id="action_reservation_not_checked_out">
+			<field name="name">Folio</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hotel.folio</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{"search_default_not_checked_out":1}
+			</field>
+			<field name="view_id" ref="inherit_view_hotel_folio_search2" />
+		</record>
+
+		hotel_reservation.menu_hotel_reservation
+		<menuitem name="Folio"
+			groups="hrms.hotel_receptionist,hrms.hotel_reservation,hrms.hotel_account"
+			id="menu_open_hotel_folio1_tree" action="action_reservation_not_checked_out"
+			sequence="20" parent="hotel_reservation.menu_hotel_reservation" />
+
+
+		<menuitem id="hotel_restaurant.hotel_restaurant_menu" name="Restaurant"
+			parent="hotel.hotel_management_menu" sequence="3" />
+
+		<record model="ir.actions.act_window" id="action_restaurant_order_form">
+			<field name="name">New</field>
+			<field name="res_model">hotel.restaurant.order</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="view_hotel_restaurant_order_form" />
+		</record>
+
+		<menuitem name="New Kitchen Order Tickets" id="menu_restaurant_order" action="action_restaurant_order_form"
+			sequence="3" parent="hotel_restaurant.hotel_restaurant_menu" groups="hrms.hotel_receptionist,hrms.hotel_reservation"/>
+		<menuitem name="Waiter Order" id="menu_restaurant" action="action_restaurant_order_form"
+			sequence="1" parent="hotel_restaurant.hotel_restaurant_menu" groups="hrms.hotel_receptionist,hrms.hotel_reservation"/>
+		<menuitem name="Ready to Serve" id="menu_restaurant_order2" action="action_restaurant_order_form"
+			sequence="1" parent="hotel_restaurant.hotel_restaurant_menu" groups="hrms.hotel_receptionist,hrms.hotel_reservation"/>
+
+
+		<record model="ir.actions.act_window" id="action_service_invoice_form">
+			<field name="name">New</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">service.invoice</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="service_invoice_form" />
+		</record>
+
+		<menuitem id="reservation_service_invoice" name="Service"
+			parent="hrms.menu_front_office" sequence="9" />
+
+
+		<menuitem name="New" id="menu_service_invoice_form" action="action_service_invoice_form"
+			sequence="1" parent="reservation_service_invoice" groups="hrms.hotel_receptionist,hrms.hotel_reservation"/>
+
+
+		<menuitem name="Service Invoice" id="menu_service_invoice_edit"
+			action="action_service_invoice" parent="reservation_service_invoice"
+			sequence="5" />
+
+
+		<record model="ir.actions.act_window" id="action_reservation_checkin_folio2">
+			<field name="name">Check Out</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hotel.folio</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{"search_default_check_in":1}
+			</field>
+			<field name="view_id" ref="inherit_view_hotel_folio_search2" />
+		</record>
+
+
+		<menuitem id="menu_reservation_checkin_folio" name="Check Out"
+			parent="hotel.hotel_management_menu" sequence="2" />
+
+		<menuitem id="menu_reservation_checkin_folio2" name="Check Out"
+			action="action_reservation_checkin_folio2" parent="hrms.menu_front_office"
+			sequence="3" />
+
+
+		<record model="ir.actions.act_window" id="action_restaurant_invoice">
+			<field name="name">Restaurant Invoice</field>
+			<field name="res_model">hotel.restaurant.order</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{"search_default_not_cancelled":1}
+			</field>
+		</record>
+
+		<menuitem id="menu_restaurant_invoice" name="F &amp; B Invoice"
+			action="action_restaurant_invoice" parent="reservation_invoice"
+			sequence="10" />
+
+
+
+
+	</data>
+</openerp>

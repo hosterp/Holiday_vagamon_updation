@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<openerp>
+    <data noupdate="1">
+
+        <!--Restaurant Bill No -->
+        <record model="ir.sequence.type" id="seq_type_hotel_restaurant_sl_no">
+            <field name="name">Hotel Restaurant Order Bill slno</field>
+            <field name="code">hotel.restaurant.order.bill.slno</field>
+        </record>
+
+        <record model="ir.sequence" id="seq_hotel_restaurant_sl_no">
+            <field name="name">Hotel Restaurant Order Bill slno</field>
+            <field name="code">hotel.restaurant.order.bill.slno</field>
+            <field name="prefix"></field>
+            <field name="padding">0</field>
+        </record>
+
+    </data>
+</openerp>

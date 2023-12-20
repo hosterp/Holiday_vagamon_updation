@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<openerp>
+	<data noupdate="1">
+
+     <record model="account.account" id="rs2">
+			<field name="name">Restaurant Sale</field>
+		<!-- 	<field name="code"></field> -->
+			<field name="type">view</field>
+			<field name="user_type" ref="account.data_account_type_receivable" />
+			<field name="reconcile" eval="False" />
+		<!-- 	<field name="parent_id" ref="l10n_in.c0" /> -->
+		</record>
+
+		<record model="account.account" id="rs31">
+			<field name="name">Cash Sale</field>
+		<!-- 	<field name="code"></field> -->
+			<field name="type">other</field>
+			<field name="user_type" ref="account.data_account_type_receivable" />
+			<field name="reconcile" eval="False" />
+			<field name="parent_id" ref="rs2" />
+		</record>
+
+		<record model="account.account" id="rs32">
+			<field name="name">Credit Sale</field>
+			<!-- <field name="code">32</field> -->
+			<field name="type">receivable</field>
+			<field name="user_type" ref="account.data_account_type_receivable" />
+			<field name="reconcile" eval="False" />
+			<field name="parent_id" ref="rs2" />
+		</record>
+
+
+	</data>
+</openerp>
+        

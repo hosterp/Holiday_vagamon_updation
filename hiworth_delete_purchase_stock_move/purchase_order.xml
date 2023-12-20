@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<!-- <record id="purchase_order_delete_form" model="ir.ui.view"> <field 
+			name="name">purchase.order.delete.form</field> <field name="model">purchase.order</field> 
+			<field name="priority" eval="1"/> <field name="inherit_id" ref="purchase.purchase_order_form" 
+			/> <field name="arch" type="xml"> <xpath expr="//button[@name='action_cancel']" 
+			position="after"> <button name="action_delete" states="except_picking,except_invoice,done" 
+			string="Cancel123" type="object" /> </xpath> </field> </record> -->
+
+		<record id="view_inherit_purchase_cancel_form" model="ir.ui.view">
+			<field name="name">view.purchase.cancel.form</field>
+			<field name="model">purchase.order</field>
+			<field name="inherit_id" ref="purchase.purchase_order_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//button[@name='action_cancel']" position="after">
+					<button name="action_cancel_stock_moves" attrs="{'invisible':['|',('shipped','!=', True),('state','not in', ['done','paid'])]}"
+						string="Cancel" type="object" class="oe_highlight"
+						confirm="Do you really want to remove these records?"
+						groups="hiworth_delete_purchase_stock_move.delete_purchase_order_group" />
+					<button name="action_delete" attrs="{'invisible':[('shipped','!=', True),('state','in', ['draft'])]}"
+						string="Delete" type="object" icon="gtk-cancel" class="oe_highlight"
+						confirm="Do you really want to remove these records?"
+						groups="hiworth_delete_purchase_stock_move.delete_purchase_order_group" />
+				</xpath>
+			</field>
+		</record>
+
+	</data>
+</openerp>

@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+        <record id="view_payroll_report_form" model="ir.ui.view">
+    <field name="name">Payroll Report</field>
+    <field name="model">payroll.report</field>
+    <field name="arch" type="xml">
+        <form string="Choose your details">
+            <group>
+                <group>
+                     <field name="company_person_id"  style="width: 40%%" domain="[('company_contractor','=',True)]"/>
+                </group>
+                <group>
+                    <field name="start_date" />
+                    <field name="end_date" />
+                </group>
+            </group>
+            <footer>
+                <button name="print_xls_report" string="Print Report" type="object"  class="oe_highlight"  />
+                or
+                <button string="Cancel" class="oe_link" special="cancel" />
+            </footer>
+        </form>
+    </field>
+</record>
+
+
+        <record id="action_employee_payroll_report" model="ir.actions.act_window">
+			<field name="name">Employee Payroll Report</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">payroll.report</field>
+			<field name="target">new</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+            <field name="view_id" ref="view_payroll_report_form"/>
+		</record>
+
+
+		<menuitem id="employee_payroll_report"
+                  parent="hr_payroll.menu_department_tree"
+                  name="PayRoll report" sequence="3"
+                  action="action_employee_payroll_report"/>
+
+
+
+
+<report
+    id="report_pyroll_xlsx"
+    model="payroll.report"
+    string="Payroll Report"
+    report_type="xlsx"
+    name="hiworth_attendance.report_payroll_report.xlsx"
+    file="hiworth_attendance.report_payroll_report.xlsx"
+    attachment_use="False"
+/>
+
+    </data>
+</openerp>

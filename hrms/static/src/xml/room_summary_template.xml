@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates id="hotel_reservation.hotel_template" xml:space="preserve">
+
+    <t t-name="summaryDetails">
+        <div >
+        <div style="width: 12%; float:left">
+        <div>
+            <table border="1" style="width: 127%;">
+                <t t-foreach="widget.summary_header" t-as="header_detail">
+                <tr>
+                    <t t-set="temp" t-value="0" />
+                    <t t-foreach="header_detail.header" t-as="date">
+                    <t t-if="temp == 0">
+                        <th class="table_header" style="text-align:center;"><t t-esc="date" /></th>
+                        <t t-set="temp" t-value="temp+1" /> 
+                    </t> 
+                    </t>
+                </tr>   
+                </t>
+                <t t-foreach="widget.room_summary" t-as="detail">
+                    <tr>
+                        <td style="text-align:center;"><t t-esc="detail.name" /></td>
+                    </tr>
+                </t>
+            </table>
+        </div>
+        </div>
+        <div style="width: 85%; float:right">
+        <div style="overflow:auto;">
+            <table border="1">
+                <t t-foreach="widget.summary_header" t-as="header_detail">
+                <tr>
+                    <t t-foreach="header_detail.header" t-as="date">
+                    <t t-if="date != header_detail.header[0]">
+                        <th class="table_header" style="text-align:center;"><t t-esc="date" /></th>  
+                        </t>
+                    </t>
+                </tr>   
+                </t>
+                <t t-foreach="widget.room_summary" t-as="detail">
+                    <tr>
+                        <!-- <td style="text-align:center;"><t t-esc="detail.name" /></td> -->
+                        <t t-foreach="detail.value" t-as="status">
+                            <t t-if="status.state == 'Free'">
+                                <td class="table_free" t-att-data="status.room_id" t-att-date="status.date" style="text-align:center;"><t t-esc="status.state" /></td>
+                            </t>
+                            <t t-if="status.state == 'Blocked'">
+                                <td class="table_block" t-att-data="status.room_id" t-att-date="status.date" style="text-align:center;"><t t-esc="status.state" /></td>
+                            </t>
+
+                            <t t-if="status.state == 'Maintenance'">
+                                <td class="table_maintenance" t-att-data="status.room_id" t-att-date="status.date" style="text-align:center;"><t t-esc="status.state" /></td>
+                            </t>
+
+                            <t t-if="status.state == 'Occupied'">
+                                <td class="table_occupied" t-att-data="status.room_id" t-att-date="status.date" style="text-align:center;"><t t-esc="status.state" /></td>
+                            </t>
+                            <t t-if="status.state == 'Dirty'">
+                                <td class="table_dirty" t-att-data="status.room_id" t-att-date="status.date" style="text-align:center;"><t t-esc="status.state" /></td>
+                            </t>
+                            <t t-if="status.state != 'Free' and status.is_draft == 'No'">
+                                <td class="table_reserved" t-att-data-model="status.data_model" t-att-data-id="status.data_id" style="text-align:center;"><t t-esc="status.state" /></td>
+                            </t>
+                            <t t-if="status.is_draft == 'Yes'">
+                                <td class="table_reserved1" t-att-data-model="status.data_model" t-att-data-id="status.data_id" style="text-align:center;"><t t-esc="status.state" /></td>
+                            </t>
+                        </t>
+                    </tr>
+                </t>
+            </table>
+        </div>
+        </div>
+        </div>
+    </t>
+</templates>
+

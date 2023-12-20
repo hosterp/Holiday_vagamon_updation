@@ -1,0 +1,292 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+		<menuitem name="Account Details" id="hiworth_accounts_details"
+			parent="account.menu_finance" sequence="4" />
+
+		<menuitem id="account_account_menu" name="Accounts"
+			parent="hrms.hiworth_accounts_details" sequence="15" />
+		<menuitem action="account.action_account_form" id="menu_action_account_form"
+			parent="account_account_menu" />
+		<menuitem sequence="0" parent="account_account_menu" id="menu_action_bank_tree"
+			action="account.action_bank_tree" />
+		<menuitem action="account.action_account_type_form" sequence="20"
+			id="menu_action_account_type_form" parent="account_account_menu"
+			groups="base.group_no_one" />
+
+
+		<record id="view_hiworth_accounting_form" model="ir.ui.view">
+			<field name="name">view.hiworth.accounting.form</field>
+			<field name="model">account.transaction.lines</field>
+			<field name="arch" type="xml">
+				<form string="Account Receipts">
+					<!-- <header> <button name="invoice_recreate" states="invoice_except" 
+						string="Recreate Invoice" groups="base.group_user"/> <button name="invoice_corrected" 
+						states="invoice_except" string="Ignore Exception" groups="base.group_user"/> 
+						</header> -->
+					<sheet>
+						<h1>
+							<!-- <label string="Cash Receipts " attrs="{'invisible': [('receiving_mode','is','bank')]}" 
+								/> <label string="Bank Receipts " attrs="{'invisible': [('receiving_mode','is','cash')]}" 
+								/> -->
+							<label string="Account Entries" colspan="4" />
+							<field name="transaction_no" readonly="1" colspan="4" />
+						</h1>
+						<group col="4" colspan="2" string="Account Receipts">
+							<field name="date_entry" />
+							<field name="receiving_mode" colspan="2" />
+							<newline />
+							<field name="line_id_transaction" colspan="2" />
+							<newline />
+							<field name="particular" colspan="2" />
+							<field name="debit" colspan="2" string="Amount" />
+							<newline />
+							<field name="narration" />
+							<!-- <field name="amount" /> -->
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_hiworth_accounting_tree" model="ir.ui.view">
+			<field name="name">view.hiworth.accounting.tree</field>
+			<field name="model">account.transaction.lines</field>
+			<field name="arch" type="xml">
+				<tree string="Account Receipts">
+					<field name="transaction_no" />
+					<field name="date_entry" />
+
+					<field name="particular" />
+					<field name="line_id_transaction" />
+					<field name="receiving_mode" />
+					<field name="debit" string="Amount" />
+					<field name="narration" />
+					<!-- <field name="amount" /> -->
+				</tree>
+			</field>
+		</record>
+
+		<record id="hiworth_accounting_account_receipts" model="ir.actions.act_window">
+			<field name="name">Account Receipts</field>
+			<field name="res_model">account.transaction.lines</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="view_hiworth_accounting_form" />
+			<!-- <field name="target">new</field> -->
+		</record>
+
+		<!-- <menuitem id="menu_finance_bank_and_cash" name="Bank and Cash" parent="account.menu_finance" 
+			sequence="1" groups="account.group_account_user,account.group_account_manager"/> -->
+		<menuitem string="Account Receipts" action="hiworth_accounting_account_receipts"
+			id="menu_account_receipts_form" parent="account.menu_finance_bank_and_cash"
+			sequence="1" />
+
+
+
+		<record id="view_hiworth_accounting_payment_form" model="ir.ui.view">
+			<field name="name">view.hiworth.accounting.payment.form</field>
+			<field name="model">account.transaction.lines</field>
+			<field name="arch" type="xml">
+				<form string="Account Payments">
+					<!-- <header> <button name="invoice_recreate" states="invoice_except" 
+						string="Recreate Invoice" groups="base.group_user"/> <button name="invoice_corrected" 
+						states="invoice_except" string="Ignore Exception" groups="base.group_user"/> 
+						</heclass="oe_inline" rader> -->
+					<sheet>
+						<h1>
+							<!-- <label string="Cash Payments " attrs="{'invisible': [('receiving_mode','is','bank')]}" 
+								/> <label string="Bank Payments " attrs="{'invisible': [('receiving_mode','is','cash')]}" 
+								/> -->
+							<label string="Account Entries" colspan="4" />
+							<!-- <field name="transaction_no" colspan="4"/> -->
+							<field name="transaction_no" readonly="1" colspan="4" />
+						</h1>
+						<!-- <field name="transaction_no" readonly="1" /> -->
+						<group col="4" colspan="2" string="Account  Payments">
+
+							<field name="date_entry" />
+							<field name="receiving_mode" colspan="2" />
+							<newline />
+							<field name="line_id_transaction" colspan="2" />
+							<newline />
+							<field name="particular" colspan="2" />
+							<field name="credit" colspan="2" string="Amount" />
+							<newline />
+							<field name="narration" />
+							<!-- <field name="amount" /> -->
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_hiworth_accounting_payments_tree" model="ir.ui.view">
+			<field name="name">view.hiworth.accounting.tree</field>
+			<field name="model">account.transaction.lines</field>
+			<field name="arch" type="xml">
+				<tree string="Account Payments">
+					<field name="transaction_no" />
+					<field name="date_entry" />
+
+					<field name="particular" />
+					<field name="line_id_transaction" />
+					<field name="receiving_mode" />
+					<field name="credit" string="Amount" />
+					<field name="narration" />
+					<!-- <field name="amount" /> -->
+				</tree>
+			</field>
+		</record>
+
+		<record id="hiworth_accounting_account_payments_receipts"
+			model="ir.actions.act_window">
+			<field name="name">Account Payments</field>
+			<field name="res_model">account.transaction.lines</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="view_hiworth_accounting_payment_form" />
+			<!-- <field name="target">new</field> -->
+		</record>
+
+		<!-- <menuitem id="menu_finance_bank_and_cash" name="Bank and Cash" parent="account.menu_finance" 
+			sequence="1" groups="account.group_account_user,account.group_account_manager"/> -->
+		<menuitem string="Account Payments"
+			action="hiworth_accounting_account_payments_receipts" id="menu_account_receipts_payment_form"
+			parent="account.menu_finance_bank_and_cash" sequence="2" />
+
+
+		<!-- <record id="view_account_form2" model="ir.ui.view">
+			<field name="name">account.account.form2</field>
+			<field name="model">account.account</field>
+			<field name="inherit_id" ref="account.view_account_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//label[@for='note']" position="replace">
+					<field name="note" invisible="True" />
+				</xpath>
+				<xpath expr="//group/group/field[@name='debit']" position="replace">
+					<field name="debit2" />
+				</xpath>
+				<xpath expr="//group/group/field[@name='credit']" position="replace">
+					<field name="credit2"  />
+				</xpath>
+				<xpath expr="//group/group/field[@name='balance']" position="replace">
+					<field name="balance2" />
+				</xpath>
+				<xpath expr="//field[@name='note']" position="replace">
+					<field name="note" invisible="True" />
+					<notebook>
+						<page string="Transaction Line">
+
+							<field name="transaction_line" widget="one2many_list" mode="tree"
+								colspan="4" nolabel="1" context="{'group_by': 'receiving_mode'}">
+								<tree>
+									<field name="transaction_no" />
+									<field name="date_entry" />
+
+									<field name="particular" />
+									<field name="receiving_mode" />
+									<field name="debit" sum="debit" />
+									<field name="credit" sum="credit" />
+
+								</tree>
+							</field>
+
+						</page>
+					</notebook>
+					<group colspan="2" class="oe_subtotal_footer oe_right">
+						<field name="opening_balance" widget='monetary' />
+						<field name="balance2" widget='monetary' string="Total" />
+						<field name="total_balance2" string="Balance" />
+
+					</group>
+				</xpath>
+
+			</field>
+		</record> -->
+
+
+		<!-- <record id="view_account_list2" model="ir.ui.view">
+			<field name="name">account.account.list2</field>
+			<field name="model">account.account</field>
+			<field name="inherit_id" ref="account.view_account_list" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='debit']" position="replace">
+					<field name="debit2" />
+				</xpath>
+				<xpath expr="//field[@name='credit']" position="replace">
+					<field name="credit2" />
+				</xpath>
+				<xpath expr="//field[@name='balance']" position="replace">
+					<field name="balance"  />
+				</xpath>
+			</field>
+		</record> -->
+
+		<record id="view_hiworth_accounting_transaction_tree" model="ir.ui.view">
+			<field name="name">view.accounting.transaction.tree</field>
+			<field name="model">account.transaction.lines</field>
+			<field name="arch" type="xml">
+				<tree string="Account Payments">
+					<field name="date_entry" />
+					<field name="transaction_no" />
+					<field name="particular" />
+					<field name="line_id_transaction" />
+					<field name="receiving_mode" />
+					<field name="credit" />
+					<field name="debit" />
+					<!-- <field name="narration" /> <field name="amount" /> -->
+				</tree>
+			</field>
+		</record>
+		<record model="ir.ui.view" id="view_hiworth_accounting_transaction_search">
+			<field name="name">view.accounting.transaction.search</field>
+			<field name="model">account.transaction.lines</field>
+			<field name="arch" type="xml">
+				<search string="Tables Detail">
+					<field name="date_entry" />
+					<field name="particular" />
+					<field name="line_id_transaction" />
+					<filter string="Month" name="group_date_entry" context="{'group_by':'date_entry'}" />
+					<filter string="Transaction Mode" domain="[]"
+						context="{'group_by':'receiving_mode'}" />
+					<filter string="Account" name="group_line_id_transaction"
+						context="{'group_by':'line_id_transaction'}" />
+					<!-- <filter string="Current Booking" domain="[('checkout_date','&gt;=', 
+						datetime.datetime.now().replace(hour=0, minute=0, second=0)),('checkin_date','&lt;=', 
+						datetime.datetime.now().replace(hour=23, minute=59, second=59))]" help="Current 
+						Booking"/> -->
+					<group expand="0" string="Group By">
+						<filter string="Month" domain="[]" context="{'group_by':'date_entry'}" />
+						<filter string="Account" domain="[]"
+							context="{'group_by':'line_id_transaction'}" />
+						<filter string="Transaction Mode" domain="[]"
+							context="{'group_by':'receiving_mode'}" />
+
+					</group>
+				</search>
+			</field>
+		</record>
+
+		<record id="hiworth_accounting_transaction_details" model="ir.actions.act_window">
+			<field name="name">Account Entries</field>
+			<field name="res_model">account.transaction.lines</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree</field>
+			<field name="context">{"search_default_group_date_entry":1,"search_default_group_line_id_transaction":1}
+			</field>
+			<field name="view_id" ref="view_hiworth_accounting_transaction_tree" />
+			<!-- <field name="target">new</field> -->
+
+		</record>
+
+		<menuitem string="Account Transaction Details" action="hiworth_accounting_transaction_details"
+			id="menu_account_transaction_details" parent="account.menu_finance_bank_and_cash"
+			sequence="3" />
+
+
+
+	</data>
+</openerp>
+    

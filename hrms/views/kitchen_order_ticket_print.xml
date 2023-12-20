@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+
+
+<template id="hotel_restaurant.report_hotel_order_kot">
+    <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    
+                    <div class="page">
+                        <div class="row text-center">
+                            <strong>
+                                <p style="font-size:16px">
+                                    <span t-field="o.company_id.name" />
+                                </p>
+                                </strong>
+                                <p style="font-size:12px">
+                                    
+                                    <span>
+                                        <t t-if="o.company_id.street">
+                                        <span t-field="o.company_id.street" />
+                                        </t>
+                                        <t t-if="o.company_id.city">
+                                        <span t-field="o.company_id.city" />
+                                        </t>
+                                    </span>
+                                </p>
+                        </div>
+                        <table
+                            style="width: 100%; font-size: 12px;border-bottom: outset;border-top: outset;">
+                            <tr>
+                                <td style="width: 42%;">
+                                    Order No:
+                                    <span t-field="o.order_no" />
+                                </td>
+                                <td style="text-align: right;">
+                                    Date:
+                                    <span t-field="o.o_date_new" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    TABLE:
+                                    <t t-foreach="o.table_no" t-as="t">
+                                        <span t-field="t.name" />
+                                    </t>
+                                </td>
+                                <t t-if="o.waiter_name.name">
+                                    <td style="text-align: right;">
+                                        Waiter:
+                                        <span t-field="o.waiter_name.name" />
+                                    </td>
+                                </t>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Guest:
+                                    <span t-field="o.cname.name" />
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <t t-if="o.room_no.name">
+                                    <td>
+                                        Room No:
+                                        <span t-field="o.room_no.name" />
+                                    </td>
+                                </t>
+                                <td></td>
+                            </tr>
+                        </table>
+                        <table
+                            style="width: 100%;font-size: 12px;border-top: outset;margin-top: 3%;">
+                            <tr style="border-bottom: outset;">
+                                <th>S#</th>
+                                <th>ITEM NAME</th>
+                                <th>Qty</th>
+                            </tr>
+                            <t t-set="sl_no" t-value="1" />
+                            <t t-set="total" t-value="0" />
+                            <t t-foreach="o.order_list" t-as="l">
+                                <tr>
+                                    <td style="width: 10%;">
+                                        <t t-esc="sl_no" />
+                                        <t t-set="sl_no" t-value="sl_no+1" />
+                                    </td>
+                                    <td style="width: 80%;">
+                                        <span t-field="l.name.name" />
+                                    </td>
+                                    <td style="width: 10%;">
+                                        <span t-field="l.item_qty" />
+                                    </td>
+                                </tr>
+                            </t>
+                        </table>
+                        <t t-set="tax" t-value="0" />
+                        <table
+                            style="width: 100%; font-size: 12px;border-bottom: outset;border-top: outset;">
+                            <tr height="10">
+                                <td style="width: 45%;">
+                                    Total Items:
+                                    <t t-esc="sl_no-1" />
+                                </td>
+                                <td style="width: 20%;text-align: right;"></td>
+                                <td style="width: 20%;text-align: right;"></td>
+                                <td style="text-align: right;width: 15%;">
+                                    <!-- <span t-esc="round(o.amount_subtotal,2)" /> -->
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <!-- <div class="footer"> -->
+
+                    
+                    <!-- </div> -->
+                </t>
+            </t>
+</template>
+
+
+
+    <report 
+            id="hotel_restaurant.report_hotel_res_order_kot"
+            string="Kitchen Order Tickets"
+            model="hotel.restaurant.order" 
+            report_type="qweb-pdf"
+            file="hotel_restaurant.report_hotel_order_kot"
+            name="hotel_restaurant.report_hotel_order_kot"
+            menu="True" />
+
+
+    <record id="paperformat_hotel_restaurant_kot" model="report.paperformat">
+        <field name="name">Thermal KOT ORDER</field>
+        <field name="default" eval="True" />
+        <field name="format">custom</field>
+        <field name="page_height">100</field>
+        <field name="page_width">72</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">0</field>
+        <field name="margin_right">0</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="hotel_restaurant.report_hotel_res_order_kot" model="ir.actions.report.xml">
+        <field name="paperformat_id" ref="hrms.paperformat_hotel_restaurant_kot" />
+    </record>
+
+</data>
+</openerp>

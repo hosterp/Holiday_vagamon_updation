@@ -1,0 +1,326 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+		<record model="ir.ui.view" id="nightaudit_wizard">
+			<field name="name">Nightaudit Report</field>
+			<field name="model">night.audit.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Night Audit Report">
+					<group col="4">
+						<field name="date_from" />
+<!-- 						<field name="date_to" /> -->
+					</group>
+					<footer>
+						<button name="action_open_window2" type="object" string="View"
+							class="oe_highlight" />
+						<!-- or -->
+						<!-- <button name="action_open_window2" type="object" string="Print"
+							class="oe_highlight" />
+						or -->
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_nightaudit_wizard" model="ir.actions.act_window">
+			<field name="name">Nightaudit Report</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">night.audit.wizard</field>
+			<field name="target">new</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+		</record>
+
+	
+		<menuitem id="menu_nightaudit_wizard" name="Night Audit Report" action="action_nightaudit_wizard" parent="hotel.hotel_report_menu"/>
+
+		<report id="report_nightaudit" string="Night Audit Report"
+			model="night.audit.wizard" report_type="qweb-html"
+			name="hrms.report_nightaudit_template" />
+
+		<template id="report_nightaudit_template">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="report.external_layout">
+						<div class="page">
+							<center><b><h2>Night Audit Report</h2></b></center>
+							
+
+							<t t-set="sl_no" t-value="1" />
+							
+							<div>
+								<center>
+									
+									<table style="width: 50%; font-size:16px;margin-top:50px;">
+			                            <thead>
+			                                <tr style="height: 30px;">
+			                                    <td style="width: 25%;"><b>Date From:</b>
+			                                        <span t-field="o.date_from"/>
+			                                    </td>
+			                                   <!--  <td style="width: 25%;text-align: right;"><b>Date To:</b>
+			                                        <span t-field="o.date_to"/>
+			                                    </td> -->
+			                                </tr>
+			                            </thead>
+			                        </table>
+
+			                        <b><h4>Checkin</h4></b>
+									<table style="font-size:16px;width: 50%;border-bottom: outset;border-top: outset;margin-top:30px;">
+										<thead>
+
+											<tr style="border-bottom: outset;border-right: outset;border-left: outset;">
+												<td style="width: 5%; border-right: outset;" align="center"><h5><b>Sl No</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Room No</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Guest Name</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Check In</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Check Out</b></h5></td>
+											</tr>
+										</thead>
+
+										<tbody>
+
+											<t t-foreach="docs.get_checkin()" t-as="line">
+												<tr style="border-left: outset;">
+													<td style="width: 5%; border-right: outset;" align="center">
+														<t t-esc="sl_no" />
+														<t t-set="sl_no" t-value="sl_no+1" />
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['room']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['guest_name']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['checkin']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['checkout']"/>
+													</td>
+													
+												</tr>
+											</t>
+											<!-- <t t-foreach="docs.get_liability1_lines()" t-as="line">
+												<t t-if="line['amount'] != 0">
+													<tr>
+														<td style="width: 50%; padding-left:1%;" align="left">
+															<b>
+																<span t-esc="line['parent']" />
+															</b>
+														</td> -->
+														<!-- <td style="width: 25%;"></td>
+														<td style="width: 25%; padding-right:1%;" align="right">
+															<span t-esc="'{0:,.2f}'.format(line['amount'])" />
+															<t t-set="sum_liability" t-value="sum_liability + line['amount']" />
+														</td>
+													</tr>
+												</t>
+												<t t-if="docs.visible_details == True">
+													<t t-foreach="line['account_list']" t-as="account_list">
+														<t t-if="account_list['amount'] != 0">
+															<tr>
+																<td style="width: 50%; padding-left: 3%;" align="left">
+																	<span t-esc="account_list['account']" />
+																</td>
+																<td style="width: 25%; " align="right">
+																	<span t-esc="'{0:,.2f}'.format(account_list['amount'])" />
+																</td>
+																<td style="width: 25%; "></td>
+															</tr>
+														</t>
+													</t>
+												</t>
+											</t> --> -->
+
+										</tbody>
+									</table>
+									<b><h4>Checkout</h4></b>
+									<table style="font-size:16px;width: 50%;border-bottom: outset;border-top: outset;margin-top:30px;">
+										<thead>
+
+											<tr style="border-bottom: outset;border-right: outset;border-left: outset;">
+												<td style="width: 5%; border-right: outset;" align="center"><h5><b>Sl No</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Room No</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Guest Name</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Check In</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Check Out</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Sub Total</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Tax Amount</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Advance</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Discount</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Total</b></h5></td>
+											</tr>
+										</thead>
+
+										<tbody>
+
+											<t t-foreach="docs.get_checkout()" t-as="line">
+												<tr style="border-left: outset;">
+													<td style="width: 5%; border-right: outset;" align="center">
+														<t t-esc="sl_no" />
+														<t t-set="sl_no" t-value="sl_no+1" />
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['room']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['guest_name']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['checkin']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['checkout']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['subtotal']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['amount_tax']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['advance']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['discount']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['total']"/>
+													</td>
+													
+												</tr>
+											</t>
+										</tbody>
+									</table>
+									<b><h4>Advance Payment</h4></b>
+									<table style="font-size:16px;width: 50%;border-bottom: outset;border-top: outset;margin-top:30px;">
+										<thead>
+
+											<tr style="border-bottom: outset;border-right: outset;border-left: outset;">
+												<td style="width: 5%; border-right: outset;" align="center"><h5><b>Sl No</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Date</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Guest Name</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Amount</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Total</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Mode</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Bank</b></h5></td>
+											</tr>
+										</thead>
+
+										<tbody>
+
+											<t t-foreach="docs.get_advance_payment()" t-as="line">
+												<tr style="border-left: outset;">
+													<td style="width: 5%; border-right: outset;" align="center">
+														<t t-esc="sl_no" />
+														<t t-set="sl_no" t-value="sl_no+1" />
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['date']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['guest_name']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['amount']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['total']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['mode']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['bank']"/>
+													</td>
+												</tr>
+											</t>
+										</tbody>
+									</table>
+									<b><h4>Invoices</h4></b>
+									<table style="font-size:16px;width: 50%;border-bottom: outset;border-top: outset;margin-top:30px;">
+										<thead>
+
+											<tr style="border-bottom: outset;border-right: outset;border-left: outset;">
+												<td style="width: 5%; border-right: outset;" align="center"><h5><b>Sl No</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Guest Name</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Reservation No.</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Amount</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Advance</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Paid Amount</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Balance</b></h5></td>
+											</tr>
+										</thead>
+
+										<tbody>
+
+											<t t-foreach="docs.get_invoice()" t-as="line">
+												<tr style="border-left: outset;">
+													<td style="width: 5%; border-right: outset;" align="center">
+														<t t-esc="sl_no" />
+														<t t-set="sl_no" t-value="sl_no+1" />
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['guest_name']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['res_no']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['amount']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['advance']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['paid']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['bal']"/>
+													</td>
+												</tr>
+											</t>
+										</tbody>
+									</table>
+									<b><h4>Cash Transactions</h4></b>
+									<table style="font-size:16px;width: 50%;border-bottom: outset;border-top: outset;margin-top:30px;">
+										<thead>
+
+											<tr style="border-bottom: outset;border-right: outset;border-left: outset;">
+												<td style="width: 5%; border-right: outset;" align="center"><h5><b>Sl No</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Account</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Amount</b></h5></td>
+											</tr>
+										</thead>
+
+										<tbody>
+
+											<t t-foreach="docs.get_summary()" t-as="line">
+												<tr style="border-left: outset;">
+													<td style="width: 5%; border-right: outset;" align="center">
+														<t t-esc="sl_no" />
+														<t t-set="sl_no" t-value="sl_no+1" />
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['account']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['amount']"/>
+													</td>
+												</tr>
+											</t>
+										</tbody>
+									</table>
+								</center>
+							</div>
+			               
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+
+	</data>
+</openerp>

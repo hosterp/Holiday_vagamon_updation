@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+		<record id="tax_mapping_form" model="ir.ui.view">
+			<field name="name">tax.mapping.form</field>
+			<field name="model">tax.mapping</field>		
+			<field name="arch" type="xml">
+				<form>
+					<group>
+						<field name="price_from"/>
+						<field name="price_to"/>
+						<field name="tax_id"/>
+					</group>					
+				</form>
+			</field>
+		</record>
+
+		<record id="tax_mapping_tree" model="ir.ui.view">
+			<field name="name">tax.mapping.tree</field>
+			<field name="model">tax.mapping</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="price_from"/>
+					<field name="price_to"/>
+					<field name="tax_id"/>
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_tax_mapping">
+			<field name="name">Tax Mapping</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">tax.mapping</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="target">current</field>
+			<field name="view_id" ref="tax_mapping_tree"/>
+		</record>
+
+		<menuitem 
+			name="Tax Mapping" 
+			id="menu_tax_mapping_id" 
+			parent="hotel.hotel_configuration_menu" 
+			action="action_tax_mapping"
+			sequence="5"/>
+
+
+		
+	</data>
+</openerp>

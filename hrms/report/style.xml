@@ -1,0 +1,27 @@
+<openerp>
+    <data>
+        <template id="hrms.report_style">
+            
+            .table {
+                border: 0.5px solid #000000;
+                
+            }
+            .table-bordered > thead > tr > th,
+            .table-bordered > tbody > tr > th,
+            .table-bordered > tfoot > tr > th,
+            .table-bordered > thead > tr > td,
+            .table-bordered > tbody > tr > td,
+            .table-bordered > tfoot > tr > td {
+               border: 0.5px solid #000000;
+            }
+        </template>
+
+        <template id="hrms.report_template_layout" inherit_id="web.layout" primary="True">
+            <xpath expr="//head" position="inside">
+                <style type="text/css">
+                	<t t-call="hrms.report_style"/>
+                </style>
+            </xpath>
+        </template>
+    </data>
+</openerp>

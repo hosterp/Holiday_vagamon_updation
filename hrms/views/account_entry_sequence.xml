@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<openerp>
+    <data noupdate="1">
+<record model="ir.sequence.type" id="seq_type_invoices_accont_entry2">
+            <field name="name">Invoices Numbers</field>
+            <field name="code">account.invoice</field>
+        </record>
+<record model="ir.sequence" id="seq_inv_accont_entry2">
+            <field name="name">Invoice Sequences</field>
+            <field name="code">account.invoice</field>
+            <field name="prefix">A/%(year)s/</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+
+        </record>
+
+
+
+        <!-- Account Entry No -->
+        <record model="ir.sequence.type" id="seq_type_hotel_accont_entry2">
+            <field name="name">Hotel Accounting Entry No2</field>
+            <field name="code">hotel.accounting.entry.no2</field>
+        </record>
+
+        <record model="ir.sequence" id="seq_hotel_accont_entry2">
+            <field name="name">Hotel Accounting Entry No2</field>
+            <field name="code">hotel.accounting.entry.no2</field>
+            <field name="prefix">AE/</field>
+            <field name="padding">4</field>
+        </record>
+
+    </data>
+</openerp>

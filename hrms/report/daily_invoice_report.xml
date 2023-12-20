@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+		<!-- Daily Invoice -->
+
+		<record model="ir.ui.view" id="daily_invoice_wizard">
+			<field name="name">daily.invoice.wizard</field>
+			<field name="model">daily.invoice.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Daily Invoice">
+					<group col="4">
+						<field name="date_from" />
+						<field name="date_to" />
+					</group>
+					<footer>
+						<button name="action_open_window1" type="object" string="View"
+							class="oe_highlight" />
+						or
+						<button name="action_open_window2" type="object" string="Print"
+							class="oe_highlight" />
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_daily_invoice_wizard" model="ir.actions.act_window">
+			<field name="name">Daily Invoice</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">daily.invoice.wizard</field>
+			<field name="target">new</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+		</record>
+
+	
+		<menuitem id="menu_daily_invoice_wizard" name="Daily Report"
+			action="action_daily_invoice_wizard" parent="hotel.hotel_report_menu"/>
+
+
+
+		<report id="report_daily_invoice" string="Daily Report"
+			model="daily.invoice.wizard" report_type="qweb-pdf"
+			name="hrms.report_daily_invoice_template" />
+
+
+		<template id="report_daily_invoice_template">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="report.external_layout">
+						<div class="page">
+							<center><b><h2>Daily Invoice Report</h2></b></center>
+							
+
+							<t t-set="sl_no" t-value="1" />
+							
+							<div>
+								<center>
+
+									<table style="width: 80%; font-size:16px;margin-top:50px;">
+			                            <thead>
+			                                <tr style="height: 30px;">
+			                                    <td style="width: 40%;"><b>Date From:</b>
+			                                        <span t-field="o.date_from"/>
+			                                    </td>
+			                                    <td style="width: 40%;text-align: right;"><b>Date To:</b>
+			                                        <span t-field="o.date_to"/>
+			                                    </td>
+			                                </tr>
+			                            </thead>
+			                        </table>
+
+
+									<table style="font-size:16px;width: 80%;border-bottom: outset;border-top: outset;margin-top:30px;">
+										<thead>
+
+											<tr style="border-bottom: outset;border-right: outset;border-left: outset;">
+												<td style="width: 5%; border-right: outset;" align="center"><h5><b>Sl No</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Date</b></h5></td>
+												<td style="width: 10%; border-right: outset;" align="center"><h5><b>Room Advance</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Services</b></h5></td>
+												<td style="width: 10%; border-right: outset;" align="center"><h5><b>Restaurant</b></h5></td>
+												<td style="width: 10%; border-right: outset;" align="center"><h5><b>Check Out</b></h5></td>
+												<td style="width: 10%; border-right: outset;" align="center"><h5><b>Total</b></h5></td>
+											</tr>
+										</thead>
+
+										<tbody>
+
+											<t t-foreach="docs.get_daily_invoice_details()" t-as="line">
+												<tr style="border-left: outset;">
+													<td style="width: 5%; border-right: outset;" align="center">
+														<t t-esc="sl_no" />
+														<t t-set="sl_no" t-value="sl_no+1" />
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['date']"/>
+													</td>
+													<td style="width: 10%;  border-right: outset;padding-right: 6px;" align="right">
+														<span t-esc="line['room_advance_amt']"/>
+													</td>
+													<td style="width: 10%;  border-right: outset;padding-right: 6px;" align="right">
+														<span t-esc="line['service_amt']"/>
+													</td>
+													<td style="width: 10%;  border-right: outset;padding-right: 6px;" align="right">
+														<span t-esc="line['restaurant_amt']"/>
+													</td>
+													<td style="width: 10%;  border-right: outset;padding-right: 6px;" align="right">
+														<span t-esc="line['out_amt']"/>
+													</td>
+													<td style="width: 10%;  border-right: outset;padding-right: 6px;" align="right">
+														<span t-esc="line['total']"/>
+													</td>
+													
+												</tr>
+											</t>
+
+										</tbody>
+									</table>
+								</center>
+							</div>
+			               
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+
+	</data>
+</openerp>

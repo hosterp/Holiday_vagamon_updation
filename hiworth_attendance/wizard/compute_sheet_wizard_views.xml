@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+         <record model="ir.ui.view" id="view_compute_sheet_wizard_form">
+            <field name="name">compute.sheet.wizard.form</field>
+            <field name="model">compute.sheet.wizard</field>
+            <field name="arch" type="xml">
+               <form>
+                   <p>Are you sure to Confirm?</p>
+
+                   <footer>
+                       <button name="action_submit" string="Submit" type="object"/>
+
+                   </footer>
+               </form>
+            </field>
+        </record>
+
+         <!--<record id="action_compute_sheet_wizard" model="ir.actions.act_window">
+            <field name="name">Compute Sheet wizard</field>
+            <field name="res_model">compute.sheet.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="view_id" eval="view_compute_sheet_wizard_form"/>
+
+
+        </record>-->
+
+        <act_window id="action_compute_sheet_wizard"
+					name="Generate Payslip Lines" res_model="compute.sheet.wizard"
+					view_mode="form" target="new" multi="True"
+					view_id="view_compute_sheet_wizard_form"
+					src_model="hr.payslip"
+					/>
+    </data>
+</openerp>

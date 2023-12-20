@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+		<!-- Check in-out -->
+
+		<record model="ir.ui.view" id="customer_check_in_out_wizard2">
+			<field name="name">customer.check.in_out.wizard</field>
+			<field name="model">customer.check.in_out.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Check In/Out Report">
+					<group col="4">
+						<field name="date_from" />
+						<field name="date_to" />
+					</group>
+					<footer>
+						<button name="action_open_window1" type="object" string="View"
+							class="oe_highlight" />
+						or
+						<button name="action_open_window2" type="object" string="Print"
+							class="oe_highlight" />
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_customer_check_in_out_wizard2" model="ir.actions.act_window">
+			<field name="name">Check In/Out Report</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">customer.check.in_out.wizard</field>
+			<field name="target">new</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+		</record>
+
+	
+		<menuitem id="menu_customer_check_in_out_wizard2" name="Check In/Out" action="action_customer_check_in_out_wizard2" parent="hotel.hotel_report_menu"/>
+
+
+
+		<report id="report_check_in_out" string="Check In/Out Report"
+			model="customer.check.in_out.wizard" report_type="qweb-pdf"
+			name="hrms.report_check_in_out_template2" />
+
+
+		<template id="report_check_in_out_template2">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="report.external_layout">
+						<div class="page">
+							<center><b><h2>Check In/Out Report</h2></b></center>
+							
+
+							<t t-set="sl_no" t-value="1" />
+							
+							<div>
+								<center>
+
+									<table style="width: 50%; font-size:16px;margin-top:50px;">
+			                            <thead>
+			                                <tr style="height: 30px;">
+			                                    <td style="width: 25%;"><b>Date From:</b>
+			                                        <span t-field="o.date_from"/>
+			                                    </td>
+			                                    <td style="width: 25%;text-align: right;"><b>Date To:</b>
+			                                        <span t-field="o.date_to"/>
+			                                    </td>
+			                                </tr>
+			                            </thead>
+			                        </table>
+
+
+									<table style="font-size:16px;width: 50%;border-bottom: outset;border-top: outset;margin-top:30px;">
+										<thead>
+
+											<tr style="border-bottom: outset;border-right: outset;border-left: outset;">
+												<td style="width: 5%; border-right: outset;" align="center"><h5><b>Sl No</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Date</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Number of check in</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Number of check out</b></h5></td>
+											</tr>
+										</thead>
+
+										<tbody>
+
+											<t t-foreach="docs.get_check_in_out_details()" t-as="line">
+												<tr style="border-left: outset;">
+													<td style="width: 5%; border-right: outset;" align="center">
+														<t t-esc="sl_no" />
+														<t t-set="sl_no" t-value="sl_no+1" />
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['date']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['checkin']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['checkout']"/>
+													</td>
+													
+												</tr>
+											</t>
+
+										</tbody>
+									</table>
+								</center>
+							</div>
+			               
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+
+	</data>
+</openerp>

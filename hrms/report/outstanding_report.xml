@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+		<record model="ir.ui.view" id="outstanding_wizard">
+			<field name="name">Outstanding Report</field>
+			<field name="model">outstanding.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Outstanding Report">
+					<group col="4">
+						<field name="date_from" />
+						<field name="date_to" />
+					</group>
+					<footer>
+						<button name="action_open_window1" type="object" string="View"
+							class="oe_highlight" />
+						<!-- or -->
+						<!-- <button name="action_open_window2" type="object" string="Print"
+							class="oe_highlight" />
+						or -->
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_outstanding_wizard" model="ir.actions.act_window">
+			<field name="name">Outstanding Report</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">outstanding.wizard</field>
+			<field name="target">new</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+		</record>
+
+	
+		<menuitem id="menu_outstanding_wizard" name="Outstanding Report" action="action_outstanding_wizard" parent="hotel.hotel_report_menu"/>
+
+		<report id="report_outstanding" string="Outstanding Report"
+			model="outstanding.wizard" report_type="qweb-html"
+			name="hrms.report_outstanding_template" />
+
+		<template id="report_outstanding_template">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="report.external_layout">
+						<div class="page">
+							<center><b><h2>Outstanding Report</h2></b></center>
+							
+
+							<t t-set="sl_no" t-value="1" />
+							
+							<div>
+								<center>
+
+									<table style="width: 50%; font-size:16px;margin-top:50px;">
+			                            <thead>
+			                                <tr style="height: 30px;">
+			                                    <td style="width: 25%;"><b>Date From:</b>
+			                                        <span t-field="o.date_from"/>
+			                                    </td>
+			                                    <td style="width: 25%;text-align: right;"><b>Date To:</b>
+			                                        <span t-field="o.date_to"/>
+			                                    </td>
+			                                </tr>
+			                            </thead>
+			                        </table>
+
+
+									<table style="font-size:16px;width: 50%;border-bottom: outset;border-top: outset;margin-top:30px;">
+										<thead>
+
+											<tr style="border-bottom: outset;border-right: outset;border-left: outset;">
+												<td style="width: 5%; border-right: outset;" align="center"><h5><b>Sl No</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Room No</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Guest Name</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Check In</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Check Out</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Total</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Balance</b></h5></td>
+											</tr>
+										</thead>
+
+										<tbody>
+
+											<t t-foreach="docs.check_outstanding()" t-as="line">
+												<tr style="border-left: outset;">
+													<td style="width: 5%; border-right: outset;" align="center">
+														<t t-esc="sl_no" />
+														<t t-set="sl_no" t-value="sl_no+1" />
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['room']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['guest_name']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['checkin']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['checkout']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['total']"/>
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['bal']"/>
+													</td>
+													
+												</tr>
+											</t>
+
+										</tbody>
+									</table>
+								</center>
+							</div>
+			               
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+
+	</data>
+</openerp>

@@ -1,0 +1,2031 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+		<record model="ir.ui.view" id="hotel_reservation_category">
+			<field name="name">hotel.category.line.form</field>
+			<field name="model">add.category.line</field>
+			<field name="arch" type="xml">
+				<form string="Add Category">
+					<sheet>
+
+						<group string="Select category">
+							
+							<group>
+								
+								<field name="category_id" />
+								<field name="rate" />
+								<field name="tax_ids" widget="many2many_tags" options="{'no_create':1}" />
+								<field name="avail_rooms" />
+								<field name="selected_rooms" widget="char"/>
+								
+							</group>
+							<group>
+								<field name="line_id" invisible="1"/>
+								<field name="capacity" string="Capacity Per Room"/>
+								<field name="adult" widget="char" required="1" />
+								<field name="child" />
+								<!-- <field name="room_id"/> -->
+							</group>
+
+						</group>
+						<footer>
+							<button name="write" string="Save" type="object" class="oe_highlight" />
+							or
+							<button string="Cancel" class="oe_link" special="cancel" />
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+
+		<menuitem id="hotel.hotel_management_menu" name="Hotel Management"
+			web_icon="hotel/data/hotel-grey.png" web_icon_hover="hotel/data/hotel-color.png"
+			groups="hrms.hotel_receptionist,hrms.hotel_reservation,hrms.hotel_account,hrms.hotel_account,hrms.hotel_restaurent" />
+
+		<record id="res_partner_hrms_form" model="ir.ui.view">
+			<field name="name">res.partner.form</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='website']" position="after">
+					<field name="gst_no" />
+					<field name="dob" />
+					<field name="wdng_day" />
+					<field name="agency" invisible="1"/>
+					<field name="is_foreigner" attrs="{'invisible':['|',('customer','=',False),('agency','=',True)]}"/>
+					<field name="is_a_waiter" />
+					
+					<!-- <field name="id_type2" />
+					<field name="id_no2" /> -->
+					<field name="passport_no" attrs="{'invisible':[('is_foreigner','=',False)]}"/>
+					<field name="nationality" attrs="{'invisible':[('is_foreigner','=',False)]}" />
+					<field name="pspt_issue_date" attrs="{'invisible':[('is_foreigner','=',False)]}"/>
+					<field name="pspt_passport_place" attrs="{'invisible':[('is_foreigner','=',False)]}"/>
+					<field name="pspt_expiry_date" attrs="{'invisible':[('is_foreigner','=',False)]}"/>
+					<field name="visa_no" attrs="{'invisible':[('is_foreigner','=',False)]}"/>
+					<field name="visa_issue_date" attrs="{'invisible':[('is_foreigner','=',False)]}" />
+					<field name="visa_place" attrs="{'invisible':[('is_foreigner','=',False)]}"/>
+					<field name="visa_expiry_date" attrs="{'invisible':[('is_foreigner','=',False)]}"/>
+					
+					<div>
+						<group string="ID Details" attrs="{'invisible':[('agency','=',True)]}"/>
+					</div>
+					<div colspan="2">
+						<group >						
+						<span><label for="id_type1" string="1. " class="oe_inline" attrs="{'invisible':['|',('is_foreigner','=',True),('agency','=',True)]}" />
+						<field name="id_type1" nolabel="1" class="oe_inline" attrs="{'invisible':['|',('is_foreigner','=',True),('agency','=',True)]}" /></span>
+
+						<field name="id_no1"  nolabel="1" class="oe_inline" placeholder="No...." attrs="{'required':[('id_type1','!=',False)], 'invisible':['|',('is_foreigner','=',True),('agency','=',True)]}" />
+						</group>
+						<group>				
+						<span><label for="id_type2" string="2. " class="oe_inline" attrs="{'invisible':['|',('is_foreigner','=',True),('agency','=',True)]}"/>
+						<field name="id_type2" nolabel="1" class="oe_inline" attrs="{'invisible':['|',('is_foreigner','=',True),('agency','=',True)]}"/></span>
+					
+						<field name="id_no2"  nolabel="1" class="oe_inline"  placeholder="No...."
+							attrs="{'required':[('id_type2','!=',False)], 'invisible':['|',('is_foreigner','=',True),('agency','=',True)]}"/>
+						</group>
+					</div>
+				</xpath>
+			</field>
+		</record>
+		<record id="hotel_reservation1_form222" model="ir.ui.view">
+			<field name="name">res.partner.form11</field>
+			<field name="model">hotel.room.new</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<group>
+							<field name="name" string="Room Number"/>
+							<field name="list_price"/>
+							<!-- <field name="taxes_id" widget="many2many_tags"/> -->
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="hotel_reservation_line_form2">
+			<field name="name">hotel.reservation.line.form2</field>
+			<field name="model">hotel_reservation.line</field>
+			<field name="arch" type="xml">
+				<form string="Add Rooms">
+					<sheet>
+
+						<group>
+							<group>
+								<field name="line_id" invisible="1"/>
+								<field name="categ_id" required="1"/>
+
+								<separator string="Particulars"/>
+								<field name="particulars_ids" colspan="4" string="Particulars" nolabel="1">
+									<tree editable="bottom">
+										<field name="particulars_id"/>
+										<field name="number"/>
+										<field name="rate"/>
+										<field name="taxes_id" widget="many2many_tags"/>
+										<field name="total"/>
+
+									</tree>
+
+
+
+								</field>
+
+
+								<separator string="Select Rooms" />
+								<!--<field name="reserved" colspan="4" string="Room"
+									nolabel="1" widget="many2many_tags"/>-->
+
+								<field name="reserved" colspan="4" string="Room"
+									nolabel="1" >
+									<tree editable="bottom" >
+										<field name="name" required="1" domain="[('status','=','available')]"/>
+										<!--<field name="list_price" required="1" />
+										<field name="taxes_id" widget="many2many_tags"/>
+										<field name="capacity" invisible="0" />
+										<field name="extra_adult" />
+										<field name="adults" invisible="0" widget="char" required="1" />
+										<field name="extra_child" />
+										<field name="children"/>
+										<field name="kids"/>
+										<field name="eff_rate"/>-->
+
+									</tree>
+								</field>
+								<group class="text-right" col-span="2">
+									<field name="total"/>
+									<field name="tax_amount"/>
+									<field name="grand_total"/>
+									</group>
+							</group>
+
+						</group>
+						<footer>
+							<button name="write" string="Save" type="object" class="oe_highlight" />
+							or
+							<button string="Cancel" class="oe_link" special="cancel" />
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="hotel_reservation1_form2" model="ir.ui.view">
+			<field name="name">res.partner.form</field>
+			<field name="model">hotel.reservation</field>
+			<field name="inherit_id" ref="hotel_reservation.view_hotel_reservation_form" />
+			<field name="arch" type="xml">
+					<xpath expr="//header//field[@name='state']" position="replace">
+						<field name="state" widget="statusbar" statusbar_visible="draft,block,confirm,done,checkout" />
+					</xpath>
+
+					<xpath expr="//h1" position="after">
+						<label for="grc_no" attrs="{'invisible': [('state','in',['draft','block'])]}"/>
+						<h1 style="width:200px;">
+							<field name="grc_no" attrs="{'invisible': [('state','in',['draft','block'])]}"/>
+							<field name="seq" placeholder="A/..." class="oe_edit_only" widget="char" nolabel="1" attrs="{'invisible': 1}"/>
+						</h1>
+					</xpath>
+
+					<xpath expr="//group//group//field[@name='warehouse_id']" position="before">
+						<field name="reservation_type" required="1" />
+						
+					</xpath>
+					<xpath expr="//button[@string='Confirm']" position="replace">
+						<button name="confirm" string="Block" states="draft" class="oe_highlight" invisible="1"/>
+						<button name="action_confirm" string="Confirm" states="block"
+							type="object" class="oe_highlight"  invisible="1"/>
+					</xpath>
+					<!-- <xpath expr="//header//button[@name='confirm']" position="after">
+						<button name="block" string="Block" type="object" class="oe_highlight" states="draft"/>
+					</xpath>
+					<xpath expr="//header//button[@name='confirm']" position="attributes">
+						<attribute name="states">draft,block</attribute>
+					</xpath> -->
+
+					<xpath expr="//field[@name='partner_id']" position="before">
+						<field name="guest_nick" string="Quick Name"
+							attrs="{'readonly':[('state','in',['cancel'])]}" />
+							<field name="id_type"
+							attrs="{'readonly':[('state','in',['cancel'])]}" invisible="1"/>
+
+
+					</xpath>
+					<xpath expr="//field[@name='partner_id']" position="attributes">
+						<attribute name="string">Guest Name</attribute>
+
+
+					</xpath>
+					<xpath expr="//field[@name='partner_id']" position="after">
+
+						<field name="identification_id" string="ID Number" invisible="1"
+							attrs="{'readonly':[('state','in',['cancel'])]}" />
+
+						<field name="direct_walking" attrs="{'invisible':[('direct_walking','=',False)]}"/>
+					</xpath>
+					<xpath expr="//field[@name='pricelist_id']" position="replace">
+						<field name="guest_type" required="1" string="Booking Source"/>
+
+
+						<field name="dob" col="2" />
+						<field name="wdng_day" col="2" />
+						<field name="pricelist_id" col="2" invisible="1" />
+
+
+					</xpath>
+					<!-- <xpath expr="//field[@name='partner_order_id']" position="after">
+
+
+
+					</xpath> -->
+					<xpath expr="//button[@string='Create Folio']" position="replace">
+						<button type="object" name="get_warning" string="Check In"
+							states="confirm" class="oe_highlight" />
+					</xpath>
+
+					<xpath expr="//button[@string='Cancel Reservation']"
+						position="replace">
+						<button name="cancel" string="Cancel Reservation" states="done,block,confirm,checkout"
+							class="oe_highlight" />
+
+					</xpath>
+
+					<xpath expr="//button[@string='Send Reservation Email']"
+						position="replace">
+						<button name="send_reservation_maill" type="object"
+							string="Send Reservation Email" states="draft" class="oe_highlight" />
+						<button name="send_acknowlegdement_maill" type="object"
+							string="Send Receipt Email" states="block" class="oe_highlight" />
+						<button name="action_change_category" type="object"
+							string="Change Category" states="confirm" class="oe_highlight" invisible="1"/>
+					</xpath>
+					<xpath expr="//group/group[3]" position="after">
+						<group>
+							<group>
+								<field name="arrived_from"/>
+								<field name="visit_purpose"/>
+								<field name="is_foreigner" invisible="1"/>
+								
+								<field name="employed_in_india" attrs="{'invisible':[('is_foreigner','=',False)]}"/>
+								<field name="duration_india" attrs="{'invisible':[('is_foreigner','=',False)]}"/>
+								<field name="arrival_date" attrs="{'invisible':[('is_foreigner','=',False)]}"/>
+							</group>
+							<group>
+								<field name="proceed_to"/>
+							</group>
+						</group>
+
+
+
+						<group colspan="4" col="4">
+							<group>
+								<field name="ml_plan" required="True" />
+								<field name="cutoff_date" />
+								<field name="remarks"/>
+							</group>
+							<group>
+								<field name="can_edit" invisible="1"/>
+								
+								<field name="room_only" string="Room Rate" class="oe_inline"/>
+								
+								<field name="extra_cash"/>
+								<field name="tax_amount" />
+								<field name="special_rate" invisible="1" />
+								<label for="rack_rate" string="Net Amount Payable" />
+								<div>
+									<field name="rack_rate" nolabel="1"
+										attrs="{'readonly':[('can_edit','=',False)]}" class="oe_inline"/>
+									<button name="make_editable" type="object" icon="STOCK_EDIT" class="oe_inline" attrs="{'invisible':['|',('can_edit','=',True),('state','in',['done','checkout'])]}"/>
+								</div>
+								<field name="discount" attrs="{'readonly':[('state','in',['cancel'])]}" groups="hrms.group_editors"/>
+								<field name="discount" readonly="True" groups="hrms.group_viewers"/>
+								<field name="advance" readonly="True" />
+								<field name="balance" readonly="True" />
+								<field name="payment_mode" invisible="1" />
+
+
+							</group>
+						</group>
+
+					</xpath>
+
+					<xpath expr="//sheet/group/group/field[@name='partner_order_id']"
+						position="replace">
+						<field name="partner_order_id" string="Agency" domain="[('agency','=',True)]" attrs="{'readonly':[('state','in',['checkout','cancel'])],'invisible':[('guest_type','=','room')]}" context="{'default_agency':1}"/>
+
+					</xpath>
+					<xpath expr="//sheet/group/group/field[@name='partner_invoice_id']"
+						position="replace">
+						<field name="partner_invoice_id"
+							attrs="{'readonly':[('state','in',['cancel'])]}"  invisible="1"/>
+					</xpath>
+					<xpath expr="//field[@name='children']" position="attributes">
+						<attribute name="string">Children with Bed</attribute>
+
+					</xpath>
+
+					<xpath expr="//field[@name='children']" position="after">
+						<field name="visible_res" invisible="1" />
+						<field name="no_rooms" string="No of Rooms"  />
+						<field name="kids" force_save="1"/>
+						<field name="no_nights" string="No of Nights" readonly="True" />
+						<field name="no_male"/>
+						<field name="no_female"/>
+						<field name="no_pax"/>
+						<field name="check_in_time"/>
+						<field name="given_rooms_ids" widget="many2many_tags" states="done" domain="[('status','=','available')]"/>
+
+						<newline />
+					</xpath>
+
+
+					<!-- <xpath expr="//notebook/page[@string='Reservation Line']" position="replace">
+						<page string='Reservation Line'> <field name="reservation_line" colspan="4"
+						nolabel="1"> <form string="Reservation Line"> <separator string="Room Type"
+						/> <field name="name" invisible="1" /> <field name="categ_id" select="1"
+						colspan="4" nolabel="1" /> <newline /> <separator string="Select Room" />
+						<field name="reserve" colspan="4" string="Room Number" nolabel="1" /> </form>
+						<tree string="Reservation Line"> <field name="reserve" string="Rooms" />
+						</tree> </field> </page> </xpath> -->
+					<xpath expr="//notebook/page[@string='Reservation Line']"
+						position="replace">
+					</xpath>
+					
+					<xpath expr="//notebook/page[@string='History']" position="before">
+						
+						<page string='Reservations' attrs="{'invisible':[('state','not in',('confirm','done'))]}">
+							<button type="object" name="open_room_booking_wizard2"
+								class="oe_highlight" string="Add Rooms"
+								attrs="{'invisible':[('state','not in',('draft','confirm'))]}" />
+							<!-- <field name="block_ids" colspan="4"> <tree editable="bottom">
+								<field name="room_type_id" string="Room Category" /> <field name="room_available"
+								/> <field name="nos" /> <field name="check_in" /> <field name="check_out"
+								/> <field name="price_subtotal" readonly="True" /> <field name="state" invisible="True"
+								/> </tree> </field> <seperator>Rooms</seperator> -->
+							<field name="reservation_line" colspan="4" nolabel="1" >
+								<form string="Reservation Line">
+									<separator string="Room Type" />
+									<field name="name" invisible="1" />
+									<field name="categ_id" select="1" colspan="4" nolabel="1" />
+
+									<newline />
+									<separator string="Particulars"/>
+								<field name="particulars_ids" string="Particulars" nolabel="1">
+									<tree editable="bottom">
+										<field name="particulars_id"/>
+										<field name="number"/>
+										<field name="rate"/>
+										<field name="taxes_id" widget="many2many_tags"/>
+										<field name="total"/>
+
+									</tree>
+
+
+
+								</field>
+									<newline/>
+									<separator string="Select Room" />
+
+									<field name="reserved" colspan="4" string="Room Number" nolabel="1" >
+										<form>
+											<group>
+												<field name="name" domain="[('status','=','available')]" required="1"/>
+												<!--<field name='list_price'/>-->
+											</group>
+										</form>
+										<tree editable="bottom">
+											<field name="name"  domain="[('status','=','available')]"/>
+											<!--<field name="taxes_id" widget="many2many_tags" invisible="0" />
+											&lt;!&ndash; <field name="categ_id" readonly="1" /> &ndash;&gt;
+											<field name="list_price" string="Rate"/>
+											&lt;!&ndash; <field name="taxes_id" string="Tax" widget="many2many_tags"
+												readonly="1"
+												options='{"no_open": True,"no_create": 1, "no_create_edit": 1}' /> &ndash;&gt;
+											<field name="capacity" string="Capacity" invisible="0"/>
+											<field name="extra_adult" />
+											<field name="adults" invisible="0" widget="char" required="1" />
+											<field name="extra_child" />
+											<field name="children" invisible="0"/>
+											<field name="kids"/>
+											<field name="eff_rate"/>-->
+										</tree>
+
+
+									</field>
+									<group class="text-right" col-span="2">
+									<field name="total"/>
+									<field name="tax_amount"/>
+									<field name="grand_total"/>
+									</group>
+								</form>
+								<tree string="Reservation Line" delete="true" create="false">
+									<field name="room_allocate" string="Rooms" />
+								</tree>
+							</field>
+						</page>
+
+					</xpath>
+					<xpath expr="//group/group/field[@name='warehouse_id']"
+						position="replace">
+						<field name="company_id" readonly="1" />
+					</xpath>
+
+					<xpath expr="//notebook[1]/page[1]/field[@name='reservation_line']"
+						position="after">
+						<group string="Extra Services" invisible="1">
+							<field name="extra_line" colspan="4" nolabel="1"
+								attrs="{'readonly':[('state','in',['cancel'])]}">
+								<tree string="Extra Services" editable="bottom">
+									<field name="product_id" required="1" />
+									<field name="name" />
+									<field name="price_unit" />
+									<field name="product_uom" invisible="1"/>
+									<field name="product_uom_qty" />
+									<field name="every_day" string="Per Day" />
+									<field name="complimentary" string="Complimentary"/>
+									<field name="taxes_id" widget="many2many_tags"
+										options='{"no_open": True,"no_create": 1, "no_create_edit": 1}' />
+									<field name="price_subtotal" readonly="True" sum="Total" />
+									<field name="state" invisible="True" />
+									<field name="tax_amount" invisible="True" />
+									<field name="amt_without_tax" invisible="True" />
+								</tree>
+							</field>
+
+						</group>
+						<!-- <group string="Food Reservation"> <field name="food_order_lines"
+							nolabel="1" attrs="{'readonly':[('state','in',['done','cancel'])]}"> <tree>
+							<field name="date" /> <field name="type" /> </tree> <form string="Food Reservation">
+							<group> <group> <field name="date" /> <field name="type" /> </group> <group></group>
+							</group> <group> <field name="order_list" nolabel="1"> <tree editable="bottom">
+							<field name="name" /> <field name="item_qty" /> <field name="item_rate" />
+							<field name="price_subtotal" sum="Total" /> </tree> </field> </group> </form>
+							</field> </group> -->
+					</xpath>
+					<xpath expr="//notebook[1]/page[2]" position="replace">
+						<page string="category" attrs="{'invisible':[('reservation_type','=','room_based')]}">
+							<button name="add_category_line" string="Add Category" type="object" class="oe_highlight" attrs="{'invisible':[('state','!=','draft')]}" />
+							<group>
+								<field name="add_category" nolabel="1">
+									<tree editable="bottom" create="false">
+										<field name="category_id" string="Room category"/>
+										<field name="rate" />
+										<field name="avail_rooms" string="Available Rooms" />
+										<field name="selected_rooms" />
+										<field name="tax_ids" widget="many2many_tags" options="{'no_create':1}" />
+										<field name="capacity" string="Capacity Per Room"/>
+										<field name="adult" />
+										<field name="child" />
+									</tree>
+									<form>
+										<group col="4">
+											<field name="category_id" string="Room category"/>
+											<field name="avail_rooms" string="Available Rooms" />
+											<field name="selected_rooms" string="Selected Rooms" />
+										</group>
+									</form>
+								</field>
+							</group>
+						</page>
+						<page string="Advance payments">
+							<field name="advance_lines"
+								attrs="{'readonly':[('state','in',['cancel'])]}">
+								<tree editable="bottom">
+									<field name="date" required="1" />
+									<field name="partner_id" invisible="1" />
+									<field name="amount" required="1" />
+									<field name="taxes_id"  invisible="1"/>
+									<field name="total_amount" string="Total"/>
+									<field name="mode" required="1" />
+									<field name="bank_name" attrs="{'readonly':[('mode', '=', 'cash')]}"/>
+									<field name="tax_amount" invisible="1"/>
+									<field name="amt_without_tax" invisible="1"/>
+									<field name="move_id" invisible="1"/>
+								</tree>
+							</field>
+						</page>
+
+					</xpath>
+			</field>
+		</record>
+
+		<!-- <record id="hotel_reservation1_form_accounts2" model="ir.ui.view">
+			<field name="name">res.partner.form</field> <field name="model">hotel.reservation</field>
+			<field name="inherit_id" ref="hrms.hotel_reservation1_form2" /> <field name="groups_id"
+			eval="[(6, 0, [ref('hrms.hotel_account') ])]" /> <field name="arch" type="xml">
+			<data> <xpath expr="//field[@name='advance']" position="replace"> <field
+			name="advance" readonly="False" /> </xpath> <xpath expr="//field[@name='journal_id']"
+			position="replace"> <field name="journal_id" readonly="False" /> </xpath>
+			<xpath expr="//field[@name='account_id']" position="replace"> <field name="account_id"
+			readonly="False" /> </xpath> </data> </field> </record> -->
+
+
+
+		<record id="hotel_folio1_form" model="ir.ui.view">
+			<field name="name">hotel.folio.form</field>
+			<field name="model">hotel.folio</field>
+			<field name="inherit_id" ref="hotel.view_hotel_folio1_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//h1" position="after">
+					<label for="grc_no"/>
+					<h1 style="width:200px;">
+						<field name="grc_no" class="oe_title" />
+					</h1>
+				</xpath>
+				
+				<!-- <xpath expr="//notebook/page/group/field[@name='amount_untaxed']"
+					position="before"> <field name="advance" readonly="True" widget='monetary'
+					/> </xpath> -->
+				<xpath expr="//notebook/page/group/field[@name='amount_untaxed']"
+					position="replace">
+					<field name="grand_total" widget='monetary' readonly="True" />
+
+				</xpath>
+				<xpath expr="//notebook/page/group/field[@name='amount_tax']"
+					position="replace">
+					<field name="tax_amount" readonly="True" widget='monetary' />
+					<!-- <field name="service_charge" widget='monetary' string="Service
+						Charge" readonly="True" /> -->
+					<field name="advance" readonly="True" widget='monetary' />
+					<field name="discount" widget='monetary' groups="hrms.group_inv_editors"/>
+					<field name="discount" readonly="True" widget='monetary' groups="hrms.group_inv_viewers" />
+					<!-- <field name="payment_received" widget='monetary' string="Payment
+						After Check In" /> -->
+				</xpath>
+				<xpath expr="//label[@for='amount_total']" position="replace">
+					<!-- <div class="oe_subtotal_footer_separator oe_inline"> -->
+					<label for="last_total" />
+					<!-- <button name="button_dummy" string="Compute" states="draft" type="object"
+						icon="terp-sale" class="oe_highlight" invisible="True"/> </div> -->
+					<!-- <field name="last_total" nolabel="1" widget='monetary'/> -->
+				</xpath>
+				<xpath expr="//notebook/page/group/field[@name='amount_total']"
+					position="replace">
+					<field name="last_total" widget='monetary' nolabel="1"
+						readonly="True" string="Service Charge" />
+				</xpath>
+
+				<xpath expr="//notebook/page/field[@name='service_lines']"
+					position="after">
+					<group colspan="2" class="oe_subtotal_footer oe_right">
+						<field name="rb_total" widget='monetary' />
+						<field name="ldry_total" widget='monetary' />
+
+					</group>
+				</xpath>
+				<xpath expr="//sheet//group//field[@name='date_order']" position="after">
+				<field name="date_folio3" invisible="0"/>
+
+				</xpath>
+
+
+				<separator string="Service Lines" colspan="4" />
+				<field name="service_lines" colspan="4" string="Service Line"
+					nolabel="1" context="{'checkin':checkin_date,'checkout':checkout_date}">
+					<form string="Service Line">
+						<notebook>
+							<page string="Service Line">
+								<group col="4">
+									<field name="ser_checkin_date" readonly="True" colspan="2" />
+									<field name="ser_checkout_date" readonly="True" colspan="2" />
+								</group>
+								<separator string="Automatic Declaration" colspan="2" />
+								<group col="4">
+									<field name="date_order" />
+									<newline />
+									<field name="product_id" colspan="2" select="1" options='{"no_create": 1, "no_create_edit": 1}' 
+										domain="[('is_hotel_service','=','service')]"
+										context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'hotel':parent.warehouse_id,'uom':product_uom}"
+										on_change="product_id_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, True, parent.date_order)" />
+									<field name="product_uom_qty" colspan="2" select="1"
+										context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'hotel':parent.warehouse_id,'uom':product_uom}"
+										on_change="product_id_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, False, parent.date_order)" />
+									<field name="product_uom" colspan="2"
+										on_change="product_uom_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, False, parent.date_order)" />
+									<field name="price_unit" select="2" />
+									<!-- <field name="is_laundry" /> -->
+									<field name="discount" invisible="True" />
+									<field name="tax_id" widget="many2many_tags"
+										options='{"no_open": True,"no_create": 1, "no_create_edit": 1}' />
+								</group>
+								<group>
+									<separator string="States" colspan="4" invisible="True" />
+									<field name="state" select="2" invisible="True" />
+									<field name="invoiced" select="2" />
+								</group>
+								<separator string="Manual Description" colspan="4" />
+								<field name="name" colspan="4" select="2" placeholder="---Description---" />
+							</page>
+							<page string="Extra Info" invisible="True">
+								<group>
+									<field name="product_uos_qty" />
+									<field name="product_uos" />
+									<field name="address_allotment_id" select="2" />
+								</group>
+							</page>
+						</notebook>
+					</form>
+					<tree string="Service Line">
+						<field name="date_order" />
+						<field name="product_id" />
+						<field name="name" />
+						<field name="product_uom_qty" />
+						<field name="price_unit" />
+						<field name="tax_id" widget="many2many_tags"
+							options='{"no_open": True,"no_create": 1, "no_create_edit": 1}' />
+						<field name="price_subtotal" sum="Total" />
+						<field name="total_with_tax" sum="Total" />
+						<field name="state" invisible="True" />
+					</tree>
+				</field>
+
+				<xpath expr="//notebook/page[@string='Other data']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//notebook/page[@string='Foreign Exchange']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//notebook/page/field/tree/field[@name='price_unit']"
+					position="after">
+					<field name="tax_id" widget="many2many_tags"
+						options='{"no_open": True,"no_create": 1, "no_create_edit": 1}' />
+				</xpath>
+				<xpath expr="//notebook/page/group/field[@name='partner_shipping_id']"
+					position="before">
+					
+						<field name="travel_agency"  />
+				</xpath>
+
+				<xpath expr="//notebook/page/group/field[@name='duration']"
+					position="after">
+					<field name="checkout_time"
+						attrs="{'readonly' : ['|',('state','in',('progress','done'))], 'required' : [('state','=','manual')]}" />
+						<field name="is_agency" invisible="1"/>					
+						
+				</xpath>
+
+				<xpath expr="//notebook/page/field/tree/field[@name='product_uom']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//notebook/page/field/tree/field[@name='state']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//notebook/page/field/tree/field[@name='state']"
+					position="after">
+					<field name="total_with_tax" sum="Total" />
+					<field name="is_check_in" invisible="1" />
+					<field name="is_check_out"  invisible="1"/>
+					<!-- <button name="current_room_checkout" type="object" attrs="{'invisible' : [('is_check_out','=', True)]}"
+								string="Checkout this room for new accommodation" icon="gtk-goto-last" class="oe_inline" />
+					<button name="current_room_check_in" type="object" attrs="{'invisible' : [('is_check_in','=', True)]}"
+								string="Checkin this room for Blocking" icon="gtk-apply" class="oe_inline" /> -->
+				</xpath>
+				<xpath expr="//notebook/page/field/tree/field[@name='product_id']"
+					position="after">
+					<field name="product_uom_qty" string="Days" />
+				</xpath>
+				<xpath expr="//notebook/page/field/tree/field[@name='price_subtotal']"
+					position="replace">
+					<field name="price_subtotal" sum="Total" />
+				</xpath>
+				<xpath expr="//notebook/page/field/tree/field[@name='product_id']"
+					position="replace">
+				</xpath>
+				<xpath expr="//notebook/page/field/tree/field[@name='checkin_date']"
+					position="replace">
+				</xpath>
+				<xpath expr="//notebook/page/field/tree/field[@name='checkout_date']"
+					position="replace">
+				</xpath>
+				<xpath expr="//notebook/page/field/tree/field[@name='name']"
+					position="before">
+					<field name="checkin_date" />
+					<field name="checkout_date" />
+					<field name="product_id" domain="[('room_status2','=',True)]"/>
+				</xpath>
+				<xpath expr="//header/button[@name='action_cancel']" position="before">
+					<button name="action_view_invoice" string="View Invoice"
+						type="object" class="oe_highlight"
+						attrs="{'invisible' : [('state','in',('draft','sent','cancel','manual'))]}" />
+						<button name="estimated_bill" string="Estimated Bill" type="object" class="oe_highlight" invisible="1" />
+				</xpath>
+
+				<xpath expr="//notebook/page[@string='Folio']" position="after">
+					<page string="Advance">
+						<field name="advance_lines"
+							attrs="{'readonly' : ['|',('state','in',('progress','done'))]}">
+							<tree editable="bottom">
+								<field name="date" required="1" />
+								<field name="partner_id" invisible="1" />
+								<field name="amount" required="1" sum="Total" />
+								<field name="taxes_id" invisible="1"/>
+								<field name="total_amount" required="1" invisible="1"/>
+								<field name="mode" required="1" />
+								<field name="tax_amount" invisible="1"/>
+								<field name="amt_without_tax" invisible="1"/>
+								<field name="move_id"/>
+							</tree>
+						</field>
+					</page>
+				</xpath>
+
+				<xpath expr="//notebook/page/field/tree[@string='Room Line']"
+					position="attributes">
+					<attribute name="editable">bottom</attribute>
+				</xpath>
+
+				<xpath expr="//header/button[@name='order_confirm']"
+					position="replace">
+					<button name="order_confirm" string="Check Out" states="draft"
+							icon="gtk-apply" class="oe_highlight" />
+				</xpath>
+			   <!--  <field name="reservation_id" position="attributes">
+					<attribute name="string">GRC No.</attribute>
+				</field> -->
+
+				<xpath expr="//header//button[@name='action_cancel']" position="after">
+					<button name="room_booking_extend_wizard" string="Extend reservation"  class="oe_highlight" type="object"  />
+
+				</xpath>
+
+                <field name="room_lines"
+					position="after">
+					<group string="Extra" >
+						<field name="extrabed_lines" string="Extra Bed" nolabel="1">
+						<tree editable="bottom">	
+							<field name="checkin_date"/>
+							<field name="checkout_date"/>
+							<field name="desc" string="Item"/>
+							<field name="name"/>
+							<field name="product_uom" invisible="1" />
+							<field name="product_uom_qty" />
+							<field name="price_unit" string="Price"/>
+							<field name="tax_id"/>
+							<field name="price_subtotal" sum="Total"/>
+							<field name="total_with_tax" sum="Total"/>
+							<field name="state" invisible="1" sum="Total"/>
+						</tree>
+						</field>
+					</group>
+				</field>
+
+			</field>
+		</record>
+
+		
+
+
+		<record model="ir.ui.view" id="hotel_extend_reservation_form">
+			<field name="name">Extend_reservation_form</field>
+			<field name="model">hotel.extend.reservation</field>
+			<field name="arch" type="xml">
+				<form string="Extend Reservation">
+					<sheet>
+						<header>
+						      <h3>Extend Reservation</h3>
+						    </header>
+						<group>
+							<group>
+								<field name="pre_check_in_date"/>
+								<field name="extended_res_id" invisible="1"/>
+								<!-- <field name="folio_id"/> -->
+								
+							</group>
+							<group>
+								<field name="pre_check_out_date"/>
+								
+							</group>
+
+						</group>
+						<group>
+							<group>
+								<field name="new_checkout_date"/>
+							</group>
+							<!-- <group>
+								<field name="room_type"/>
+							</group> -->
+
+						</group>
+
+						<footer>
+							<button name="get_room_details" string="Summit" type="object" class="oe_highlight" />
+							or
+							<button string="Cancel" class="oe_link" special="cancel" />
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+
+
+
+		<record id="action_hotel_reservation" model="ir.actions.act_window">
+			<field name="name">Extend reservation  Details</field>
+			<field name="res_model">hotel.extend.reservation</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+		</record>
+
+
+		<record model="ir.ui.view" id="view_hotel_folio1_form_inherited2">
+			<field name="name">hotel.folio.form.inherited</field>
+			<field name="model">hotel.folio</field>
+			<field name="inherit_id" ref="hotel_reservation.view_hotel_folio1_form_inherited"/>
+			<field name="arch" type="xml">
+				<field name="reservation_id" position='attributes'>
+					<attribute name="string">Reservation No</attribute>
+				</field>
+			</field>
+		</record>
+
+
+
+		<record model="ir.ui.view" id="view_hotelfolio2_form2_inherited_hiworth">
+			<field name="name">hotel.folio2.form2.inherited.hiworth</field>
+			<field name="model">hotel.folio</field>
+			<field name="inherit_id"
+				ref="hotel_pos_restaurant.view_hotelfolio2_form2_inherited" />
+			<field name="arch" type="xml">
+				<xpath expr="//notebook/page[@string='POS Restaurant']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_hotelfolio1_form1_inherited_hiworth">
+			<field name="name">hotel.folio1.form1.inherited.hiworth</field>
+			<field name="model">hotel.folio</field>
+			<field name="inherit_id" ref="hotel_restaurant.view_hotelfolio1_form1_inherited" />
+			<field name="arch" type="xml">
+				<xpath expr="//notebook/page[@string='Hotel Restaurant']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+			</field>
+		</record>
+
+
+		<record id="hotel_folio1_form9" model="ir.ui.view">
+			<field name="name">hotel.folio.tree9</field>
+			<field name="model">hotel.folio</field>
+			<field name="inherit_id" ref="hotel.view_hotel_folio1_tree" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='name']" position="replace">
+					<field name="name" />
+				</xpath>
+				<xpath expr="//field[@name='state']" position="replace">
+					<field name="state" invisible="True" />
+					<field name="company_id" />
+					<field name="partner_order_id" />
+					<field name="extra_amount_bed" />
+					<field name="extra_amount_withoutbed" />
+					<field name="date_folio3"/>
+				</xpath>
+				<xpath expr="//field[@name='partner_id']" position="after">
+					<field name="room_no_list" />
+				</xpath>
+				<xpath expr="//field[@name='amount_total']" position="replace">
+					<field name="last_total" sum="Total amount" />
+					<field name="state" />
+				</xpath>
+
+			</field>
+		</record>
+
+		<!-- <record model="ir.actions.act_window" id="open_hotel_folio1_form_tree_all9">
+			<field name="name">Folio</field> <field name="res_model">hotel.folio</field>
+			<field name="view_type">form</field> <field name="view_mode">tree</field>
+			<field name="view_id" ref="hotel_folio1_form9" /> </record> <menuitem string="Folio
+			Detail" action="open_hotel_folio1_form_tree_all9" id="menu_hotel_folio1_form_tree_all9"
+			parent="hotel.menu_all_folio" sequence="2" groups="hrms.hotel_restaurent"
+			/> -->
+
+
+		<record model="ir.actions.act_window" id="action_hotel_reservation_tree_restaurant">
+			<field name="name">Check In</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hotel.reservation</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree</field>
+			<field name="context">{"search_default_group_check_in":1}
+			</field>
+			<field name="view_id" ref="inherit_view_hotel_resrevation_filter_remainder" />
+		</record>
+
+		<!-- <menuitem string="Check In" action="action_hotel_reservation_tree_restaurant"
+			id="open_hotel_reservation_tree_restaurant" parent="hotel.menu_all_folio"
+			sequence="1" groups="hrms.hotel_restaurent" /> -->
+
+
+
+
+		<record id="hotel_restaurant_kitchen_order_tickets_tree2"
+			model="ir.ui.view">
+			<field name="name">hotel_restaurant_kitchen_order_tickets.tree2
+			</field>
+			<field name="model">hotel.restaurant.kitchen.order.tickets</field>
+			<field name="inherit_id"
+				ref="hotel_restaurant.view_hotel_restaurant_kitchen_order_tickets_tree" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='kot_list']" position="replace">
+					<field name="kot_list" invisible="1" />
+				</xpath>
+			</field>
+		</record>
+
+
+		<record id="view_hotel_menucard_form" model="ir.ui.view">
+			<field name="name">hotel.menucard.form2</field>
+			<field name="model">hotel.menucard</field>
+			<field name="inherit_id" ref="hotel_restaurant.view_hotel_menucard_form" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//form/sheet/div/h2/field[@name='categ_id']"
+					position="replace">
+					<label for="item_code" />
+					<field name="item_code" />
+					<label for="item_type_id" class="oe_edit_only" />
+					<h2>
+						<field name="item_type_id" select="1" string="Category" />
+					</h2>
+				</xpath>
+
+				<xpath expr="//notebook/page/group/field[@name='list_price']"
+					position="replace">
+				</xpath>
+				<xpath expr="//notebook/page/group/group/field[@name='uom_id']"
+					position="before">
+					<field name="list_price" required="1" />
+				</xpath>
+				<!-- <xpath expr="//notebook/page/group/group/field[@name='type']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath> -->
+				<xpath expr="//notebook/page/group/group/field[@name='product_manager']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//notebook/page/group/group/field[@name='uom_po_id']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//notebook/page/separator[@string='Supplier Taxes']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//notebook/page/field[@name='supplier_taxes_id']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//notebook/page/separator[@string='Customer Taxes']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//notebook/page/field[@name='taxes_id']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//notebook/page[@string='Procurement']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//notebook/page[@string='Descriptions']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_hotel_menucard_tree_hiworth">
+			<field name="name">hotel.menucard.tree.hiworth</field>
+			<field name="model">hotel.menucard</field>
+			<field name="inherit_id" ref="hotel_restaurant.view_hotel_menucard_tree" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='categ_id']" position="replace">
+					<field name="item_type_id" />
+				</xpath>
+				<xpath expr="//field[@name='name']" position="before">
+					<field name="item_code" />
+				</xpath>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="hotel_restaurant.action_hotel_menucard_form">
+			<field name="name">Hotel Menucard</field>
+			<field name="res_model">hotel.menucard</field>
+			<field name="view_type">form</field>
+			<field name="context">{'default_ismenucard':1,'default_available_in_pos':0}
+			</field>
+			<field name="view_mode">kanban,tree,form</field>
+			<field name="search_view_id" ref="hotel_restaurant.view_hotel_menucard_search_new" />
+		</record>
+
+
+		<record id="view_hotel_restaurant_order_form" model="ir.ui.view">
+			<field name="name">hotel_restaurant_order.form</field>
+			<field name="model">hotel.restaurant.order</field>
+			<field name="inherit_id" ref="hotel_restaurant.view_hotel_restaurant_order_form" />
+			<field name="arch" type="xml">
+
+				<!-- <xpath expr="//group/group/field[@name='o_date']" position="before">
+					<group col="4" colspan="4"> <field name="journal_id" /> <field name="account_id"
+					/> </group> </xpath> -->
+				<!-- <xpath expr="//group/group/field[@name='room_no']" position="after">
+					<field name="ml_plan" domain="[('isroom','=',True)]" attrs="{'invisible':[('is_folio','=',False)]}"
+					/> </xpath> -->
+				<xpath expr="//button[@string='generate Bill']" position="replace">
+					<button name="%(report_hotel_res_order_bill2)d"
+						attrs="{'invisible' : ['|',('state','in',('draft','order','cancel'))]}"
+						type="action" string="Generate Bill" class="oe_highlight" />
+				</xpath>
+				<xpath expr="//button[@string='Done']" position="after">
+					<button string="Paid" name="done_payed" states="done,cancel" type="object"
+						class="oe_highlight" confirm="Are You Sure?" />
+					<button string="Credit" name="done_credited" states="done,cancel" type="object"
+						attrs="{'invisible' : ['|',('folio_id','=', False)]}"
+						class="oe_highlight" />
+					<button string="Mark as NC" name="markas_non_chargable"  type="object" class="oe_highlight" />
+					<button string="Cancel" name="action_cancel" type="object"
+						states="payed,credited" icon="gtk-cancel" />
+
+				</xpath>
+				<!-- <xpath expr="//button[@string='Generate KOT']" position="replace">
+					<button string="Generate KOT" name="generate_kot3" type="object" states="draft"
+					icon="gtk-go-forward" /> </xpath> -->
+<!--				<xpath expr="//sheet/h1" position="replace">-->
+<!--						<h1>-->
+<!--							<label string="KOT" colspan="4" />-->
+<!--&lt;!&ndash;                            <field name="order_no" colspan="4" readonly="False"/>&ndash;&gt;-->
+<!--							<field name="kot_number"/>-->
+<!--                        </h1>-->
+<!--				</xpath>-->
+<!--				<xpath expr="//sheet/group[2]" position="replace">-->
+<!--					<group>-->
+<!--						<group>-->
+<!--							<field name="remarks" attrs="{'required':['|',('discount_percent','!=',0)]}"/>-->
+<!--						</group>-->
+<!--						<group>-->
+<!--							<field name="amount_subtotal" widget="monetary" invisible="1" />-->
+<!--							<field name="tax" widget='monetary' invisible="1" />-->
+
+<!--							<field name="amount_tax" string="Amount Tax" invisible="1" />-->
+<!--							<field name="combo_subtotal" widget="monetary" string="Combo Subtotal"/>-->
+<!--							<field name="combo_cgst" widget="monetary" string="Combo CGST"/>-->
+<!--							<field name="combo_sgst" widget="monetary" string="Combo SGST"/>-->
+<!--							<field name="combo_igst" widget="monetary" string="Combo IGST"/>-->
+<!--							<field name="combo_total" widget="monetary" string="Combo Total"/>-->
+<!--							<field name="subtotal" widget="monetary" />-->
+<!--							<field name="discount_percent" invisible="1" />-->
+<!--							<field name="discount_amt" invisible="1" />-->
+<!--							<field name="cgst" />-->
+<!--							<field name="sgst" />-->
+<!--							<field name="igst" />-->
+<!--							<field name="coinage" invisible="1"  />-->
+<!--							<div class="oe_subtotal_footer_separator oe_inline">-->
+<!--								<label for="amount_total" style="font-weight: 600;font-size: 150%;" />-->
+<!--							</div>-->
+<!--							<field name="amount_total" nolabel="1" widget='monetary'-->
+<!--								style="font-weight: 600;font-size: 150%;" />-->
+<!--						</group>-->
+<!--					</group>-->
+					<!-- <field name="serv" widget='monetary' string="Service Charge" /> -->
+<!--				</xpath>-->
+
+				<!-- <xpath expr="//sheet/group/field[@name='tax']" position="replace">
+					<field name="taxes_id" string="Taxes" widget="many2many_tags" /> <field name="amount_tax"
+					string="Amount Tax" /> <field name="coinage" /> <field name="serv" widget='monetary'
+					string="Service Charge" /> </xpath> -->
+				<!-- <xpath expr="//sheet/group/field[@name='amount_subtotal']" position="replace">
+					<field name="price_subtotal" string="Amount Without Tax" widget="monetary"/>
+					</xpath> -->
+
+				<xpath expr="//header/field[@name='state']" position="replace">
+					<field name="state" widget="statusbar" statusbar_visible="draft,payed,credited,nc" />
+				</xpath>
+
+<!--				<field name="cname" position="after">-->
+<!--					<field name="agent_id" domain="[('agency','=',True)]" context="{'default_agency':1,'default_customer':0}"/>-->
+
+<!--				</field>-->
+
+				<xpath expr="//group/field[@name='order_list']" position="replace">
+<!--					<field name="tax_id" />-->
+					<field name="order_list" colspan="4" nolabel='1'
+						attrs="{'readonly':[('state','in',['cancel','payed','credited'])]}">
+						<form string="Order List">
+							<group>
+								<field name="name"
+									options="{'no_quick_create':True,'no_create_edit':True}" />
+								<field name="complimentary" />
+								<field name="item_qty" />
+								<field name="item_rate" />
+								<field name="amount"/>
+								<field name="discount"/>
+<!--								<field name="price_subtotal" invisible="1" />-->
+<!--								<field name="cgst"/>-->
+<!--								<field name="sgst" />-->
+<!--								<field name="igst" />-->
+							</group>
+						</form>
+						<tree string="Order List" editable="bottom">
+							<field name="name"
+								options='{"no_open": True,"no_quick_create": 1, "no_create_edit": 1}' />
+							<field name="complimentary" />
+							<field name="item_qty" sum="Total"/>
+							<field name="item_rate" />
+							<field name="amount"/>
+								<field name="discount"/>
+								<field name="tax_ids" widget="many2many_tags"
+								readonly="1" invisible="1" />
+								<field name="price_subtotal" sum="Total"/>
+<!--							&lt;!&ndash; <field name="restaurant_line_tax_id" widget="many2many_tags"-->
+<!--&lt;!&ndash;								/> &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;								<field name="cgst" sum="Total"/>&ndash;&gt;-->
+<!--&lt;!&ndash;								<field name="sgst" sum="Total"/>&ndash;&gt;-->
+<!--&lt;!&ndash;								<field name="igst" />&ndash;&gt;-->
+<!--&lt;!&ndash;								<field name="total_amount" sum="Total"/>&ndash;&gt;-->
+
+						</tree>
+					</field>
+					<!-- <group> <group></group> <group> <field name="restaurant_line_tax_id"
+						widget="many2many_tags" /> </group> </group> -->
+				</xpath>
+
+<!--				<xpath expr="//group//group//field[@name='room_no']" position="replace" />-->
+<!--				<xpath expr="//group//group//field[@name='folio_id']"-->
+<!--					position="before">-->
+<!--					<field name="room_no" domain="[('room_status2','=',True)]"-->
+<!--						options='{"no_open": True,"no_create": 1, "no_create_edit": 1}'-->
+<!--						attrs="{'invisible':[('is_folio','=',False)] ,'required':[('is_folio','=',True)]}" />-->
+<!--				</xpath>-->
+
+				<xpath expr="//group/group/field[@name='is_folio']" position="attributes">
+					<attribute name="attrs">{'readonly':[('state','in',['cancel','payed','credited'])]}
+					</attribute>
+				</xpath>
+				<xpath expr="//group/group/field[@name='o_date']" position="after">
+
+						<field name="morning" />
+						<field name="lunch" />
+						<field name="dinner" />
+						<field name="other" />
+
+
+
+					<field name="food_time" required="1" invisible="1"/>
+					<!-- <field name="o_date_new1" /> -->
+<!--					<field name="o_date" invisible="1"/>-->
+				</xpath>
+
+				<xpath expr="//group/group/field[@name='o_date']" position="replace">
+					<field name="kot_number"/>
+					<field name="company_id" readonly="1"/>
+					<field name="o_date_new" />
+					<field name="o_date" invisible="1"/>
+				</xpath>
+				<xpath expr="//group/group/field[@name='o_date']" position="attributes">
+					<attribute name="attrs">{'readonly':[('state','in',['cancel','payed','credited'])]}
+					</attribute>
+				</xpath>
+				<xpath expr="//group/group/field[@name='folio_id']" position="replace">
+					<field name="folio_id" domain="[('state','not in',['done','cancel'])]"
+						attrs="{'invisible':[('is_folio','=',False)], 'required':[('is_folio','=',True)], 'readonly':[('state','in',['cancel','payed','credited'])]}" />
+				</xpath>
+				<xpath expr="//group/group/field[@name='room_no']" position="replace">
+					<field name="room_no" domain="[('room_status2','=',True)]"
+						options="{'no_quick_create':True,'no_create_edit':True}"
+						attrs="{'invisible':[('is_folio','=',False)], 'required':[('is_folio','=',True)], 'readonly':[('state','in',['cancel','payed','credited'])]}" />
+				</xpath>
+				<xpath expr="//field[@name='table_no']" position="replace">
+					<field name="table_no" colspan="4" nolabel='1'
+						attrs="{'readonly':[('state','in',['cancel','payed','credited'])]}" />
+				</xpath>
+				<xpath expr="//group/group/field[@name='cname']" position="attributes">
+					<attribute name="attrs">{'readonly':[('state','in',['cancel','payed','credited'])]}
+					</attribute>
+					<attribute name="domain">[('customer','=',True),('agency','=',False)]</attribute>
+				</xpath>
+
+
+				<xpath expr="//group/group/field[@name='waiter_name']"
+					position="attributes">
+					<attribute name="attrs">{'readonly':[('state','in',['cancel','payed','credited'])]}
+					</attribute>
+					<attribute name="domain">[('is_a_waiter','=',True)]</attribute>
+					<attribute name="context">{'default_is_a_waiter':1,'default_customer':0}</attribute>
+				</xpath>
+
+
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_hotel_restaurant_order_tree_alter">
+			<field name="name">hotel_restaurant_order.tree.alter</field>
+			<field name="model">hotel.restaurant.order</field>
+			<field name="inherit_id" ref="hotel_restaurant.view_hotel_restaurant_order_tree" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='order_no']" position="replace">
+
+				</xpath>
+				<xpath expr="//field[@name='o_date']" position="before">
+					<!-- <field name="sl_no" /> -->
+					<field name="order_no" />
+					<!-- <field name="bill_no" /> -->
+				</xpath>
+
+				<!-- <xpath expr="//field[@name='bill_no']" position="after"> <field
+					name="order_no" /> </xpath> -->
+				<xpath expr="//field[@name='state']" position="after">
+					<field name="bill_no" />
+				</xpath>
+
+
+
+			</field>
+		</record>
+
+
+
+		 <record model="ir.ui.view" id="hotel_restaurant.view_hotel_restaurant_order_search">
+			<field name="name">hotel.restaurant.order.search</field>
+			<field name="model">hotel.restaurant.order</field>
+			<field name="arch" type="xml">
+				<search string="Restaurant Order">
+					<filter name="today" domain="[('o_date','&gt;=',datetime.datetime.now().replace(hour=0, minute=0, second=0)),('o_date','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]" string="Today's Orders"/>
+					<field name="order_no"/>
+					<group expand="0" string="Group By">
+						<filter name="waiter_name" string="waiter name" icon="terp-personal" domain="[]" context="{'group_by':'waiter_name'}"/>
+						<filter name="o_date" string="date"  domain="[]" context="{'group_by':'o_date'}"/>
+						<filter name="not_cancelled" string="Not Cancelled" domain="[('state','!=','cancel')]"/>
+					</group>
+				</search>
+			</field>
+		</record>
+
+		<!-- Action of hotel restaurant order-->
+		<record model="ir.actions.act_window" id="hotel_restaurant.open_view_hotel_restaurant_order_form_tree">
+			<field name="name">Generate Table Order</field>
+			<field name="res_model">hotel.restaurant.order</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{'search_default_not_cancelled': 1}</field>
+		</record>
+
+
+		<record id="inherite_invoice_form1" model="ir.ui.view">
+			<field name="name">account.invoice.form</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.invoice_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//notebook/page/group/field[@name='amount_total']"
+					position="before">
+					<label for="discount" groups="hrms.group_inv_editors"/>
+					<field name="discount" nolabel="1" widget="monetary"
+						options="{'currency_field': 'currency_id'}" groups="hrms.group_inv_editors"/>
+					<label for="discount" groups="hrms.group_inv_viewers"/>
+					<field name="discount" nolabel="1" widget="monetary"
+						options="{'currency_field': 'currency_id'}" readonly="True" groups="hrms.group_inv_viewers"/>
+					<label for="round_off" />
+					<field name="round_off" nolabel="1" widget="monetary"
+						options="{'currency_field': 'currency_id'}"  />
+					</xpath>
+				<xpath expr="//notebook/page/group/field[@name='amount_total']"
+					position="after">
+					<label for="advance" />
+					<field name="advance" nolabel="1" widget="monetary"
+						options="{'currency_field': 'currency_id'}" readonly="True" />
+				</xpath>
+
+				<xpath expr="//h1" position="after">
+					<label for="grc_no" />
+					<h1 style="width:200px;">
+						<field name="grc_no" />
+					</h1>
+				</xpath>
+
+				<xpath expr="//button[@name='invoice_open']" position="replace">
+					<button name="invoice_open" states="draft" string="Validate" class="oe_highlight" groups="base.group_user" invisible="0"/>
+                    <button name="invoice_open" states="proforma2" string="Validate" groups="base.group_user" invisible="1"/>
+				</xpath>
+
+				<xpath expr="//button[@string='Print Invoice']" position="replace">
+					<button name="invoice_print"
+						attrs="{'invisible':[('state', 'not in', ['open','paid'])]}"
+						class="oe_highlight" type="object" string="Print Invoice" />
+					<button name="delete_invoice"
+						attrs="{'invisible':[('state', 'not in', ['open','paid'])]}"
+						class="oe_highlight" type="object" string="Delete" confirm="Are you sure you want to delete this record?" />
+				</xpath>
+
+
+				<!-- <xpath expr="//button[@name='invoice_open']" position="replace">
+					<button name="invoice_open" string="Validate"  invisible="1" class="oe_highlight" groups="base.group_user"/>
+					<button name="invoice_open_new" type="object" string="Validate" states="draft" class="oe_highlight" />
+				</xpath> -->
+				<!-- <xpath expr="//button[@name='invoice_open']" position="replace">
+					<button name="invoice_open" states="proforma2" string="Validate" groups="base.group_user"/>
+				</xpath> -->
+
+				<xpath expr="//button[@string='Print']" position="replace">
+					<button name="invoice_print"
+						attrs="{'invisible':['|',('sent','=',True), ('state', '!=', 'open')]}"
+						type="object" string="Print" class="oe_highlight" groups="base.group_user"
+						invisible="1" />
+				</xpath>
+
+				<!-- new validate button -->
+				<xpath expr="//button[@name='invoice_print']" position="after">
+					<button name="invoice_validate_new" type="object" string="Credit to Agency" class="oe_highlight" groups="base.group_user" states="draft" />
+				</xpath>
+				<xpath expr="//field[@name='date_invoice']" position="before">
+					<field name="inter_state" />
+					<field name="local" />
+				</xpath>
+				<xpath expr="//group/group/field[@name='partner_id']"
+					position="replace">
+					<field name="b2b"/>
+					<field name="b2c"/>
+					<field string="Invoice Address" name="partner_id"
+						on_change="onchange_partner_id(type, partner_id, date_invoice, payment_term, partner_bank_id, company_id, context)"
+						context="{'search_default_customer':1, 'show_address': 1}"
+						options='{"always_reload": True}' domain="[('customer', '=', True)]" />
+					<field name="customer_id" string="Customer" />
+					<!-- <field name="from_kot" invisible="1"/> -->
+					<field name="agent_id" invisible="1"/>
+					<field name="traval_agent_id"/>
+					
+					<field name="reservation_id"/>
+				</xpath>
+				<xpath expr="//notebook/page/field/tree/field[@name='discount']"
+					position="replace">
+					<field name="discount"/>
+				</xpath>
+
+				
+
+				
+
+				<!-- <xpath expr="//notebook/page/field/tree/field[@name='price_subtotal']" position="before">
+					<field name="tax_id"/>
+				</xpath> -->
+
+				<xpath expr="//notebook//page//group//field[@name='amount_untaxed']" position="after">
+					<field name="cgst"/>
+					<field name="sgst"/>
+					<field name="igst"/>
+
+				</xpath>
+
+				<xpath expr="//notebook/page/field/tree/field[@name='price_unit']"
+					position="after">
+					<field name="amount_amount" />
+
+				</xpath>
+
+				<xpath expr="//notebook/page/field/tree/field[@name='price_subtotal']"
+					position="attributes">
+					<attribute name="string">Taxable Value</attribute>
+				</xpath>
+
+				<xpath expr="//notebook/page/field/tree/field[@name='price_subtotal']"
+					position="after">
+					
+					<field name="sgst" />
+					<field name="cgst" />
+					<field name="igst"/>
+					<field name="amount_with_tax" string="Total" />
+					
+				</xpath>
+				<xpath expr="//group/group/field[@name='fiscal_position']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//group/group/field[@name='journal_id']"
+					position="attributes">
+					<attribute name="invisible">0</attribute>
+				</xpath>
+				<xpath expr="//group/group/field[@name='journal_id']"
+					position="after">
+					<field name="user_id" groups="base.group_user"
+						context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'account.group_account_invoice']}" />
+					<field name="checkin_date" />
+					<field name="checkout_date" />
+					<!-- <field name="invoice_report" attrs="{'invisible':[('state', '=', 'draft')]}"/> -->
+				</xpath>
+				<xpath expr="//group/group/field[@name='account_id']"
+					position="attributes">
+					<attribute name="invisible">0</attribute>
+				</xpath>
+				<xpath expr="//notebook/page/group/field[@name='payment_term']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//notebook/page[@string='Other Info']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//notebook/page/group/group/field[@name='user_id']"
+					position="replace">
+				</xpath>
+				<field name="number" position="replace">
+					 <field name="number" class="oe_inline" invisible="1"/>
+					 <field name="number2" class="oe_inline"/>
+					 <!-- <field name="seq" placeholder="A/..." class="oe_edit_only" widget="char" /> -->
+				</field>
+
+
+			</field>
+		</record>
+
+
+		<record id="invoice_tree_inherit" model="ir.ui.view">
+			<field name="name">account.invoice.form</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.invoice_tree" />
+			<field name="arch" type="xml">
+				<field name="number" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</field>
+				<field name="partner_id" position="after">
+					<field name="number2"/>
+				</field>
+
+
+			</field>
+		</record>
+
+		 <record id="invoice_supplier_form_hrms" model="ir.ui.view">
+			<field name="name">account.invoice.supplier.form</field>
+			<field name="model">account.invoice</field>
+			<field name="priority">2</field>
+			<field name="inherit_id" ref="account.invoice_supplier_form" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//field[@name='account_id']"
+					position="before">
+					<field name="purchase_bill_no" />
+				</xpath>
+
+				<xpath expr="//notebook/page/group/field[@name='amount_total']"
+					position="before">
+					<label for="round_off" />
+					<field name="round_off" nolabel="1" widget="monetary"
+						options="{'currency_field': 'currency_id'}"  />
+				</xpath>
+
+				<xpath expr="//notebook//page//group//field[@name='amount_untaxed']" position="after">
+					<field name="cgst"/>
+					<field name="sgst"/>
+					<field name="igst"/>
+
+				</xpath>
+			
+
+			</field>
+		</record>
+
+				
+
+		<!-- <record id="invoice_tree_altered" model="ir.ui.view">
+			<field name="name">account.invoice.tree.altered</field>
+			<field name="model">account.invoice</field>
+			<field name="arch" type="xml">
+
+				<xpath expr="//field[@name='date_invoice']" position="after">
+					<field name="room_no_list" />
+				</xpath>
+				<xpath expr="//field[@name='partner_id']" position="replace">
+					<field name="customer_id" string="Customer" />
+				</xpath>
+				<xpath expr="//field[@name='user_id']" position="before">
+					<field name="traval_agent_id" string="Travel Agent" />
+				</xpath>
+				<xpath expr="//field[@name='user_id']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//field[@name='company_id']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//field[@name='date_due']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+			</field>
+		</record> -->
+
+
+		<record id="view_account_invoice_filter_hrms" model="ir.ui.view">
+			<field name="name">view.account.invoice.filter.hrms</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.view_account_invoice_filter" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='partner_id']" position="after">
+					<field name="traval_agent_id" />
+				</xpath>
+				<xpath expr="//group/filter[@name='group_by_partner_id']"
+					position="after">
+					<filter name="group_by_agency_id" string="Travel Agency"
+						context="{'group_by':'traval_agent_id'}" />
+				</xpath>
+			</field>
+		</record>
+
+
+
+		<record id="view_product_product_form_inherited3" model="ir.ui.view">
+			<field name="name">view.product.product.form.inherited2</field>
+			<field name="model">product.product</field>
+			<field name="arch" type="xml">
+				<form string="Service">
+					<sheet>
+						<div class="oe_title" style="width: 390px;">
+							<label class="oe_edit_only" for="name" string="Service Name" />
+							<h1>
+								<field name="name" class="oe_inline" />
+							</h1>
+						</div>
+						<notebook>
+							<page string="Information">
+								<group colspan="4">
+									<group>
+										<field name="type" on_change="onchange_type(type)"
+											invisible="1" />
+										<field name="list_price" required="1" string="Rate" />
+										<field name="uom_id" on_change="onchange_uom(uom_id,uom_po_id)" />
+										<field name="is_hotel_service" invisible="1" />
+										<field name="uom_po_id" invisible="1" />
+									</group>
+									<group>
+										<field name="active" />
+										<field name="taxes_id" widget="many2many_tags" string="Taxes" />
+									</group>
+								</group>
+								<group colspan="4">
+									<field name="company_id" groups="base.group_multi_company"
+										widget="selection" />
+								</group>
+								<field name="description" placeholder="describe the product characteristics..." />
+							</page>
+						</notebook>
+					</sheet>
+				</form>
+				<!-- <xpath expr="//field[@name='type']" position="after"> <field name="is_laundry"
+					/> <field name="is_hotel_service" /> </xpath> -->
+			</field>
+		</record>
+
+
+
+
+		<!-- =====================================================================================
+			For hiding the menus ===================================================================================== -->
+		<record model="ir.ui.menu" id="point_of_sale.menu_point_root">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+
+		<record model="ir.ui.menu" id="account.menu_finance">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible_accounting')])]" />
+		</record>
+
+		
+
+		<record model="ir.ui.menu" id="base.menu_base_partner">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+		<!-- <record model="ir.ui.menu" id="stock.menu_stock_warehouse_mgmt"> <field
+			name="groups_id" eval="[(6,0,[ref('make_invisible')])]" /> </record> -->
+		<record model="ir.ui.menu" id="stock.menu_stock_sched">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+		<!-- <record model="ir.ui.menu" id="stock.menu_traceability"> <field name="groups_id"
+			eval="[(6,0,[ref('make_invisible')])]" /> </record> -->
+		<record model="ir.ui.menu" id="stock.menu_procurement_rules">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+		<!-- <record model="ir.ui.menu" id="base.menu_module_tree"> <field name="groups_id"
+			eval="[(6,0,[ref('make_invisible')])]" /> </record> <record model="ir.ui.menu"
+			id="base.module_mi"> <field name="groups_id" eval="[(6,0,[ref('make_invisible')])]"
+			/> </record> -->
+		<record model="ir.ui.menu" id="mail.mail_feeds_main">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+		<record model="ir.ui.menu" id="base.menu_management">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+
+		<!--<record model="ir.ui.menu"
+			id="hotel_restaurant.menu_open_view_hotel_restaurant_reservation_form_tree">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>-->
+
+		<record model="ir.ui.menu" id="hotel.menu_hotel_room_category_action">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+		<record model="ir.ui.menu" id="hotel.menu_hotel_ty_category_action">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+		<record model="ir.ui.menu" id="hotel.menu_hotel_service_category_action">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+
+		<record model="ir.ui.menu" id="hotel.menu_hotel_service">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+
+
+		<record model="ir.ui.menu" id="base.menu_reporting">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+
+		<record model="ir.ui.menu" id="hotel_pos_restaurant.wizard_order_menu">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+
+
+		<!-- <record model="ir.ui.menu" id="account.menu_finance">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+
+		<record model="ir.ui.menu" id="stock.menu_stock_root">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+
+		<record model="ir.ui.menu" id="base.menu_purchase_root">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+
+		<record model="ir.ui.menu" id="knowledge.menu_document">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record> -->
+
+<!--
+		<record model="ir.ui.menu"
+			id="hotel_restaurant.menu_open_view_hotel_reservation_order_form_tree">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>-->
+		<!--<record model="ir.ui.menu"
+			id="hotel_restaurant.menu_open_view_hotel_restaurant_kitchen_order_tickets_form_tree">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>-->
+
+
+		<!-- <record model="ir.ui.menu" id="hotel.hotel_report_menu">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record> -->
+
+		<!--<record model="ir.ui.menu"
+			id="hotel_restaurant.menu_hotel_restaurent_food_category_action">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>-->
+
+
+		<record model="ir.ui.menu" id="hotel.menu_currency_exchange_tree">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+
+
+		<!-- <record model="ir.ui.menu" id="hotel_housekeeping.menu_housekeeping">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record> -->
+		<record model="ir.ui.menu" id="hotel_housekeeping.menu_hotel_activity">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+
+
+		<record model="ir.ui.menu" id="hotel.menu_all_folio">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+
+
+		<!--  ======================= Inventory ================== -->
+
+
+	<!--	<record model="ir.ui.menu" id="purchase.menu_purchase_rfq">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+
+		<record model="ir.ui.menu" id="purchase.menu_procurement_management_inventory">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+		<record model="ir.ui.menu" id="purchase.menu_procurement_management_invoice">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+		<record model="ir.ui.menu" id="purchase.menu_purchase_partner_cat">
+			<field name="groups_id" eval="[(6,0,[ref('make_invisible')])]" />
+		</record>
+-->
+
+
+	
+		<menuitem id="hotel_reservation.menu_hotel_reservation" name="Reservations"
+			parent="hotel.hotel_management_menu" sequence="1"
+			groups="hrms.hotel_receptionist,hrms.hotel_reservation,hrms.hotel_account" />
+
+
+
+		<menuitem name="Hotel Reservation Report"
+			action="hotel_reservation.action_hotel_reservation_wizard" parent="hotel.hotel_report_menu"
+			id="hotel_reservation.wizard_res_menu" sequence="28"
+			groups="hrms.hotel_receptionist,hrms.hotel_reservation,hrms.hotel_account" />
+		<menuitem name="Activity Report" id="hotel_housekeeping.wizard_activity_menu"
+			action="hotel_housekeeping.action_hotel_housekeeping_wizard" parent="hotel.hotel_report_menu"
+			sequence="29"
+			groups="hrms.hotel_receptionist,hrms.hotel_reservation,hrms.hotel_account" />
+		<menuitem name="Hotel Folio Report" action="hotel.hotel_folio_wizard"
+			id="hotel.wizard_hotel_menu" parent="hotel.hotel_report_menu"
+			sequence="31"
+			groups="hrms.hotel_receptionist,hrms.hotel_reservation,hrms.hotel_account" />
+
+
+		<!-- <menuitem name="Inventory Management" id="hotel.menu_all_folio"
+			sequence="70" /> -->
+
+
+		<!-- ==================================================================================
+			House Keeping ==================================================================================== -->
+
+		<record id="view_hotel_housekeeping_form" model="ir.ui.view">
+			<field name="name">hotel.housekeeping.form</field>
+			<field name="model">hotel.housekeeping</field>
+			<field name="inherit_id" ref="hotel_housekeeping.view_hotel_housekeeping_form" />
+			<field name="arch" type="xml">
+				<data>
+					<xpath expr="//group/group/field[@name='inspect_date_time']"
+						position="replace">
+						<field name="inspect_date_time" required="False" />
+					</xpath>
+					<xpath expr="//group/group/field[@name='quality']" position="replace">
+						<field name="quality" required="False" />
+					</xpath>
+					<xpath expr="//group/group/field[@name='inspector']"
+						position="replace">
+						<field name="inspector" required="False" />
+					</xpath>
+					<xpath expr="//field[@name='activity_lines']" position="replace">
+						<field name="activity_lines" context="{'room_id':room_no, 'today_date':current_date}"
+							colspan="4" nolabel="1">
+							<form string="Activity Lines">
+								<group colspan="4" col="4">
+									<field name="room_id" />
+									<field name="today_date" />
+									<field name="activity_name" />
+									<field name="housekeeper" />
+									<field name="clean_start_time" />
+									<field name="clean_end_time" />
+								</group>
+								<div class="oe_title">
+									<div class="oe_edit_only">
+										<field name="dirty" />
+										<label for="dirty" string="Is Dirty?" />
+										<field name="clean" />
+										<label for="clean" string="Is Clean?" />
+									</div>
+								</div>
+							</form>
+							<tree string="Activity Lines" editable="buttom">
+								<field name="activity_name" />
+								<field name="housekeeper" />
+								<field name="room_id" />
+								<field name="today_date" />
+								<field name="clean_start_time" required="False" />
+								<field name="clean_end_time" required="False" />
+								<field name="dirty" />
+								<field name="clean" />
+							</tree>
+						</field>
+					</xpath>
+
+				</data>
+			</field>
+		</record>
+
+
+		<!-- <record model="ir.ui.view" id="view_hotel_housekeeping_tree"> <field
+			name="name">hotel.housekeeping.tree</field> <field name="model">hotel.housekeeping</field>
+			<field name="inherit_id" ref="hotel_housekeeping.view_hotel_housekeeping_form"
+			/> <field name="arch" type="xml"> <tree string="Housekeeping12"> <field name="current_date"
+			/> <field name="clean_type" /> <field name="room_no" /> <field name="inspector"
+			/> <field name="inspect_date_time" /> <field name="state" /> </tree> </field>
+			</record> -->
+
+
+
+
+
+
+
+
+
+
+
+
+		<!-- <record id="view_hotel_housekeeping_activities_form" model="ir.ui.view">
+			<field name="name">view.hotel.housekeeping.activities.form</field> <field
+			name="model">hotel.housekeeping.activities</field> <field name="arch" type="xml">
+			<form string="Housekeeping Activities"> <header> <button name="done" states="dirty"
+			string="Done" /> <field name="state" widget="statusbar" /> </header> <sheet>
+			<group string="Housekeeping Activities"> <field name="today_date" string="Date"
+			/> <field name="activity_name" /> <newline /> <field name="housekeeper" />
+			<newline /> <field name="clean_start_time" /> <field name="clean_end_time"
+			/> </group> </sheet> </form> </field> </record> <record id="view_hotel_housekeeping_activities_tree"
+			model="ir.ui.view"> <field name="name">view.hotel.housekeeping.activities.tree</field>
+			<field name="model">hotel.housekeeping.activities</field> <field name="arch"
+			type="xml"> <tree string="Housekeeping Activities"> <field name="today_date"
+			string="Date" /> <field name="activity_name" /> <field name="housekeeper"
+			/> <field name="clean_start_time" /> <field name="clean_end_time" /> <field
+			name="state" /> </tree> </field> </record> -->
+
+		<!-- <record id="open_hotel_housekeeping_activities_tree" model="ir.actions.act_window">
+			<field name="name">House Keeping Activities</field> <field name="res_model">hotel.housekeeping.activities</field>
+			<field name="view_type">form</field> <field name="view_mode">form,tree</field>
+			<field name="view_id" ref="view_hotel_housekeeping_activities_tree" /> <field
+			name="target">new</field> </record> -->
+
+		<!-- <menuitem id="menu_open_hotel_housekeeping_activities_tree2" action="view_hotel_housekeeping_activities_form"
+			parent="hotel_housekeeping.menu_housekeeping" sequence="10" /> -->
+
+
+
+		<record model="ir.ui.view" id="service_products_reservation">
+			<field name="name">service.products.reservation</field>
+			<field name="model">product.product</field>
+			<field name="priority" eval="17" />
+			<field name="arch" type="xml">
+				<tree string="Services">
+					<field name="name" />
+					<field name="uom_id" />
+					<field name="lst_price" />
+					<field name="description" />
+
+				</tree>
+			</field>
+		</record>
+
+
+		<record model="ir.actions.act_window" id="action_hotel_reservation_services">
+			<field name="name">Services</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">product.product</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[('is_hotel_service','=', True)]</field>
+			<field name="context">{"default_is_hotel_service":1}
+			</field>
+		</record>
+
+		<record id="action_hotel_reservation_services_tree" model="ir.actions.act_window.view">
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="service_products_reservation" />
+			<field name="act_window_id" ref="action_hotel_reservation_services" />
+		</record>
+
+		<record id="action_hotel_reservation_services_form" model="ir.actions.act_window.view">
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="view_product_product_form_inherited3" />
+			<field name="act_window_id" ref="action_hotel_reservation_services" />
+		</record>
+
+
+		<menuitem name="Services" id="menu_hotel_reservation_services"
+			action="action_hotel_reservation_services" sequence="2"
+			parent="hotel.hotel_configuration_menu" groups="hrms.hotel_reservation,hrms.hotel_receptionist" />
+
+
+
+		<!-- <menuitem name="Taxes" id="menu_hotel_reservation_taxes"
+			action="account.action_tax_form" sequence="30"
+			parent="hotel.hotel_configuration_menu" /> -->
+
+
+
+
+
+		<!-- <menuitem string="Customers" action="base.action_partner_customer_form"
+			id="menu_account_customer_hrms2" parent="hotel.hotel_configuration_menu"
+			sequence="40" /> -->
+
+
+
+		<record model="ir.ui.view" id="reservation_reminder_wizard1111">
+			<field name="name">reservation.reminder.wizard</field>
+			<field name="model">reservation.reminder.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Services">
+					<group col="4">
+						<field name="date_from" />
+						<field name="date_to" />
+					</group>
+					<group>
+						<field name="reminder" />
+					</group>
+					<footer>
+						<button name="action_open_window1" type="object" string="Continue"
+							class="oe_highlight" />
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_reservation_reminder_wizard11" model="ir.actions.act_window">
+			<field name="name">Reminder</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">reservation.reminder.wizard</field>
+			<field name="target">new</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+		</record>
+
+
+		<menuitem id="menu_reservation_reminder_wizard11" name="Reminder" action="action_reservation_reminder_wizard11" parent="hotel.hotel_report_menu"/>
+
+
+		<record model="ir.ui.view" id="form_reservation_reminder">
+			<field name="name">reservation.customer.reminder</field>
+			<field name="model">reservation.customer.reminder</field>
+			<field name="arch" type="xml">
+				<form create="false" edit="false">
+					<field name="reminder" invisible="1"/>
+					<group col="4">
+						<field name="date_from" readonly="1" />
+						<field name="date_to" readonly="1" />
+					</group>
+					<group string="Birthdays" attrs="{'invisible': [('reminder','=','wedding')]}" >
+						<field name="dob_one2many" nolabel="1" >
+							<tree create="false" delete="false">
+								<field name="name" />
+								<field name="dob" />
+							</tree>
+						</field>
+					</group>
+					<group string="Wedding Anniversary" attrs="{'invisible': [('reminder','=','dob')]}" >
+						<field name="wedding_one2many" nolabel="1">
+							<tree create="false" delete="false">
+								<field name="name" />
+								<field name="wdng_day" />
+							</tree>
+						</field>
+					</group>
+					<button name="open_report_reminder" type="object" class="oe_highlight" string="Print"/>
+				</form>
+			</field>
+		</record>
+
+
+		<!-- Available Rooms -->
+
+		<record model="ir.ui.view" id="form_hotel_available_rooms">
+			<field name="name">hotel.rooms.available</field>
+			<field name="model">hotel.rooms.available</field>
+			<field name="arch" type="xml">
+				<form string="Available Rooms" create="false" edit="false">
+					<sheet>
+						<h1>Available Rooms</h1>
+						<group>
+							<field name="date" />
+						</group>
+						<field name="rooms" readonly="1" >
+							<tree>
+								<field name="room_type" />
+								<field name="no_rooms" sum="Total"/>
+							</tree>
+						</field>
+
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_hotel_available_rooms" model="ir.actions.act_window">
+			<field name="name">Available Rooms</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hotel.rooms.available</field>
+			<field name="target">inline</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+		</record>
+
+
+		<menuitem id="menu_hotel_available_rooms" name="No of available rooms" action="action_hotel_available_rooms" parent="hotel_reservation.menu_hotel_reservation"/>
+
+
+		<menuitem  id="hotel.menu_hotel_room" name="Room" parent="hotel.hotel_configuration_menu" sequence="2" groups="hrms.hotel_receptionist,hrms.hotel_reservation"/>
+
+
+		<record id="base.lang_en" model="res.lang">
+			<field name="date_format">%d/%m/%Y</field>
+		</record>
+
+
+	</data>
+</openerp>

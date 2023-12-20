@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+	<data>
+		<template id="report_restaurant_menu_card">
+			<div class="page">
+					<img t-att-src="'data:image/png;base64,%s' % user.company_id.menu_card"
+						style="max-height: 950px;" />
+			</div>
+		</template>
+	</data>
+</openerp>
+    

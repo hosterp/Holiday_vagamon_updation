@@ -1,0 +1,258 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+		<!-- Check in-out -->
+
+		<record model="ir.ui.view" id="customer_occupancy_wizard">
+			<field name="name">customer.occupancy.wizard</field>
+			<field name="model">customer.occupancy.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Occupancy Report">
+					<group col="4">
+						<field name="date_from" />
+						<field name="date_to" />
+					</group>
+					<footer>
+						<button name="action_open_window1" type="object" string="View"
+							class="oe_highlight" />
+						or
+						<button name="action_open_window2" type="object" string="Print"
+							class="oe_highlight" />
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_customer_occupancy_wizard" model="ir.actions.act_window">
+			<field name="name">Occupancy Report</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">customer.occupancy.wizard</field>
+			<field name="target">new</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+		</record>
+
+	
+		<menuitem id="menu_customer_occupancy_wizard" name="Occupancy Report" action="action_customer_occupancy_wizard" parent="hotel.hotel_report_menu"/>
+
+
+		<record model="ir.ui.view" id="customer_available_rooms_wizard">
+			<field name="name">customer.available.rooms.report</field>
+			<field name="model">customer.available.rooms.report</field>
+			<field name="arch" type="xml">
+				<form string="Available Rooms">
+					<group col="4">
+						<field name="from_date" />
+						<field name="to_date" />
+					</group>
+					<footer>
+						<button name="action_open_window1" type="object" string="View"
+							class="oe_highlight" />
+						or
+						<button name="action_open_window2" type="object" string="Print"
+							class="oe_highlight" />
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+
+
+		<record id="action_available_rooms" model="ir.actions.act_window">
+			<field name="name">Available Rooms Report</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">customer.available.rooms.report</field>
+			<field name="target">new</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+		</record>
+
+
+		<menuitem name="Room Availability"
+			id="menu_action_hotel_checkin_checkout_summary" action="action_available_rooms"
+			parent="hotel_reservation.menu_hotel_reservation" sequence="2" />
+
+
+
+
+
+		<report id="report_available_rooms" string="Available Rooms Report"
+			model="customer.available.rooms.report" report_type="qweb-pdf"
+			name="hrms.report_available_room_template2" />
+
+
+		<template id="report_available_room_template2">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="report.external_layout">
+						<div class="page">
+							<center><b><h2>Rooms Availability Report</h2></b></center>
+							
+
+							<t t-set="sl_no" t-value="1" />
+							
+							<div>
+								<center>
+
+									<table style="width: 50%; font-size:16px;margin-top:50px;">
+			                            <thead>
+			                                <tr style="height: 30px;">
+			                                    <td style="width: 25%;"><b>Date From:</b>
+			                                        <span t-field="o.from_date"/>
+			                                    </td>
+			                                    <td style="width: 25%;text-align: right;"><b>Date To:</b>
+			                                        <span t-field="o.to_date"/>
+			                                    </td>
+			                                </tr>
+			                            </thead>
+			                        </table>
+
+
+									<table style="font-size:16px;width: 50%;border-bottom: outset;border-top: outset;margin-top:30px;">
+										<thead>
+
+											<tr style="border-bottom: outset;border-right: outset;border-left: outset;">
+												<td style="width: 5%; border-right: outset;" align="center"><h5><b>Sl No</b></h5></td>
+								
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Room Type</b></h5></td>
+
+												<t t-foreach="o.get_dates()" t-as="category">
+    											<td style="border: outset;width: 15%" align="center">
+    												<span t-esc="category['date']"/>
+    											</td>
+    											</t>
+												
+											</tr>
+										</thead>
+										<t t-set="sl_no" t-value="1" />
+										<tbody>
+
+											<t t-foreach="docs.get_category()" t-as="category">
+											<tr>
+												<td style="width: 5%; border: outset;" align="center">
+													<span t-esc="sl_no" />
+													<t t-set="sl_no" t-value="sl_no+1" />
+												</td>
+												<td style="border: outset;width: 10%" align="center">
+    												<span t-esc="category['category']"/>
+    											</td>
+												<t t-foreach="docs.get_category_details(category['categ_id'])" t-as="items">
+    											<td style="border: outset;width: 10%" align="center">
+    												<span t-esc="items['vacancy']"/>
+    								
+    											</td>
+    										</t>
+											 </tr>
+											</t>
+
+
+										</tbody>
+
+										
+										
+									</table>
+								</center>
+							</div>
+			               
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+
+
+
+		<report id="report_customer_occupancy" string="Occupancy Report"
+			model="customer.occupancy.wizard" report_type="qweb-pdf"
+			name="hrms.report_customer_occupancy_template2" />
+
+
+		<template id="report_customer_occupancy_template2">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="report.external_layout">
+						<div class="page">
+							<center><b><h2>Occupancy Report</h2></b></center>
+							
+
+							<t t-set="sl_no" t-value="1" />
+							
+							<div>
+								<center>
+
+									<table style="width: 100%; font-size:16px;margin-top:50px;">
+			                            <thead>
+			                                <tr style="height: 30px;">
+			                                    <td style="width: 50%;"><b>Date From:</b>
+			                                        <span t-field="o.date_from"/>
+			                                    </td>
+			                                    <td style="width: 50%;text-align: right;"><b>Date To:</b>
+			                                        <span t-field="o.date_to"/>
+			                                    </td>
+			                                </tr>
+			                            </thead>
+			                        </table>
+
+
+									<table style="font-size:16px;width: 100%;border-bottom: outset;border-top: outset;margin-top:30px;">
+										<thead>
+
+											<tr style="border-bottom: outset;border-right: outset;border-left: outset;">
+												<td style="width: 5%; border-right: outset;" align="center"><h5><b>Sl No</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Room No</b></h5></td>
+												<td style="width: 30%; border-right: outset;" align="center"><h5><b>Guest Name</b></h5></td>
+												<td style="width: 10%; border-right: outset;" align="center"><h5><b>Number of adults</b></h5></td>
+												<td style="width: 10%; border-right: outset;" align="center"><h5><b>Number of child</b></h5></td>
+												<td style="width: 20%; border-right: outset;" align="center"><h5><b>Checkin Date</b></h5></td>
+												<td style="width: 20%; border-right: outset;" align="center"><h5><b>Checkout Date</b></h5></td>
+											</tr>
+										</thead>
+
+										<tbody>
+
+											<t t-foreach="docs.get_occupancy_details()" t-as="line">
+												<tr style="border-left: outset;">
+													<td style="width: 5%; border-right: outset;" align="center">
+														<t t-esc="sl_no" />
+														<t t-set="sl_no" t-value="sl_no+1" />
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['room_no']"/>
+													</td>
+													<td style="width: 30%;  border-right: outset;padding-left: 4px;">
+														<span t-esc="line['guest']"/>
+													</td>
+													<td style="width: 10%;  border-right: outset;" align="center">
+														<span t-esc="line['no_pax']"/>
+													</td>
+													<td style="width: 10%;  border-right: outset;" align="center">
+														<span t-esc="line['no_child']"/>
+													</td>
+													<td style="width: 20%;  border-right: outset;" align="center">
+														<span t-esc="time.strftime('%m/%d/%Y',time.strptime(line['checkin'],'%Y-%m-%d'))"/>
+													</td>
+													<td style="width: 20%;  border-right: outset;" align="center">
+														<span t-esc="time.strftime('%m/%d/%Y',time.strptime(line['checkout'],'%Y-%m-%d'))"/>
+													</td>
+													
+												</tr>
+											</t>
+
+										</tbody>
+									</table>
+								</center>
+							</div>
+			               
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+
+	</data>
+</openerp>

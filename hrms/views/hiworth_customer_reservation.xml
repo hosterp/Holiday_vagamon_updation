@@ -1,0 +1,233 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+		<record model="ir.ui.view" id="hotel_custmer_reservation_form">
+			<field name="name">hotel.customer.reservation.form</field>
+			<field name="model">hotel.reservation</field>
+			<field name="priority" eval="17" />
+			<field name="arch" type="xml">
+				<form string="Reservation">
+					<header>
+						<button name="confirm" string="Confirm" states="draft"
+							class="oe_highlight" />
+						<button name="cancel" string="Cancel Reservation" states="draft,confirm"
+							class="oe_highlight" />
+						
+						<field name="state" widget="statusbar"
+							statusbar_colors='{"draft":"green","cancel":"red"}' />
+						<field name="state" invisible="1" />
+					</header>
+					<sheet>
+						<group>
+							<group>
+								<field name="user_id" string="User" readonly="1" />
+								<field name="date_order" string="Date Order" readonly="1" />
+
+							</group>
+							<group>
+								<field name="company_id" string="Hotel"
+									options='{"no_open": True,"no_create": 1, "no_create_edit": 1}' />
+							</group>
+						</group>
+						<group>
+							<group>
+								<field name="customer_name" string="Name" />
+								<field name="street" string="House No" />
+								<field name="street2" string="Street" />
+								<field name="city" />
+								<field name="state_id" />
+								<field name="zip" />
+								<field name="country_id" />
+							</group>
+							<group>
+
+								<field name="phone" />
+								<field name="Mobile" />
+								<field name="email" required="1" />
+								<field name="state" invisible="1" />
+							</group>
+						</group>
+						<group>
+							<group>
+								<field name="checkin" />
+							</group>
+							<group>
+								<field name="checkout" />
+								<field name="external_user" invisible="1" />
+							</group>
+
+						</group>
+						<group>
+							<group>
+								<field name="no_rooms" string="No of Rooms" readonly="True" />
+								<field name="no_nights" string="No of Nights" readonly="True" />
+								<field name="cutoff_date" readonly="True" />
+							</group>
+							<group>
+								<field name="rack_rate" string="Net Amount Payable"
+									readonly="True" />
+								<field name="advance" readonly="True" />
+								<field name="balance" readonly="True" />
+								<field name="special_rate" invisible="1" />
+							</group>
+						</group>
+						<!-- <notebook> -->
+						<!-- <page string="Reservation Line"> -->
+						<group string="Rooms">
+							<field name="reservation_line" colspan="4" nolabel="1">
+								<form string="Reservation Line">
+									<separator string="Room Type" />
+									<field name="name" invisible="1" />
+									<field name="categ_id" select="1" colspan="4" nolabel="1" />
+									<newline />
+									<separator string="Select Room" />
+									<field name="reserve" colspan="4" string="Room Number"
+										nolabel="1" />
+								</form>
+								<tree string="Reservation Line">
+									<field name="reserve" string="Rooms" />
+								</tree>
+							</field>
+						</group>
+						<!-- </page> -->
+						<group string='Extra Services'>
+							<field name="extra_line" colspan="4"
+								attrs="{'readonly':[('state','in',['done','cancel'])]}">
+								<tree string="Extra Services" editable="bottom">
+
+									<field name="product_id" required="1"
+										options='{"no_open": True,"no_create": 1, "no_create_edit": 1}' />
+									<field name="name" />
+									<field name="price_unit" />
+									<field name="product_uom_qty" />
+									<field name="every_day" string="Per Day" />
+									<field name="price_subtotal" readonly="True" />
+									<field name="state" invisible="True" />
+								</tree>
+							</field>
+
+						</group>
+						<!-- </notebook> -->
+					</sheet>
+				</form>
+
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="hotel_custmer_reservation_tree">
+			<field name="name">hotel.customer.reservation.tree</field>
+			<field name="model">hotel.reservation</field>
+			<field name="priority" eval="17" />
+			<field name="arch" type="xml">
+				<tree string="Reservation">
+					<field name="reservation_no" />
+					<field name="partner_id" />
+					<field name="checkin" />
+					<field name="checkout" />
+					<field name="state" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_hotel_custmer_reservation" model="ir.actions.act_window">
+			<field name="name">Reservation</field>
+			<field name="res_model">hotel.reservation</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="domain">[('user_id','=', uid)]</field>
+			<field name="context">{"default_external_user":1}
+			</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<record id="action_hotel_custmer_reservation_tree" model="ir.actions.act_window.view">
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="hotel_custmer_reservation_tree" />
+			<field name="act_window_id" ref="action_hotel_custmer_reservation" />
+		</record>
+
+		<record id="action_hotel_custmer_reservation_form" model="ir.actions.act_window.view">
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="hotel_custmer_reservation_form" />
+			<field name="act_window_id" ref="action_hotel_custmer_reservation" />
+		</record>
+
+		<menuitem id="menu_hotel_custmer_reservation_root" sequence="50"
+			name="Reservation" groups="hrms.hotel_reservation_external" />
+
+		<menuitem id="menu_hotel_custmer_reservation3" name="Reservation"
+			parent="menu_hotel_custmer_reservation_root" sequence="10" />
+
+
+		<menuitem action="action_hotel_custmer_reservation" id="menu_hotel_custmer_reservation4"
+			name="Reservation" parent="menu_hotel_custmer_reservation3" sequence="10" />
+
+		<menuitem name="Reservations Summary"
+			id="menu_action_hotel_reservation_summary_hiworth" action="hotel_reservation.action_hotel_reservation_summary"
+			parent="menu_hotel_custmer_reservation3" sequence="20" />
+
+
+		<record model="ir.ui.view" id="room_custmer_reservation_tree">
+			<field name="name">room.customer.reservation.tree</field>
+			<field name="model">hotel.room</field>
+			<field name="priority" eval="17" />
+			<field name="arch" type="xml">
+				<tree string="Room">
+					<field name="name" />
+					<field name="categ_id" select="1" />
+					<field name="company_id" string="Hotel" />
+					<field name="list_price" string="Room rate" />
+
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_hotel_room_form_hiworth">
+			<field name="name">Hotel Room</field>
+			<field name="res_model">hotel.room</field>
+			<field name="view_type">form</field>
+			<field name="context">{'default_isroom':1,'default_rental':1,'default_available_in_pos':0}
+			</field>
+			<field name="view_id" ref="room_custmer_reservation_tree" />
+			<field name="view_mode">tree</field>
+		</record>
+
+		<menuitem name="Rooms" id="hotel_room_customer_reservation_room2"
+			action="action_hotel_room_form_hiworth" sequence="30"
+			parent="menu_hotel_custmer_reservation3" />
+
+		<!-- <menuitem name="Room Types" id="hotel_room_customer_reservation_room_type" 
+			action="hotel.open_hotel_room_type_form_tree" sequence="40" parent="menu_hotel_custmer_reservation3" 
+			/ -->
+		>
+
+
+		<record model="ir.actions.act_window" id="action_hotel_services_external">
+			<field name="name">Services</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">product.product</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="service_products_reservation" />
+			<field name="domain">[('is_hotel_service','=', True)]</field>
+			<field name="context">{"default_is_hotel_service":1}
+			</field>
+		</record>
+
+		<menuitem id="hotel_services_customer_reservation" name="Services"
+			action="action_hotel_services_external" parent="menu_hotel_custmer_reservation3"
+			sequence="50" />
+
+		<menuitem id="account.next_id_27" name="Taxes" parent="hotel.hotel_configuration_menu" sequence="8"/>
+
+
+		<menuitem id="account.next_id_23" name="Periods" parent="hotel.hotel_configuration_menu" sequence="10"/>
+
+
+
+		<!-- <delete model="ir.ui.menu" id="website.menu_website"></delete> -->
+
+	</data>
+</openerp>
+

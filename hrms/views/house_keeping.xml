@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<record model="ir.ui.view" id="form_house_keeping_allocation">
+			<field name="name">form.house.keeping.allocation</field>
+			<field name="model">house.keeping.allocation</field>
+			<field name="arch" type="xml">
+				<form string="Item Allcoation">
+					<header>
+						<button type="object" name="action_close" string="Close"
+							states="open" class="oe_highlight" />
+						<field name="state" widget="statusbar" statusbar_visible="open,close" />
+					</header>
+					<sheet>
+						<group>
+							<group>
+								<field name="date" required="1" />
+								<field name="partner_id" />
+							</group>
+							<group>
+								<field name="folio_id" />
+							</group>
+						</group>
+						<field name="allocation_room_ids">
+							<tree>
+								<field name="room_id" />
+							</tree>
+							<form>
+								<group>
+									<group>
+										<field name="room_id" />
+									</group>
+									<group></group>
+								</group>
+								<group>
+									<field name="allocation_ids" nolabel="1">
+										<tree editable="bottom">
+											<field name="product_id" required="1" />
+											<field name="alloted_qty" required="1" />
+											<field name="state" required="1" />
+											<field name="returned_qty"
+												attrs="{'readonly':[('state','=','alloted')], 'required':[('state','not in ','alloted')]}" />
+											<field name="damaged_qty"
+												attrs="{'readonly':[('state','in',['alloted','return'])], 'required':[('state','=','damage')]}" />
+											<field name="remarks" />
+										</tree>
+									</field>
+								</group>
+							</form>
+						</field>
+
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="tree_house_keeping_allocation">
+			<field name="name">tree.house.keeping.allocation</field>
+			<field name="model">house.keeping.allocation</field>
+			<field name="arch" type="xml">
+				<tree string="Item Allcoation">
+					<field name="date" />
+					<field name="partner_id" />
+					<field name="folio_id" />
+					<field name="state" />
+				</tree>
+			</field>
+		</record>
+
+		<!-- Action of hotel reservation Remainder -->
+		<record model="ir.actions.act_window" id="action_house_keeping_allocation">
+			<field name="name">Allocations</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">house.keeping.allocation</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="tree_house_keeping_allocation" />
+		</record>
+		<menuitem name="Allocations" id="menu_house_keeping_allocation"
+			action="action_house_keeping_allocation" parent="hotel_housekeeping.menu_housekeeping"
+			sequence="10" />
+
+	</data>
+</openerp>

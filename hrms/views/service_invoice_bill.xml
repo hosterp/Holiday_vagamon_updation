@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<template id="report_service_invocie_template2">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<!-- <div class="header">
+						<table style="width: 100%; font-size: large;">
+							<tr style="width: 100%;">
+								<td style="text-align: center;">
+									<span style="font-size: 28px;">
+										ASOKAM BEACH RESORT
+									</span>
+									<br />
+									<span style="font-size: 16px;">AYURVEDIC CHIKITSA KENDRAM</span>
+									<br />
+									<span style="font-size: 16px;">GSTIN : 32AAVPN4305Q1Z5</span>
+									<br />
+									<br />
+									<span style="font-size: 18px;">SERVICE BILL</span>
+								</td>
+							</tr>
+						</table>
+					</div> -->
+					<t t-call="report.external_layout">
+						<div class="page">
+							<table
+								style="width: 100%; font-size: large;border-bottom: outset;border-top: outset;">
+								<tr>
+									<td style="width: 42%;">
+										Bill No:
+										<span t-field="o.name" />
+									</td>
+									<td>
+									</td>
+									<td style="text-align: right;">
+										Date:
+										<span t-field="o.date" />
+									</td>
+								</tr>
+								<tr>
+									<td>
+										Guest:
+										<span t-field="o.partner_id.name" />
+									</td>
+									<td>
+										Room No:
+										<span t-field="o.room_no.name" />
+									</td>
+									<td style="text-align: right;">
+										Status:
+										<span t-field="o.type" />
+									</td>
+								</tr>
+							</table>
+
+							<table
+								style="width: 100%;font-size: large;border-top: outset;margin-top: 5%;">
+								<tr style="border-bottom: outset;">
+									<th>Sl.No</th>
+									<th>Particulars</th>
+									<th>Qty</th>
+									<th>Rate</th>
+									<th>CGST</th>
+									<th>SGST</th>
+									<th>Net Amount</th>
+								</tr>
+								<t t-set="sl_no" t-value="1" />
+								<t t-set="cgst" t-value="0" />
+								<t t-set="sgst" t-value="0" />
+								<t t-set="total" t-value="0" />
+								<t t-foreach="o.line_ids" t-as="l">
+									<tr>
+										<td style="width: 8%;">
+											<t t-esc="sl_no" />
+											<t t-set="sl_no" t-value="sl_no+1" />
+										</td>
+										<td style="width: 37%;">
+											<span t-field="l.product_id.name" />
+										</td>
+										<td style="width: 10%;">
+											<span t-field="l.qty" />
+										</td>
+										<td style="width: 10%;">
+											<span t-field="l.price_unit" />
+										</td>
+										<td style="width: 10%;">
+											<span t-field="l.cgst" />
+											<t t-set="cgst" t-value="cgst+l.cgst" />
+										</td>
+										<td style="width: 10%;">
+											<span t-field="l.sgst" />
+											<t t-set="sgst" t-value="sgst+l.sgst" />
+										</td>
+										<td style="text-align: right;width: 15%;">
+											<span t-field="l.sub_total" />
+											<t t-set="total" t-value="total+l.sub_total" />
+										</td>
+									</tr>
+								</t>
+							</table>
+						</div>
+						<div class="footer">
+							<table
+								style="width: 100%; font-size: large;border-bottom: outset;border-top: outset;">
+								<tr height="15">
+									<td style="width: 8%;">
+									</td>
+									<td style="width: 37%;"> Total </td>
+									<td style="width: 10%;"></td>
+									<td style="width: 10%;"></td>
+									<td style="width: 10%;">
+										<t t-esc="cgst" />
+									</td>
+									<td style="width: 10%;">
+										<t t-esc="sgst" />
+									</td>
+									<td style="text-align: right;width: 15%;">
+										<t t-esc="total" />
+									</td>
+								</tr>
+							</table>
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+
+	</data>
+</openerp>

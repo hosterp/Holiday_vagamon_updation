@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+		<!-- block reservation summary -->
+
+		<record model="ir.ui.view" id="quick_room_reservation_block_form_view">
+             <field name="name">quick.room.reservation.block.form</field>
+             <field name="model">quick.room.reservation.view</field>
+             <field name="arch" type="xml">
+                 <form string="View Blocked Reservation">
+                     <header>
+                         <separator string="Blocked Reservation Details" colspan="4"/>
+                     </header>
+                     <sheet>
+                         <group colspan="4" col="4">
+                             <field name="name" />
+                             <field name="room"/>
+                             <field name="check_in"/>
+                             <field name="check_out"/>
+                             
+                         </group>
+                     </sheet>
+                     <footer>
+                         <group colspan="2" col="2">
+                             <button string="OK" name="room_block_reserve" type="object" icon="gtk-ok" />
+                             <button string="Cancel" special="cancel" icon="gtk-cancel" />
+                         </group>
+                     </footer>
+                 </form>
+             </field>
+         </record>
+
+
+         <record model="ir.ui.view" id="quick_room_reserved_form_view">
+             <field name="name">quick.room.reserved.form</field>
+             <field name="model">quick.room.reservation.table</field>
+             <field name="arch" type="xml">
+                 <form string="View Reserved Customer Data">
+                     <header>
+                         <separator string="Reserved Customer Details" colspan="4"/>
+                     </header>
+                     <sheet>
+                         <group colspan="4" col="4">
+                             <field name="name" />
+                             <field name="room"/>
+                             <field name="check_in"/>
+                             <field name="check_out"/>
+                             
+                         </group>
+                     </sheet>
+                     <footer>
+                         <group colspan="2" col="2">
+                             <button string="OK" name="room_reserved" type="object" icon="gtk-ok" />
+                             <button string="Cancel" special="cancel" icon="gtk-cancel" />
+                         </group>
+                     </footer>
+                 </form>
+             </field>
+         </record>
+
+
+		 <record model="ir.ui.view" id="calendar.view_calendar_event_form_popup">
+        <field name="name">Meetings Popup</field>
+        <field name="model">calendar.event</field>
+        <field name="priority" eval="2"/>
+        <field name="arch" type="xml">
+            <form string="Meetings">
+                <field name="state" invisible="1"/>
+                <field name="is_attendee" invisible="1"/>
+                <field name="attendee_status" invisible="1"/>
+                
+                
+                <group>
+                    <group>
+                    	<field name="name"/>
+                        <field name="start_date" string="Starting at" attrs="{'invisible': [('allday','=',False)]}"/>
+                        <field name="start_datetime" string="Starting at" attrs="{'invisible': [('allday','=',True)]}"/>
+        
+                        <field name="duration" string="Duration" widget="float_time" attrs="{'invisible': [('allday','=',True)]}" invisible="1"/>
+                        <field name="allday" class="oe_inline" attrs="{'invisible': [('allday','=',False)]}" invisible="1"/>
+                        <field name="partner_ids" widget="many2manyattendee" string="Attendees" invisible="1"/>
+                    </group>
+                    <group>
+                        <field name="categ_ids" widget="many2many_tags" invisible="1"/>
+                        <field name="alarm_ids" widget="many2many_tags" invisible="1"/>
+                        <field name="location" invisible="1"/>
+                    </group>
+                </group>       
+            </form>
+        </field>
+    </record>
+
+			<record model="ir.ui.view" id="view_calendar_event_calendar1">
+        <field name="name">Meetings Calendar1</field>
+        <field name="model">calendar.event</field>
+        <field name="priority" eval="2"/>
+        <field name="arch" type="xml">
+            <calendar string="Meetings" date_start="start" date_stop="stop" date_delay="duration" all_day="allday" 
+                         display="[name]" color="color_partner_id" attendee="partner_ids" avatar_model="res.partner"
+                         use_contacts="True" event_open_popup="%(calendar.view_calendar_event_form_popup)s">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="color_partner_id"/>
+                <field name="partner_ids"/>
+            </calendar>
+        </field>
+    </record>
+
+   
+
+    <record id="action_calendar_events" model="ir.actions.act_window">
+        <field name="name">Meetings</field>
+        <field name="res_model">calendar.event</field>
+        <field name="view_mode">calendar</field>
+        <field name="view_id" ref="view_calendar_event_calendar1"/>
+        <field name="search_view_id" ref=""/>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to schedule a new meeting.
+          </p><p>
+            The calendar is shared between employees
+          </p>
+        </field>
+    </record>
+<!-- <menuitem name="Calendar"
+			id="menu_action_calendarss"
+			parent="hotel.hotel_management_menu" sequence="1" />
+			<menuitem name="Calendar"
+			id="menu_action_calendarss_sub" action="action_calendar_events"
+			parent="menu_action_calendarss" sequence="1" /> -->
+
+
+</data>
+</openerp>

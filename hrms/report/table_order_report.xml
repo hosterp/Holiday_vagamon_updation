@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+		<!-- Table Order -->
+
+		<record model="ir.ui.view" id="table_order_details_wizard">
+			<field name="name">restaurant.table_order.wizard</field>
+			<field name="model">restaurant.table_order.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Table Order Report">
+					<group col="4">
+						<field name="date_from" />
+						<field name="date_to" />
+					</group>
+					<group>
+						<field name="state_done" />
+						<field name="state_paid" />
+						<field name="state_credited" />
+						<field name="state_nc" />
+					</group>
+					<footer>
+						<!-- <button name="action_open_window1" type="object" string="View"
+							class="oe_highlight" />
+						or -->
+						<button name="action_open_window" type="object" string="Print"
+							class="oe_highlight" />
+						or
+						<button name="action_open_window1" type="object" string="View"
+							class="oe_highlight" />or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_table_order_details_wizard" model="ir.actions.act_window">
+			<field name="name">Table Order Report</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">restaurant.table_order.wizard</field>
+			<field name="target">new</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+		</record>
+
+	
+
+		<menuitem id="menu_table_order_details_wizard" name="Table Order Report" action="action_table_order_details_wizard" parent="hotel.hotel_report_menu"/>
+
+
+		<report id="report_finance_analysis" string="Table Order Report"
+			model="restaurant.table_order.wizard" report_type="qweb-pdf"
+			name="hrms.report_table_order_template" />
+
+
+		<template id="report_table_order_template">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="report.external_layout">
+						<div class="page">
+							<center><b><h2>Table Order Report</h2></b></center>
+							
+
+							<t t-set="sl_no" t-value="1" />
+							
+							<div>
+								<center>
+
+									<table style="width: 100%; font-size:16px;margin-top:50px;">
+			                            <thead>
+			                                <tr style="height: 30px;">
+			                                    <td style="width: 50%;"><b>Date From:</b>
+			                                        <span t-field="o.date_from"/>
+			                                    </td>
+			                                    <td style="width: 50%;text-align: right;"><b>Date To:</b>
+			                                        <span t-field="o.date_to"/>
+			                                    </td>
+			                                </tr>
+			                            </thead>
+			                        </table>
+
+			                       <!--  <div class="col-xs-12">
+						                <div class="col-xs-3">
+						                    Done<span t-field="o.state_done"></span><br/>
+						                </div>
+						                <div class="col-xs-5">
+						                    Paid<span t-field="o.state_paid"></span><br/>
+						                </div>
+						                <div class="col-xs-5">
+						                    Credited<span t-field="o.state_credited"></span><br/>
+						                </div>
+						                <div class="col-xs-5">
+						                    Non Chargable<span t-field="o.state_nc"></span><br/>
+						                </div>
+						            </div> -->
+
+			                        <t t-set="tot_amt" t-value="0" />
+			                      
+
+									<table style="font-size:16px;width: 100%;border-bottom: outset;border-top: outset;margin-top:30px;">
+										<thead>
+
+											<tr style="border-bottom: outset;border-right: outset;border-left: outset;">
+												<td style="width: 5%; border-right: outset;" align="center"><h5><b>Sl No</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Order Date</b></h5></td>
+												<td style="width: 10%; border-right: outset;" align="center"><h5><b>Order No.</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Customer Name</b></h5></td>
+												<td style="width: 10%; border-right: outset;" align="center"><h5><b>Room No.</b></h5></td>
+												<td style="width: 10%; border-right: outset;" align="center"><h5><b>Waiter</b></h5></td>
+												<td style="width: 10%; border-right: outset;" align="center"><h5><b>State</b></h5></td>
+												<td style="width: 10%; border-right: outset;" align="center"><h5><b>Bill No.</b></h5></td>
+												<td style="width: 15%; border-right: outset;" align="center"><h5><b>Amount</b></h5></td>
+											</tr>
+										</thead>
+
+										<tbody>
+
+											<t t-foreach="docs.get_details()" t-as="line">
+												<tr style="border-left: outset;">
+													<td style="width: 5%; border-right: outset;" align="center">
+														<t t-esc="sl_no" />
+														<t t-set="sl_no" t-value="sl_no+1" />
+													</td>
+													<td style="width: 15%; border-right: outset;" align="center">
+														<span t-esc="line['order_date']"/>
+													</td>
+
+													<td style="width: 10%; padding-left:5px; border-right: outset;">
+														<span t-esc="line['order_no']"/>
+													</td>
+													<td style="width: 15%; padding-left:5px; border-right: outset;">
+														<span t-esc="line['cname'].name"/>
+													</td>
+													<td style="width: 10%; padding-left:5px; border-right: outset;">
+														<span t-esc="line['room_no'].name"/>
+													</td>
+													<td style="width: 10%; padding-left:5px; border-right: outset;">
+														<span t-esc="line['waiter'].name"/>
+													</td>
+													<td style="width: 10%; padding-left:5px; border-right: outset;">
+														<span t-esc="line['state']"/>
+													</td>
+													<td style="width: 10%; padding-left:10px; border-right: outset;">
+														<span t-esc="line['bill_no']"/>
+													</td>
+													<td style="width: 15%; padding-right:20px;border-right: outset;" align="right">
+														<span t-esc="'{0:,.2f}'.format(line['total'])"/>
+                            							<t t-set="tot_amt" t-value="tot_amt+line['total']" />
+													</td>
+													
+												</tr>
+											</t>
+
+											<tr style="border-left: outset;border-top: outset;">
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td style="width: 10%; padding-left:10px; border-right: outset;">Total</td>
+												<td style="width: 15%; padding-right:20px;border-right: outset;padding-right: 4px;" align="right">
+													<span t-esc="'{0:,.2f}'.format(tot_amt)"/>
+												</td>
+											</tr>
+
+										</tbody>
+									</table>
+								</center>
+							</div>
+			               
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+	</data>
+</openerp>

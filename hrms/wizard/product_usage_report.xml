@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+
+		<record id="form_product_usage_report_wizard" model="ir.ui.view">
+			<field name="name">product.usage.report.form</field>
+			<field name="model">product.usage.report</field>
+			<field name="arch" type="xml">
+				<form>
+					<h1>Product Usage Report</h1>
+					<group col="4">
+						<field name="date_from" />
+						<field name="date_to" />
+						<field name="location_id" options="{'no_create':1}" />
+					</group>
+
+
+					<footer>
+						<button type="object" name="print_product_usage_report" string="Print"
+							class="oe_highlight" /> Or
+							<button type="object" name="view_product_usage_report" string="View"
+							class="oe_highlight" /> Or
+						<button special="cancel" string="Cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+
+		<record id="action_product_usage_report_wizard" model="ir.actions.act_window">
+			<field name="name">Product Usage Report</field>
+			<field name="res_model">product.usage.report</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+			<field name="view_id" ref="form_product_usage_report_wizard" />
+		</record>
+
+
+		<!-- <menuitem id="menu_product_usage_report" name="Usage" parent="menu_report_new"/> -->
+		<menuitem id="menu_product_usage_report_wizard" name="Product Usage Report" 
+			parent="menu_purchase_report" action="action_product_usage_report_wizard" />
+
+
+
+
+
+
+	    <report id="report_product_usage_report" string="Product Usage Report"
+			model="product.usage.report" report_type="qweb-html"
+			name="hrms.report_product_usage_report_template" />
+
+
+		<template id="report_product_usage_report_template">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="report.external_layout">
+						<div class="page">
+							<center><b><h2>Product Usage Report</h2></b></center>
+							
+
+
+							<table style="width: 100%; font-size:16px;margin-top:50px;">
+	                            <thead>
+	                                
+	                                <tr style="height: 30px;">
+	                                    <td style="width: 50%;"><b>From :</b>
+	                                        <span t-field="o.date_from"/>
+	                                    </td>
+	                                    <td style="width: 50%;"><b>To :</b>
+	                                        <span t-field="o.date_to"/>
+	                                    </td>
+	                                    
+	                                </tr>
+	                                <tr style="height: 30px;">
+	                                    
+	                                    <td style="width: 50%;"><b>Location:</b>
+	                                        <span t-field="o.location_id.name"/>
+	                                    </td>
+	                                    
+	                                </tr>
+	                            </thead>
+	                        </table>
+
+	                        <t t-set="sl_no" t-value="1" />
+
+
+							<table style="font-size:16px;width: 100%;border-bottom: outset;border-top: outset;margin-top:30px;">
+								<thead>
+
+
+									<tr style="border-bottom: outset;border-right: outset;border-left: outset;">
+										<td style="border-right: outset;" align="center"><h5><b>Sl No:</b></h5></td>
+										<td style="border-right: outset;" align="center"><h5><b>Product</b></h5></td>
+										<td style="border-right: outset;" align="center"><h5><b>Opening Stock</b></h5></td>
+										<td style="border-right: outset;" align="center"><h5><b>Received</b></h5></td>
+										<td style="border-right: outset;" align="center"><h5><b>Usage</b></h5></td>
+										<td style="border-right: outset;" align="center"><h5><b>Avg Price</b></h5></td>
+										<td style="border-right: outset;" align="center"><h5><b>UoM</b></h5></td>
+										<td style="border-right: outset;" align="center" colspan="5"><h5><b>Inventory Value</b></h5></td>
+										<td style="border-right: outset;" align="center"><h5><b>Closing Stock</b></h5></td>
+										
+										
+									</tr>
+								</thead>
+								
+
+								<tr t-foreach="docs.get_product_usage(o.date_from,o.date_to,o.location_id)" t-as="m" style="border-bottom: outset;border-right: outset;border-left: outset;">
+									
+
+									<td style="border-right: outset;" align="center"><span t-esc="sl_no" />
+									<t t-set="sl_no" t-value="sl_no+1" />
+									</td>
+									<td style="border-right: outset;" align="center"><span t-esc="m['product']" /></td>
+									<td style="border-right: outset;" align="center"><span t-esc="m['opening_stock']" /></td>
+									<td style="border-right: outset;" align="center"><span t-esc="m['purchase']" /></td>
+									<td style="border-right: outset;" align="center"><span t-esc="m['usage']" /></td>
+									<td style="border-right: outset;" align="center"><span t-esc="m['avg_price']" /></td>
+									<td style="border-right: outset;" align="center"><span t-esc="m['uom']" /></td>
+									<td style="border-right: outset;" align="center" colspan="5"><span t-esc="m['inventory_value']" /></td>
+									<td style="border-right: outset;" align="center"><span t-esc="m['closing_stock']" /></td>
+								</tr>
+									
+								
+							</table>
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+
+
+	</data>
+</openerp>

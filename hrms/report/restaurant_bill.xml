@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+		<report id="report_hotel_res_order_bill2" string="Customer Bill"
+			model="hotel.restaurant.order" report_type="qweb-pdf" file="hrms.report_order_bill7"
+			name="hrms.report_order_bill7" menu="True" multi="True" />
+
+		<record id="paperformat_hotel_restaurant_bill" model="report.paperformat">
+			<field name="name">European A4 low KOT ORDER</field>
+			<field name="default" eval="True" />
+			<field name="format">custom</field>
+			<field name="page_height">120</field>
+			<field name="page_width">72</field>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">10</field>
+			<field name="margin_bottom">0</field>
+			<field name="margin_left">0</field>
+			<field name="margin_right">0</field>
+			<field name="header_line" eval="False" />
+			<field name="header_spacing">0</field>
+			<field name="dpi">90</field>
+		</record>
+
+		<record id="hrms.report_hotel_res_order_bill2" model="ir.actions.report.xml">
+			<field name="paperformat_id" ref="hrms.paperformat_hotel_restaurant_bill" />
+		</record>
+	</data>
+</openerp>

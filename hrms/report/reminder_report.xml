@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+
+		<report id="action_print_reminder" model="reservation.customer.reminder"
+			report_type="qweb-pdf" string="Reminder"
+			name="hrms.report_customer_reminder" file="hrms.report_customer_reminder" />
+
+		<template id="report_customer_reminder">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="report.external_layout">
+						<div class="page">
+							<center><b><h2>REMINDER</h2></b></center>
+
+							<table style="width: 100%; font-size:16px;margin-top:50px;">
+	                            <thead>
+	                                <tr style="height: 30px;">
+	                                    <td style="width: 50%;"><b>Date From:</b>
+	                                        <span t-field="o.date_from"/>
+	                                    </td>
+	                                    <td style="width: 50%;text-align: right;"><b>Date To:</b>
+	                                        <span t-field="o.date_to"/>
+	                                    </td>
+	                                </tr>
+	                            </thead>
+	                        </table>
+							
+							
+
+							<t t-set="sl_no" t-value="1" />
+
+							<span t-if="o.reminder == 'dob'">
+
+								<table style="font-size:16px;width: 100%;border-bottom: outset;border-top: outset;margin-top:30px;">
+
+									<thead>
+										<tr style="border-bottom: outset;border-right: outset;border-left: outset;">
+											<td style="width: 10%; border-right: outset;%" align="center"><h5><b>Sl No</b></h5></td>
+											<td style="width: 50%; border-right: outset;" align="center"><h5><b>Customer</b></h5></td>
+											<td style="width: 40%; border-right: outset;" align="center"><h5><b>DOB</b></h5></td>
+										</tr>
+									</thead>
+									<tbody>
+
+										<t t-set="nos" t-value="0" />
+										<t t-foreach="o.dob_one2many" t-as="l" style="border-left: outset;">
+											<tr style="border-right: outset;border-left: outset;" height="25">
+												
+												<td style="width: 10%; border-right: outset;" align="center">
+													<t t-esc="sl_no" />
+													<t t-set="sl_no" t-value="sl_no+1" />
+												</td>
+												<td style="width: 50%; border-right: outset;" align="left" ><span t-field="l.name" /></td>
+												<td style="width: 40%; border-right: outset;" align="left" ><span t-field="l.dob" /></td>
+												
+
+												<t t-set="nos" t-value="nos+1" />
+											</tr>
+										</t>
+
+									</tbody>
+								</table>
+							</span>
+								
+
+							<t t-set="sl_no2" t-value="1" />
+
+							<span t-if="o.reminder == 'wedding'">
+
+								<table style="font-size:16px;width: 100%;border-bottom: outset;border-top: outset;margin-top:30px;">
+
+									<thead>
+										<tr style="border-bottom: outset;border-right: outset;border-left: outset;">
+											<td style="width: 10%; border-right: outset;%" align="center"><h5><b>Sl No</b></h5></td>
+											<td style="width: 50%; border-right: outset;" align="center"><h5><b>Customer</b></h5></td>
+											<td style="width: 40%; border-right: outset;" align="center"><h5><b>Wedding Anniversary</b></h5></td>
+										</tr>
+									</thead>
+									<tbody>
+
+										<t t-set="nos" t-value="0" />
+										<t t-foreach="o.wedding_one2many" t-as="l" style="border-left: outset;">
+											<tr style="border-right: outset;border-left: outset;" height="25">
+												
+												<td style="width: 10%; border-right: outset;" align="center">
+													<t t-esc="sl_no2" />
+													<t t-set="sl_no2" t-value="sl_no2+1" />
+												</td>
+												<td style="width: 50%; border-right: outset;" align="left" ><span t-field="l.name" /></td>
+												<td style="width: 40%; border-right: outset;" align="left" ><span t-field="l.wdng_day" /></td>
+												
+
+												<t t-set="nos" t-value="nos+1" />
+											</tr>
+										</t>
+
+									</tbody>
+								</table>
+							</span>
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+
+	</data>
+</openerp>

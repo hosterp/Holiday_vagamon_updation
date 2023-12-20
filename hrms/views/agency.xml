@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+		<record id="view_agency_tree" model="ir.ui.view">
+			<field name="name">agency.tree</field>
+			<field name="model">res.partner</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name"/>
+					<field name="email"/>
+					<field name="phone"/>
+					
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_agency_form" model="ir.ui.view">
+			<field name="name">agency.form</field>
+			<field name="model">res.partner</field>
+			<!-- <field name="inherit_id" ref="hotel_reservation.res_partner_hrms_form"/> -->
+			<field name="arch" type="xml">
+
+				<form>
+					<sheet>
+					<h1><center>Agency</center></h1>
+						
+                    
+                    <div class="oe_title">
+                        <div class="oe_edit_only">
+                           
+                        </div>
+                        <h1>
+                            <field name="name" default_focus="1" placeholder="Name" />
+                        </h1>
+                        <group>
+                        <field name="agency" string="Is Agency" invisible="1"/>
+                    </group>
+                        
+                    </div>
+                    <group>
+                        <field name="user_ids" invisible="1"/>
+                        <field name="email" widget="email" required="context.get('force_email', False)" attrs="{'required': [('user_ids','!=', [])]}"/>
+                        <field name="phone"/>
+                        <field name="mobile"/>
+                    </group>
+                </sheet>
+                </form>
+				
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_agency_res_partner_view">
+			<field name="name">Agency</field>
+			<field name="res_model">res.partner</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[('agency','=',True)]</field>
+   			<field name="context">{"default_agency":1}</field>
+		</record>
+
+		<record id="action_agency_tree_view" model="ir.actions.act_window.view">
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="view_agency_tree" />
+			<field name="act_window_id" ref="action_agency_res_partner_view" />
+		</record>
+
+		<record id="action_agency_form_view" model="ir.actions.act_window.view">
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="base.view_partner_form" />
+			<field name="act_window_id" ref="action_agency_res_partner_view" />
+		</record>
+
+		<menuitem name="Agency" id="menu_agency_item" parent="hotel.hotel_configuration_menu" action="action_agency_res_partner_view" groups="hrms.hotel_receptionist,hrms.hotel_reservation"/>
+
+		
+		<record id="hotel_restaurant_report" model="ir.ui.view">
+			<field name="name">folio.rest.reservation.form</field>
+			<field name="model">folio.rest.reservation</field>
+			<field name="inherit_id" ref="hotel_restaurant.view_folio_rest_reservation" />
+			<field name="arch" type="xml">
+				<xpath expr="//button[@name='print_rest_report']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+			</field>
+		</record>
+
+
+		<record id="sample_data_ota" model="account.journal">
+			<field name="name">OTA</field>
+			<field name="code">ota</field>
+			<field name="type">cash</field>
+		</record>
+
+		<record id="sample_data_company" model="account.journal">
+			<field name="name">Company</field>
+			<field name="code">cmpny</field>
+			<field name="type">cash</field>
+		</record>
+
+		<record id="sample_data_card" model="account.journal">
+			<field name="name">Card</field>
+			<field name="code">card</field>
+			<field name="type">bank</field>
+		</record>
+
+
+
+
+		<record id="view_account_tax_form_altered" model="ir.ui.view">
+			<field name="name">account.tax.form</field>
+			<field name="model">account.tax</field>
+			<field name="inherit_id" ref="account.view_tax_form" />
+			<field name="arch" type="xml">
+				<!-- <xpath expr="//notebook//page//group//group//field[@name='price_include']" position="after">
+					<field name="tax_based" required="1"/>
+				</xpath> -->
+				<xpath expr="//notebook/page[@string='Special Computation']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//notebook/page/group/group[@string='Misc']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<field name="description" position="after">
+					<field name="tax_based" required="1"/>
+					<field name="tax_type" required="1"/>
+				</field>
+
+				<xpath expr="//notebook/page/group/group[1]" position="replace">
+					<group string="Tax Computation">
+			            <field name="type" invisible="1"/>
+			            <field name="amount" />
+				        <field name="price_include"/>
+				        <field name="python_compute" invisible="1" attrs="{'invisible':[('type','!=','code')],'required':[('type','=','code')]}"/>
+				        <field name="python_compute_inv" invisible="1" attrs="{'invisible':[('type','!=','code')],'required':[('type','=','code')]}"/>
+				    </group>
+				</xpath>
+				
+			</field>
+		</record>
+
+
+
+		<menuitem name="Inventory"
+            id="base.menu_purchase_root"
+            groups="purchase.group_purchase_manager,purchase.group_purchase_user"
+            sequence="60"/>
+
+
+
+
+
+
+
+		<menuitem id="stock.menu_stock_inventory_control" name="Inventory Control" parent="base.menu_purchase_root" sequence="20"/>
+
+		<menuitem action="stock.action_move_form2" id="stock.menu_action_move_form2" parent="stock.menu_stock_inventory_control" sequence="30" groups="stock.group_locations"/>
+
+
+	</data>
+</openerp>

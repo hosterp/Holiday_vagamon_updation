@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<openerp>
+    <data noupdate="1">
+
+        <!--Restaurant Bill No -->
+        <record model="ir.sequence.type" id="seq_type_service_invoice">
+            <field name="name">Service Bill</field>
+            <field name="code">service.bill</field>
+        </record>
+
+        <record model="ir.sequence" id="seq_service_invoice">
+            <field name="name">Service Bill</field>
+            <field name="code">service.bill</field>
+            <field name="prefix">SB/</field>
+            <field name="padding">4</field>
+        </record>
+
+    </data>
+</openerp>

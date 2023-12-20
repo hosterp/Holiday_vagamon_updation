@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+        <report id="report_hotel_res_invoice_bill_all" string="Customer Bill"
+            model="wizard.selection" report_type="qweb-pdf" file="hrms.report_all_bill_print"
+            name="hrms.report_all_bill_print" menu="True" multi="True" />
+
+
+		<report id="report_hotel_res_invoice_bill" string="Customer Bill"
+			model="wizard.selection" report_type="qweb-pdf" file="hrms.report_room_bill_print22"
+			name="hrms.report_room_bill_print22" menu="True" multi="True" />
+
+		<report id="report_estimated_bills_11" string="Customer Bill"
+		model="estimated.bill" report_type="qweb-pdf" file="hrms.report_estimated_bill"
+			name="hrms.report_estimated_bill" menu="False" multi="True" />
+
+
+		<report id="report_hotel_food_bill_print" string="Customer Bill"
+			model="wizard.selection" report_type="qweb-pdf" file="hrms.report_food_bill_print"
+			name="hrms.report_food_bill_print" menu="True" multi="True" />
+
+		<record id="paperformat_report_fianl_bill2" model="report.paperformat">
+            <field name="name">Hotel Final Bill</field>
+            <field name="default" eval="True" />
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+
+		
+
+        <record id="hrms.report_hotel_res_invoice_bill" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="hrms.paperformat_report_fianl_bill2" />
+        </record>
+
+
+        <record id="paperformat_report_estimate_bill" model="report.paperformat">
+            <field name="name">Hotel Final Bill</field>
+            <field name="default" eval="True" />
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="hrms.report_estimated_bills_11" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="hrms.paperformat_report_estimate_bill" />
+        </record>
+
+        <record id="hrms.report_hotel_food_bill_print" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="hrms.paperformat_report_fianl_bill2" />
+        </record>
+
+        <!-- <record id="hrms.report_hotel_room_bill_view" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="hrms.paperformat_report_fianl_bill2" />
+        </record>
+
+        <record id="hrms.report_hotel_food_bill_view" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="hrms.paperformat_report_fianl_bill2" />
+        </record> -->
+
+
+
+		<report id="report_hotel_restaurant_cash" string="Cash Sale"
+			model="hotel.restaurant.order" report_type="qweb-pdf"
+			file="hrms.report_restaurant_cash_sale" name="hrms.report_restaurant_cash_sale"
+			menu="False" />
+
+
+		<report id="report_hotel_res_folio9" string="Restaurants"
+			model="hotel.restaurant.order" report_type="qweb-pdf" file="hrms.report_cash_credit"
+			name="hrms.report_cash_credit" menu="False" />
+
+		<record id="paperformat_report_menu_card2" model="report.paperformat">
+			<field name="name">Landscape</field>
+			<field name="default" eval="True" />
+			<field name="format">A4</field>
+			<field name="orientation">Landscape</field>
+			<field name="margin_top">0</field>
+			<field name="margin_bottom">0</field>
+			<field name="margin_left">0</field>
+			<field name="margin_right">0</field>
+			<field name="header_line" eval="False" />
+			<field name="header_spacing">0</field>
+			<field name="dpi">0</field>
+		</record>
+
+		<report string="Menu Card" id="report_menu_card2" model="hotel.reservation"
+			report_type="qweb-pdf" name="hrms.report_restaurant_menu_card" file="hrms.report_restaurant_menu_card" 
+			menu="False"/>
+
+		<record id="hrms.report_menu_card2" model="ir.actions.report.xml">
+			<field name="paperformat_id" ref="hrms.paperformat_report_menu_card2" />
+		</record>
+
+
+
+	</data>
+</openerp>

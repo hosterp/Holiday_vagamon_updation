@@ -1,0 +1,365 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+		<report id="report_reservation_customer" string="Registration Card"
+			model="hotel.reservation" report_type="qweb-pdf"
+			name="hrms.report_reservation_customer_template" />
+
+
+		<template id="report_reservation_customer_template">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="report.external_layout">
+						<div class="page">
+							
+							<div style="float: left;width: 45%;">
+								<h4><b>GUEST REGISTRATION CARD</b></h4>
+								<table border="1" class="table table-bordered" style="font-size:12px;height:100mm;margin-top:20px;">
+									<tr >
+										<td style="padding-left: 2px;" colspan="2">
+											GUEST NAME : <span t-field="o.partner_id.name" />
+										</td>
+									</tr>
+									<tr >
+										<td style="padding-left: 2px;" colspan="2">
+											DESIGNATION : <span t-field="o.partner_id.function" />
+											<!-- <span t-field="o.cname.name" /> -->
+										</td>
+									</tr>
+									<tr >
+										<td style="padding-left: 2px;" colspan="2">
+											ADDRESS :
+											<span t-field="o.partner_id.street"/>
+											<p style="padding-left: 60px;"> 
+											<!-- <div style="padding-left: 60px;"> -->
+												<!-- <br/> --><span t-field="o.partner_id.street2"/>
+											<!-- </div> -->
+											<!-- <div style="padding-left: 60px;"> -->
+
+												<br />
+												<span t-field="o.partner_id.city"/>-<span t-field="o.partner_id.state_id"/>-<span t-field="o.partner_id.zip"/>
+											<!-- </div> -->
+											<!-- <div style="padding-left: 60px;"> -->
+												<br />
+												<span t-field="o.partner_id.country_id"/>
+											<!-- </div> -->
+											</p>
+										</td>
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;" colspan="2">
+											MAIL ID : <span t-field="o.partner_id.email" />
+										</td>
+										
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;" >
+											MOB : <span t-field="o.partner_id.mobile" /> <span t-field="o.partner_id.phone" />
+										</td>
+										<td style="padding-left: 2px;" >
+											DATE OF BIRTH : <span t-field="o.partner_id.dob" /> <span t-field="o.partner_id.phone" />
+										</td>
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;"> 
+											ARRIVAL DATE : <span t-field="o.checkin" />
+										</td>
+										<td style="padding-left: 2px;"> 
+											TIME : <span t-field="o.checkin_time" />
+										</td>
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;"> 
+											DEPARTURE DATE : <span t-field="o.checkout" />
+										</td>
+										<td style="padding-left: 2px;"> 
+											<!-- TIME : <span t-field="o.checkin_time" /> -->
+										</td>
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;"> 
+											ARRIVED FROM : <span t-field="o.arrived_from" />
+										</td>
+										<td style="padding-left: 2px;"> 
+											PROCEEDING TO : <span t-field="o.proceed_to" />
+										</td>
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;" colspan="2">
+											PURPOSE OF VISIT : <span t-field="o.visit_purpose" />
+										</td>
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;" colspan="2">
+											MODE OF PAYMENT : <span t-field="o.guest_type" />
+										</td>
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;" colspan="2">
+											<P><u>DECLARATION:</u>
+											<br />
+											<br />
+											     I HAVE READ THE RULES AND REGULATIONS OF FALCON CREST (AS PRINTED OVER LEAF). I AGREE TO ABIDE BY THE 
+												RULES AND REGULATIONS.
+												ALL THE DETAILS THAT I HAVE STATED ARE TRUE AND TO THE BEST OF MY KNOWLEDGE	
+											<br />
+												<div align="right"><b>Guest Signature</b></div>
+											</P>	
+										</td>
+									</tr>
+								</table>
+								<!-- <div align="right">
+									<br />
+									<b>Resort Manager</b>
+								</div> -->
+							</div>
+							<div style="float: left;width: 10%;">
+								<table>
+									<tr>
+										<td style="padding-left: 2px;"> 
+											.
+										</td>
+									</tr>
+								</table>
+							</div>
+
+
+
+
+
+
+
+
+
+							<div style="width: 45%;float: left;">
+								<table style="font-size:15px;width:100%;height:1mm;">
+									<tr>
+										<td align="right">GRC No.</td>
+										<td align="left">
+											<span t-field="o.grc_no"/>
+										</td>
+										<td align="right">Date:</td>
+										<td align="left">
+											<span t-field="o.checkin"/>
+										</td>
+									</tr>
+								</table>
+								<!-- <div col="4">
+									<div align="left"><h4>GRC No. <span t-field="o.reservation_no"/></h4></div>
+									<div align="right"><h4>Date: <span t-field="o.checkin"/></h4></div>
+								</div> -->
+								<table border="1" class="table table-bordered" style="font-size:12px;height:100mm;width:100%;margin-top:5px;">
+									<tr style="width:5px;height:1mm">
+										<td style="padding-left: 2px;padding-top: 2px;padding-bottom: 1px;height:1px" colspan="2">
+											<center><u>FOR FOREIGNERS ONLY</u></center>
+											<br />
+											NATIONALITY:  <span t-field="o.partner_id.nationality" />
+										</td>
+									</tr>
+									<tr style="height:0.05mm">
+										<td style="padding-left: 2px;padding-top: 2px;padding-bottom: 2px;" colspan="2">
+											PASSPORT NO:  <span t-field="o.partner_id.passport_no" />
+										</td>
+									</tr>
+									<tr style="height:1cm">
+										<td style="padding-left: 2px;padding-top: 2px;padding-bottom: 2px;"> 
+											DATE OF ISSUE:  <span t-field="o.partner_id.pspt_issue_date" />
+										</td>
+										<td style="padding-left: 2px;padding-top: 2px;padding-bottom: 2px;"> 
+											PLACE OF ISSUE:  <span t-field="o.partner_id.pspt_passport_place" />
+										</td>
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;padding-top: 2px;padding-bottom: 2px;" colspan="2">
+											EXPIRY DATE:  <span t-field="o.partner_id.pspt_expiry_date" />
+										</td>
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;padding-top: 2px;padding-bottom: 2px;" colspan="2">
+											VISA NO:  <span t-field="o.partner_id.visa_no"/>
+										</td>
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;padding-top: 2px;padding-bottom: 2px;"> 
+											DATE OF ISSUE:  <span t-field="o.partner_id.visa_issue_date" />
+										</td>
+										<td style="padding-left: 2px;padding-top: 2px;padding-bottom: 2px;"> 
+											PLACE OF ISSUE:  <span t-field="o.partner_id.visa_place" />
+										</td>
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;padding-top: 2px;padding-bottom: 2px;" colspan="2">
+											EXPIRY DATE:  <span t-field="o.partner_id.visa_expiry_date" />
+										</td>
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;padding-top: 2px;padding-bottom: 2px;" colspan="2">
+											DATE OF ARRIVAL IN INDIA:  <span t-field="o.arrival_date" />
+										</td>
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;padding-top: 2px;padding-bottom: 2px;" colspan="2">
+											WHETHER EMPLOYED IN INDIA:  <span t-field="o.employed_in_india" />
+										</td>
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;padding-top: 2px;padding-bottom: 2px;" colspan="2">
+											PROPOSED DURATION OF STAY IN INDIA:  <span t-field="o.duration_india" />
+										</td>
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;padding-top: 2px;padding-bottom: 2px;" colspan="2">
+											<p>
+												<center><u>FOR HOTEL USE ONLY</u></center>
+												<!-- <br /> -->
+												<t t-set="room_no" t-value="''" />
+												<t t-set="room_type" t-value="''" />
+												<t t-foreach="o.reservation_line" t-as="line">
+													<t t-set="room_no" t-value="room_no+ ',' + line.room_allocate"/>
+													<t t-set="room_type" t-value="room_type+ ',' +line.categ_id.name"/>
+												</t>
+												ROOM NO:
+													<t t-esc="room_no" />
+													<br />
+												ROOM TYPE:
+													<t t-esc="room_type" />
+											</p>
+										</td>
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;padding-top: 2px;padding-bottom: 2px;"> 
+											NO OF PAX:  <span t-esc="o.adults+o.children" />
+										</td>
+										<td style="padding-left: 2px;padding-top: 2px;padding-bottom: 2px;"> 
+											CHILD:  <span t-esc="o.kids" />
+										</td>
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;padding-top: 2px;padding-bottom: 2px;"> 
+											ROOM RATE:  <span t-esc="o.rack_rate" />
+										</td>
+										<td style="padding-left: 2px;padding-top: 2px;padding-bottom: 2px;"> 
+											ADVANCE:  <span t-esc="o.advance" />
+										</td>
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;padding-top: 2px;padding-bottom: 2px;" colspan="2">
+											MEAL PLAN:  <span t-field="o.ml_plan.name" />
+										</td>
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;padding-top: 2px;padding-bottom: 2px;" colspan="2">
+											BOOKED BY:  
+                                			<t t-if="o.guest_type == 'room'">
+												<span t-field="o.partner_id.name" />
+											</t>
+											<t t-if="o.guest_type == 'ota' or o.guest_type == 'advance'">
+												<span t-field="o.partner_order_id.name" />
+											</t>
+
+										</td>
+									</tr>
+									<tr>
+										<td style="padding-left: 2px;padding-top: 2px;padding-bottom: 2px;" colspan="2">
+											<p>
+											REMARKS/BILLING INSTRUCTIONS 
+											<br />
+											<span t-field="o.remarks" />
+											</p>
+										</td>
+									</tr>
+								</table>
+								<!-- <div align="right">
+									<br />
+									<b>Front Office Assistant</b>
+								</div> -->
+							</div>
+
+
+							<table style="font-size:15px;width:100%;height:1mm;">
+								<tr>
+									<td style="width: 45%;" align="right"><b>Resort manager</b></td>
+									<td style="width: 10%;" align="right"></td>
+									<td style="width: 45%;" align="right"><b>Front Office Assistant</b></td>
+								</tr>
+							</table>	
+					    </div>
+					</t>
+					<t t-call="report.external_layout">
+
+					    <div class="page">
+					    	<!-- <div> -->
+					    	<table border="1" class="table table-bordered" style="font-size:12px;height:100mm;width:100%;">
+					    		<tr>
+					    			<td>
+					    	<center><h4>Rules</h4></center>
+					    	<div>
+					    		The following are the terms and conditions of the Agreement between the Guests and M/s Falcon Crest Resort, Vagamon (herein after called “Management”) under which rooms are permitted to be used by the Guests and are binding on the Guest/s.
+					    		<br/>
+					    		<br/>
+								1. All Guests Shall be liable to provide a valid id proof at the time of Check In as required by law. The Management reserves its right to reject the guest booking if valid id proof is not given.
+					    		<br/>
+								2. Tariff: Guest should obtain the details of Tariff from Reception. The tariff will depend on the type of plan and room. Meals and other services not mentioned in the Tariff will be at extra
+								costs.
+								<br/>
+								3. Settlement of bills: Bill must be settled on presentation. Cheques are not accepted. All taxes imposed by the government will be applicable extra.
+								<br/>
+								4. Company’s Lien on guest’s luggage and belongings: In the case of default in payment of dues by a guest, the Management shall a lien on the luggage and belongings, and be entitled to detain the same, and to sell or auction such property anytime without reference to the guest, and appropriate the net sale proceeds towards the amount due by the guest without prejudice to the guest, management right to adopt such further recovery proceedings as may be required.
+								<br/>
+								5. Departure “Check Out”: time is 12.00 noon and Check In is 2 pm. The guest shall vacate the room allocated to him on expiry of the period of occupation granted to the Guest. On failure of the Guest to vacate the room on expiry of the period, the management shall have the right to remove the guest and his/her belongings from the occupied by the guest.
+								<br/>
+								6. Luggage storage: Subject to availability of storage space, the guest can store luggage in the luggage Room at the nominal charge of the Guest’s sole risk as to loss or damage from any cause. Luggage cannot be stored for a period of over six days.
+								<br/>
+								7. Guest’s Belongings: Guest’s are particularly request to lock the door of their rooms when going to bed. The management will not in any way whatever Be responsible for any loss/damage to the guest’s Belongings or any other property from either the hotel room or locked any other part for any cause whatever including theft or pilferage.
+								<br/>
+								8. Hazardous Goods: Bring into and or storing of row or exposed cinema films or any other articles of any flammable or hazardous nature and / or prohibited goods and / or goods of objectionable nature, is prohibited. The guest shall be solely liable and responsible to the management, its other guest’s, invites, visitors, agents and servants for all loss, financial or
+								other , and damage they may be caused by such articles or as a result of the guest’s own negligence of any / all instructions.
+								<br/>
+								9. Use of hotel facilities: the guest shall use all the facilities and services available of the hotel with care and caution and entirely of the guest’s risk. The guest agrees to abide by and follow
+								all instructions placed by the management at various place in the hotel premises. The management shall not be responsible for any injury to the guest or damage to the guest’s belongings that met because as a result of use of the facilities / services from any reason whatever.
+								<br/>
+								10. Damage to the property: the guest’s will be held responsible to any loss or damage to the hotel property caused by themselves, their friends or any person for whom they are responsible.
+								<br/>
+								11. Management Rights: It is agreed that the guest will conduct himself/herself in a respectable manner and not cause any nuisance within the hotel premises. The management reserves to itself the absolute right of admission to any person in the hotel premises. The management has the right to request any guest to vacate his / her room or other of the hotel forthwith, or
+								without previous notice and without assigning any reason whatsoever and the guest shall be bound to vacate when requested to do so. In default the management shall have the right to remove the guest and the guest’s belongings from the room occupied to him or her. The management shall have the right to change the room allotted to the guest at any time without assigning any reasons thereof and without any previous notice, or to shift the guest to any other suitable accommodation.
+								<br/>
+								12. Relation between management and Guest: Nothing here in above shall constitute, or observe, abide by, confirmed and be bound to all applicable acts and lows and the government rules and regulation in from time to time.
+								<br/>
+								13. Application of Laws, Government Rules and Regulations: The guest is requested to observe, abide by conform to and be bound by all applicable acts and laws and the Government Rules and Regulations in force from time to time.
+								<br/>
+								14. Pets: Dogs, Cats, Birds and other pet animals of the guest are not permitted inside Guest Rooms, Restaurants and Public areas. Guests are requested to retrain from bringing pets to the hotel.
+								<br/>
+								15. Amendment of rules: The management reserves to itself the right to add to, or alter, or amend any of the above terms, conditions and rules.
+					    	</div>
+					    	</td>
+					    	</tr>
+					    	</table> 
+					    	</div> 
+					    <!-- </div>      -->
+					</t>
+				</t>
+			</t>
+		</template>
+
+
+		<record id="paperformat_grc2" model="report.paperformat">
+		    <field name="name">GRC </field>
+		    <field name="default" eval="True"/>
+		    <field name="format">A4</field>
+		    <field name="orientation">Landscape</field>
+		    <field name="margin_top">30</field>
+		    <field name="margin_bottom">15</field>
+		    <field name="margin_left">6</field>
+		    <field name="margin_right">6</field>
+		    <field name="header_line" eval="False"/>
+		    <field name="header_spacing">20</field>
+		    <field name="dpi">80</field>
+		</record>
+
+		<record id="hrms.report_reservation_customer" model="ir.actions.report.xml">
+			<field name="paperformat_id" ref="hrms.paperformat_grc2" />
+		</record>
+
+	</data>
+</openerp>

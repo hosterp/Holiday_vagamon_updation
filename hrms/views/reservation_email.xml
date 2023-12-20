@@ -1,0 +1,229 @@
+<openerp>
+
+	<data>
+		<!-- EDI related Email Templates menu -->
+		<record model="ir.actions.act_window" id="action_hotel_reservation_template">
+			<field name="name">Email Templates</field>
+			<field name="res_model">email.template</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="email_template.email_template_tree" />
+			<field name="search_view_id" ref="email_template.view_email_template_search" />
+			<field name="context"
+				eval="{'search_default_model_id': ref('hotel_reservation.model_hotel_reservation')}" />
+		</record>
+
+
+
+	</data>
+
+	<data>
+
+		<!--Email template for hotel reservation -->
+		<record id="email_template_hotel_reservation10" model="email.template">
+			<field name="name">Reservation-Send by Email</field>
+			<field name="email_from">${(object.warehouse_id.partner_id.email or '')}
+			</field>
+			<field name="subject">Hotel Reservation Details</field>
+			<field name="partner_to">${(object.partner_id.id or '')}</field>
+			<field name="model_id" ref="hotel_reservation.model_hotel_reservation" />
+			<field name="auto_delete" eval="True" />
+			<field name="report_template" ref="report_menu_card2" />
+			<field name="report_name">Hotel Menu Card</field>
+			<field name="lang">${object.partner_id.lang}</field>
+			<field name="body_html"><![CDATA[
+			    <!-- <h1>
+			    <font color="red">Greetings from</font>  
+			    <font color="green">Samudratheeram</font> 
+			    <font color="blue">Beach Resort (SBR)</font></h1> -->
+                <p> <strong> Dear sir/madam. </strong></p>
+                <p>
+                Thank you for your mail. We are pleased to confirm 
+                the Room/s booking as per below Please reconfirm the booking with advance payment before cut off date....
+                </p> 
+                &nbsp;&nbsp;<strong>Details :</strong><br/>
+                <p style="border-left: 1px solid #8e0000; margin-left: 30px;">
+                &nbsp;&nbsp;Name Of Guest : <strong>${object.partner_id.name}</strong><br />
+                <!-- &nbsp;&nbsp;<strong>Room Reservation Details :</strong><br/> 
+                <br/> -->
+                <table border="1" cellpadding="4" style="margin-left: 30px;">
+                        <tr>
+                            <th>Reservation No</th>
+                            <th>${object.reservation_no}</th>                            
+                        </tr>
+                        <tr >
+                             <td>Check In Date</td>
+                             <td>${object.checkin}</td>
+                        </tr>
+                        <tr >
+                             <td>Checkout Date</td>
+                             <td>${object.checkout}</td>
+                        </tr>
+
+                        <tr >
+                             <td>No of Rooms</td>
+                             <td>${object.no_rooms}</td>
+                        </tr>
+                        <tr >
+                             <td>Rooms Category</td>
+                             <td>${object.room_type}</td>
+          
+                        </tr>
+                        <tr >
+                             <td>No of Nights</td>
+                             <td>${object.no_nights}</td>
+                        </tr>
+
+                        	% for line in object.reservation_line:
+							% for particular in line['particulars_ids']:
+								<tr>
+									<td>${particular.particulars_id.name}</td>
+									<td>${particular.number} * ${particular.rate}</td>
+								</tr>
+                        	% endfor
+                        % endfor
+                        <tr >
+                             <td>Net Amount Payable</td>
+                             <td>${object.rack_rate}</td>
+                        </tr>
+                        <tr >
+                             <td>Cut Off Date</td>
+                             <td>Reconfirm the booking with advance<br/> payment on or before  ${object.cutoff_date}
+                             <br/>otherwise booking will consider as <br/>invalid</td>
+                        </tr>
+                        <tr >
+                             <td>Before 30days no charges from the arrival
+
+							50% Retention before 10 days from the
+
+							date of arrival
+
+							100 %  Retention within 10 days from the
+
+							date of arrival</td>
+                             <td> </td>
+                        </tr>
+
+                </table>
+               <br /> 
+               <br />
+               ${object.company_id and object.company_id.signature | safe or ''}
+            ]]></field>
+		</record>
+
+		<record id="email_template_hotel_reservation_acknowledgement" model="email.template">
+			<field name="name">Acknowlegdement-Send by Email</field>
+			<field name="email_from">${(object.warehouse_id.partner_id.email or '')}
+			</field>
+			<field name="subject">Payment Details</field>
+			<field name="partner_to">${(object.partner_id.id or '')}</field>
+			<field name="model_id" ref="hotel_reservation.model_hotel_reservation" />
+			<field name="auto_delete" eval="True" />
+			<field name="lang">${object.partner_id.lang}</field>
+			<field name="body_html"><![CDATA[
+			    <!-- <h1>
+			    <font color="red">Greetings from</font>
+			    <font color="green">Samudratheeram</font>
+			    <font color="blue">Beach Resort (SBR)</font></h1> -->
+                <p> <strong> Dear sir/madam. </strong></p>
+                <p>
+                Thank you for your mail. We are pleased to confirm
+                the Advance payment of Rs.
+                </p>${object.advance}
+                &nbsp;&nbsp;<strong>Details :</strong><br/>
+                <p style="border-left: 1px solid #8e0000; margin-left: 30px;">
+                &nbsp;&nbsp;Name Of Guest : <strong>${object.partner_id.name}</strong><br />
+                <!-- &nbsp;&nbsp;<strong>Room Reservation Details :</strong><br/>
+                <br/> -->
+                <table border="1" cellpadding="4" style="margin-left: 30px;">
+                        <tr>
+                            <th>Reservation No</th>
+                            <th>${object.reservation_no}</th>
+                        </tr>
+                        <tr >
+                             <td>Amount</td>
+                             <td>${object.advance}</td>
+                        </tr>
+
+                </table>
+               <br />
+               <br />
+               ${object.company_id and object.company_id.signature | safe or ''}
+            ]]></field>
+		</record>
+
+		<!--Email template for hotel reservation reminder before 24hrs -->
+		<record id="email_template_reservation_reminder_24hrs" model="email.template">
+			<field name="name">Reservation Reminder Before 24hrs</field>
+			<field name="email_from">${(object.warehouse_id.partner_id.email or '')}
+			</field>
+			<field name="subject">Hotel Reservation Reminder</field>
+			<field name="partner_to">${(object.partner_id.id or '')}</field>
+			<field name="model_id" ref="hotel_reservation.model_hotel_reservation" />
+			<field name="auto_delete" eval="True" />
+			<field name="body_html"><![CDATA[
+                <p><left>Hello <strong>${object.partner_id.name}</strong>.</left></p>
+                <p><left>Greetings from <strong>${object.warehouse_id.name} Hotel</strong>.</left></p> 
+                <p>This email is for reminding you that the Reservation at the <strong>${object.warehouse_id.name} Hotel</strong>.&nbsp;
+                   % if object.warehouse_id.partner_id.city: 
+                   <strong>${object.warehouse_id.partner_id.city}</strong>,&nbsp;
+                   % endif 
+                   % if object.warehouse_id.partner_id.country_id.name:
+                   <strong>${object.warehouse_id.partner_id.country_id.name}</strong>.&nbsp;
+                   % endif
+                    Your checkin has been confirmed on Date <strong>${object.date_order}</strong> . 
+                   Please find all the details regarding to the reservation as listed below:
+                </p>
+                <br/>
+                &nbsp;&nbsp;<strong>Details :</strong><br/>
+                <p style="border-left: 1px solid #8e0000; margin-left: 30px;">
+                &nbsp;&nbsp;Name Of Guest : <strong>${object.partner_id.name}</strong><br />
+                &nbsp;&nbsp;Date Of Arrival : <strong>${object.checkin}</strong><br />
+                &nbsp;&nbsp;Date Of Departure : <strong>${object.checkout}</strong><br />
+                &nbsp;&nbsp;Reservation Number : <strong>${object.reservation_no}</strong><br />
+                &nbsp;&nbsp;Number Of Persons : <strong>${object.adults}</strong> Adults and <strong>${object.children}</strong> Childrens<br />
+                </p>
+                &nbsp;&nbsp;<strong>Rooms Rates Per Night :</strong><br/>
+                <br/>
+                <table border="1" cellpadding="4" style="margin-left: 30px;">
+                        <tr>
+                            <th>Room No</th>
+                            <th>Amount</th>
+                        </tr>
+                        %for line in object.reservation_line:
+                            %for line2 in line.reserve:
+                                <tr >
+                                    <td>${line2.product_id.name}</td>
+                                    <td>${line2.product_id.list_price}</td>
+                                </tr>
+                            %endfor
+                        %endfor
+                </table>
+               <br /> 
+               <p>
+We would appreciate it if you could let us know in case there are any changes in your schedule or program.
+Please inform us immediately, so that we can refund your money according to Hotel policies.
+We are sure that you will find our services satisfactory. We look forward to providing you quality services at our hotel. 
+               </p>
+               <br />
+<strong>Best Regards<strong>,<br />
+<br />
+<strong>Reservations Team <strong><br />
+[<strong>${object.warehouse_id.name} Hotel</strong>]<br />
+% if object.warehouse_id.partner_id.street:
+<strong>${object.warehouse_id.partner_id.street}</strong><br />
+% endif
+% if object.warehouse_id.partner_id.city:
+<strong>${object.warehouse_id.partner_id.city}</strong>,<br />
+% endif
+% if object.warehouse_id.partner_id.country_id.name:
+<strong>${object.warehouse_id.partner_id.country_id.name}</strong>,<br />
+% endif
+<br />
+% if object.warehouse_id.partner_id.website:
+<strong>${object.warehouse_id.partner_id.website}</strong> <br />
+% endif
+             ]]></field>
+		</record>
+	</data>
+</openerp>

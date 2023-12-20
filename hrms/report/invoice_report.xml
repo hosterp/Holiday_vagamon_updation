@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="report_invoice">
+    <t t-call="report.external_layout">
+        <div class="page">
+           
+            <h2 class="text-center">
+                <span>INVOICE11</span>
+               
+            </h2>
+            <table class="table table-bordered">
+                <tr>
+                    <td rowspan="3" colspan="6">
+                        <strong><span t-esc="docs.company_id.name"/></strong><br/>
+                        <span t-esc="docs.company_id.street"/><br/>
+                        <span t-esc="docs.company_id.street2"/><br/>
+                        <span t-esc="docs.company_id.city"/>,<span t-esc="docs.company_id.country_id.name"/>-<span t-esc="docs.company_id.zip"/><br/>
+                        Phone: <span t-esc="docs.company_id.phone"/><br/>
+                        GSTIN:<span t-esc="docs.company_id.gst_no"/><br/>
+                        Email:<span t-esc="docs.company_id.email"/>
+                    </td>
+                    <td colspan="3">
+                        <span>Invoice No:</span><br/>
+                        <strong><span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">Invoice</span>
+                        <span t-if="o.type == 'out_invoice' and o.state == 'proforma2'">PRO-FORMA</span>
+                        <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Draft Invoice....</span>
+                        <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">Cancelled Invoice</span>
+                        <span t-if="o.type == 'out_refund'">Refund</span>
+                        <span t-if="o.type == 'in_refund'">Supplier Refund</span>
+                        <span t-if="o.type == 'in_invoice'">Supplier Invoice</span>
+                        <span t-field="o.number"/></strong>
+                    </td>
+                    <td colspan="3">
+                        <span>Dated:
+                        </span><br/>
+                        <strong><span t-esc="docs.date_invoice"/></strong><br/>
+                       
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        Delivery Note
+                    </td>
+                    <td colspan="3">
+                        Mode/Terms Of Payment
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        Supplier's Ref
+                    </td>
+                    <td colspan="3">
+                        Other Refernce(s)
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="4" colspan="6">
+                        <span>Buyer</span><br/>
+                        <strong><span t-esc="docs.partner_id.name"/></strong><br/>
+                        <span t-esc="docs.partner_id.country_id.name"/>
+                    </td>
+                    <td colspan="3">
+                        <span>Buyer's Order No:</span><br/>
+                        
+                    </td>
+                    <td colspan="3">
+                        <span>Dated:
+                        </span><br/>
+                        
+                       
+                    </td>
+                </tr>
+                    <tr>
+                    <td colspan="3">
+                        <span>Dispatch Document No:</span><br/>
+                        
+                    </td>
+                    <td colspan="3">
+                        <span>Delivery Note Date:
+                        </span><br/>
+                        
+                       
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <span>Dispatched Through:</span><br/>
+                        
+                    </td>
+                    <td colspan="3">
+                        <span>Destination:
+                        </span><br/>
+                        
+                       
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <span>Terms Of Delivery</span>
+                    </td>
+                </tr>
+                <t t-set="sl_no" t-value="1" />
+                <t t-set="qty" t-value="0" />
+                
+                    <th colspan="1">
+                        <span>Sl No</span>
+                    </th>
+                    <th colspan="4">
+                        <span>Description Of Goods</span>
+                    </th>
+                    <th colspan="2">
+                        <span>Quantity</span>
+                    </th>
+                    <th colspan="2">
+                        <span>Rate</span>
+                    </th>
+                    <th colspan="1">
+                        <span>Per</span>
+                    </th>
+                    <th colspan="2">
+                        <span>Amount</span>
+                    </th>
+                    <tr t-foreach="o.invoice_line" t-as="l">
+                        <td colspan="1"><span t-esc="sl_no"/><t t-set="sl_no" t-value="sl_no+1" /></td>
+                        <td colspan="4"><span t-field="l.name"/></td>
+                        <td colspan="2">
+                            <span t-field="l.quantity"/>
+                            <t t-set="qty" t-value="qty+l.quantity" />
+                            <span t-field="l.uos_id"  groups="product.group_uom"/>
+                        </td>
+                        <td class="text-right" colspan="2">
+                            <span t-field="l.price_unit"/>
+                        </td>
+                        <td colspan="1">
+                        </td>
+                        <td class="text-right" colspan="2">
+                            <span t-field="l.price_subtotal" 
+                                t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                        </td>
+                    </tr>
+                    <t t-set="nos2" t-value="5" />
+                                <t t-foreach="range(nos2)" t-as="i">
+                                    <tr height="30">
+                                        <td colspan="1"></td>
+                                        <td colspan="4"></td>
+                                        <td colspan="2"></td>
+                                        <td colspan="2"></td>
+                                        <td colspan="1"></td>
+                                        <td colspan="2"></td>
+                                    </tr>
+                                </t>
+                    <tr>
+                        <td colspan="5" class="text-right">Total</td>
+                        <td colspan="2"><span t-esc="qty"/>Nos</td>
+                        <td colspan="2"></td>
+                        <td colspan="1"></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="12">
+                            <span class="text-left">
+                                Amount Chargeable(In Words)
+                            </span>
+                            <span style="padding-left:550px;">
+                                E. &amp;O.E
+                            </span><br/>
+
+                            
+                                <span t-esc="docs.amount_to_text(docs.amount_total, 'Rupees')" />
+                           
+                   
+                            <span>
+                                <br/><br/><br/>
+                                <br/><br/><br/>
+                                Buyer's Local Sales Tax No:
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            <span>Declaration</span><br/>
+                            <span>We declare that this invoice shows the actual price of the<br/> goods desribed and that all particulars are true and correct.</span>
+                        </td>
+                        <td colspan="6">
+                            <span class="text-right" style="padding-left:280px;">For <strong>VISTARA</strong>
+                                </span><br/><br/>
+                                <span style="padding-left:280px;">Authorised Signatory</span>
+                        </td>
+                    </tr>
+
+               
+            </table><br/>
+            <center><span>This Is A Computer Generated Invoice</span></center>
+
+            
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th class="text-right">Unit Price</th>
+                        <th class="text-right" groups="sale.group_discount_per_so_line">Discount (%)</th>
+                        <th class="text-right">Taxes</th>
+                        <th class="text-right">Amount</th>
+                    </tr>
+                </thead>
+                <tbody class="invoice_tbody">
+                    <tr t-foreach="o.invoice_line" t-as="l">
+                        <td><span t-field="l.name"/></td>
+                        <td>
+                            <span t-field="l.quantity"/>
+                            <span t-field="l.uos_id"  groups="product.group_uom"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="l.price_unit"/>
+                        </td>
+                        <td class="text-right" groups="sale.group_discount_per_so_line"><span t-field="l.discount"/></td>
+                        <td class="text-right">
+                            <span t-esc="', '.join(map(lambda x: x.name, l.invoice_line_tax_id))"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="l.price_subtotal" 
+                                t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+          
+
+           
+        </div>
+    </t>
+</template>
+
+</data>
+</openerp>

@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+
+
+		<report id="report_checkin_checkout" string="Daily Report"
+			model="checkin.checkout.summary" report_type="qweb-pdf"
+			name="hrms.report_checkin_checkout_template" />
+
+
+		<template id="report_checkin_checkout_template">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="report.external_layout">
+						<div class="page">
+							<center><b><h2>Check In/Out Summary</h2></b></center>
+							
+
+							<t t-set="sl_no" t-value="1" />
+							
+							<div>
+								<center>
+
+									<table style="width: 100%; font-size:16px;margin-top:50px;">
+			                            <thead>
+			                                <tr style="height: 30px;">
+			                                    <td style="width: 50%;"><b>Date From:</b>
+			                                        <span t-field="o.date_from"/>
+			                                    </td>
+			                                    <td style="width: 50%;text-align: right;"><b>Date To:</b>
+			                                        <span t-field="o.date_to"/>
+			                                    </td>
+			                                </tr>
+			                            </thead>
+			                        </table>
+
+
+									<table style="font-size:16px;width: 80%;border-bottom: outset;border-top: outset;margin-top:30px;">
+
+										<thead>
+											<tr>
+												<td style="border: outset;width: 5%" align="center">
+    												<span>Rooms</span>
+    											</td>
+												<t t-foreach="docs.get_header()" t-as="item">
+    											<td style="border: outset;width: 5%" align="center">
+    												<span t-esc="item['summary']"/>
+    											</td>
+    											</t>
+											 </tr>
+
+													
+										
+										</thead>
+
+										<tbody>
+											<t t-foreach="docs.get_body()" t-as="item">
+											<tr>
+												<td style="border: outset;width: 10%" align="center">
+    												<span t-esc="item['room']"/>
+    											</td>
+												<t t-foreach="docs.get_body_val(item['room_id'])" t-as="items">
+    											<td style="border: outset;width: 10%" align="center">
+    												<span t-esc="items['state']"/>
+    								
+    											</td>
+    										</t>
+											 </tr>
+											</t>
+
+											<!-- <t t-foreach="docs.get_daily_invoice_details()" t-as="line">
+												<tr style="border-left: outset;">
+													<td style="width: 5%; border-right: outset;" align="center">
+														<t t-esc="sl_no" />
+														<t t-set="sl_no" t-value="sl_no+1" />
+													</td>
+													<td style="width: 15%;  border-right: outset;" align="center">
+														<span t-esc="line['date']"/>
+													</td>
+													<td style="width: 10%;  border-right: outset;padding-right: 6px;" align="right">
+														<span t-esc="line['room_advance_amt']"/>
+													</td>
+													<td style="width: 10%;  border-right: outset;padding-right: 6px;" align="right">
+														<span t-esc="line['service_amt']"/>
+													</td>
+													<td style="width: 10%;  border-right: outset;padding-right: 6px;" align="right">
+														<span t-esc="line['restaurant_amt']"/>
+													</td>
+													<td style="width: 10%;  border-right: outset;padding-right: 6px;" align="right">
+														<span t-esc="line['out_amt']"/>
+													</td>
+													<td style="width: 10%;  border-right: outset;padding-right: 6px;" align="right">
+														<span t-esc="line['total']"/>
+													</td>
+													
+												</tr>
+											</t> -->
+
+										</tbody>
+									</table>
+								</center>
+							</div>
+			               
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+
+	</data>
+</openerp>

@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+		<record model="ir.ui.view" id="view_vendor_receipt_dialog_form_hrms">
+			<field name="name">account.voucher.receipt.dialog.form.hrms</field>
+			<field name="model">account.voucher</field>
+			<field name="priority">30</field>
+			<field name="inherit_id" ref="account_voucher.view_vendor_receipt_dialog_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//group//field[@name='journal_id']" position="after">
+					<field name="travel_agency" domain="[('agency','=',True)]" options="{'no_create':1}" />
+					<field name="account_holder" domain="[('customer','=',True)]"/>
+					<field name="account_no"/>
+				</xpath>
+
+
+				<xpath expr="//group//field[@name='partner_id']" position="replace">
+					<field name="invoice_id" invisible="1"/>
+					<field name="partner_id" on_change="get_id(invoice_id)" required="1" options="{'no_create':True}"/>
+				</xpath>
+
+				<!-- <xpath expr="//group/group/field[@name='date']" position="after">
+					<field name="invoice_id" readonly="1" />
+				</xpath>
+				<xpath expr="//group/group/field[@name='journal_id']"
+					position="replace">
+					<field name="journal_id" domain="[('type','in',['bank', 'cash'])]"
+						invisible="context.get('line_type', False)" widget="selection"
+						string="Payment Method" />
+				</xpath>
+				<xpath expr="//group/group/field[@name='amount']" position="replace">
+					<field name="amount" class="oe_inline" string="Paid Amount"
+						widget='monetary' options='{"currency_field": "currency_id"}'
+						invisible="context.get('line_type', False)" />
+				</xpath>
+				<xpath expr="//group/group/field[@name='partner_id']"
+					position="replace">
+					<field name="partner_id" required="1" string="Customer"
+						context="{'search_default_customer': 1}" />
+				</xpath>
+				<xpath expr="//notebook/page/field/tree/field[@name='reconcile']" position="replace">
+					<field name="reconcile"
+						on_change="onchange_reconcile(reconcile, amount, amount_unreconciled, context)" />
+				</xpath> -->
+				<xpath expr="//button[@name='button_proforma_voucher']" position="replace">
+					<button name="button_proforma_voucher" string="Register Payment" class="oe_highlight" type="object" invisible="1"/>
+					<button name="button_proforma_voucher2" string="Register Payment" class="oe_highlight" type="object"/>
+				</xpath>
+
+			</field>
+		</record>
+
+
+
+	</data>
+</openerp>

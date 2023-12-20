@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data noupdate="0">
+
+		<record id="make_invisible" model="res.groups">
+			<field name="name">visible</field>
+		</record>
+
+		<record id="make_invisible_accounting" model="res.groups">
+			<field name="name">visible Accounting</field>
+		</record>
+		
+		<record id="make_invisible_hr" model="res.groups">
+			<field name="name">visible HR</field>
+		</record> 
+
+		<record id="make_invisible_warehouse" model="res.groups">
+			<field name="name">visible Warehouse</field>
+		</record>
+		
+		<!-- <record id="make_visible_house_keeping" model="res.groups">
+            <field name="name">Visible House Keeping</field>
+        </record> -->
+         <!-- <record id="make_visible_restaurant" model="res.groups">
+            <field name="name">Visible Restaurant</field>
+        </record> --> 
+        
+         <!-- <record id="make_visible_inventory" model="res.groups">
+            <field name="name">Visible Inventory</field>
+        </record> -->
+        
+       <!--  <record id="make_visible_purchase" model="res.groups">
+            <field name="name">Visible Purchase</field>
+        </record> -->
+        
+	</data>
+</openerp>

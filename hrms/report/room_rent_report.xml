@@ -1,0 +1,208 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+		<!-- Room Rent wizard -->
+
+		<record id="form_room_rent_wizard" model="ir.ui.view">
+			<field name="name">room.rent.report.wizard.form</field>
+			<field name="model">room.rent.report.wizard</field>
+			<field name="arch" type="xml">
+				<form>
+					<h1>Room Rent</h1>
+					<group col="4">
+						<field name="date_from" />
+						<field name="date_to" />
+						<field name="tax_type" />
+					</group>
+
+					<footer>
+						<button type="object" name="view_room_rent_report" string="View"
+							class="oe_highlight" />
+						<button type="object" name="print_room_rent_report" string="Print"
+							class="oe_highlight" />
+						<button special="cancel" string="Cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<!-- Room Rent wizard action -->
+
+		<record id="action_room_rent_wizard" model="ir.actions.act_window">
+			<field name="name">Room Rent</field>
+			<field name="res_model">room.rent.report.wizard</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+			<field name="view_id" ref="form_room_rent_wizard" />
+		</record>
+
+		<menuitem id="menu_room_rent_report" name="Room Rent Report" 
+			parent="menu_purchase_report"
+			action="action_room_rent_wizard" />
+
+		<report id="report_room_rent" string="Room Rent Report"
+			model="room.rent.report.wizard" report_type="qweb-html"
+			name="hrms.report_room_rent_template" />
+
+
+		<template id="report_room_rent_template">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="report.external_layout">
+						<div class="page">
+							<center><b><h2>Room Rent Report</h2></b></center>
+							
+
+							<t t-set="sl_no" t-value="1" />
+							<t t-set="sum_purchase_rate" t-value="0" />
+							<t t-set="sum_selling_rate" t-value="0" />
+
+							<table style="width: 100%; font-size:16px;margin-top:50px;">
+	                            <thead>
+	                                <tr style="height: 30px;">
+	                                    <td style="width: 50%;"><b>Date From:</b>
+	                                        <span t-field="o.date_from"/>
+	                                    </td>
+	                                    <td style="width: 50%;text-align: right;"><b>Date To:</b>
+	                                        <span t-field="o.date_to"/>
+	                                    </td>
+	                                </tr>
+	                            </thead>
+	                        </table>
+
+
+							<table style="font-size:12px;width: 100%;border-bottom: outset;border-top: outset;margin-top:30px;">
+								<thead>
+									<t t-set="tax_val" t-value="0" />
+									<t t-if="o.tax_type == '5'">
+										<t t-set="tax_val" t-value="5" />
+									</t>
+									<t t-if="o.tax_type == '12'">
+										<t t-set="tax_val" t-value="12" />
+									</t>
+									<t t-if="o.tax_type == '18'">
+										<t t-set="tax_val" t-value="18" />
+									</t>
+									<t t-if="o.tax_type == '28'">
+										<t t-set="tax_val" t-value="28" />
+									</t>
+
+
+									<tr style="border-bottom: outset;border-right: outset;border-left: outset;">
+										<td style="width: 6%;border-right: outset;" align="center" rowspan="2"><h5><b>Date</b></h5></td>
+										<td style="width: 15%;border-right: outset;" align="center"><h5><b>Particulars</b></h5></td>
+										<td style="width: 7%; border-right: outset;" align="center"><h5><b>Voucher Type</b></h5></td>
+										<td style="width: 10%;border-right: outset;" align="center"><h5><b>Bill No</b></h5></td>
+										<td style="width: 10%;border-right: outset;" align="center"><h5><b>Taxable Value</b></h5></td>
+										<td style="width: 8%;border-right: outset;" align="center"><h5><b>CGST - <span t-esc="tax_val/2"/>%</b></h5></td>
+										<td style="width: 8%;border-right: outset;" align="center"><h5><b>SGST- <span t-esc="tax_val/2"/>%</b></h5></td>
+										<td style="width: 8%;border-right: outset;" align="center"><h5><b>IGST - <span t-esc="tax_val"/>%</b></h5></td>
+										<td style="width: 10%;border-right: outset;" align="center"><h5><b>Total</b></h5></td>
+										<td style="width: 8%;border-right: outset;" align="center"><h5><b>GST In</b></h5></td>
+										<td style="width: 10%;border-right: outset;" align="center"><h5><b>Name</b></h5></td>
+										
+									</tr>
+								</thead>
+
+								<tbody>
+									<t t-set="taxable_value" t-value="0" />
+									<t t-set="cgst" t-value="0" />
+									<t t-set="sgst" t-value="0" />
+									<t t-set="igst" t-value="0" />
+									<t t-set="total" t-value="0" />
+
+									<t t-foreach="docs.get_room_rent()" t-as="line">
+										<tr style="border-bottom: outset;border-right: outset;border-left: outset;">
+											<td style="border-right: outset;" align="center">
+												<span t-esc="line['date']"/>
+											</td>
+											<td style="border-right: outset;padding-left: 2px">
+												<span t-esc="line['particulars']"/>
+											</td>
+											<td style="border-right: outset;padding-left: 2px">
+												<span t-esc="line['vch_type']"/>
+											</td>
+											<td style="border-right: outset;padding-left: 2px">
+												<span t-esc="line['bill_no']"/>
+											</td>
+											
+											<td style="border-right: outset;padding-right: 2px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['taxable_value'])"/>
+												<t t-set="taxable_value" t-value="taxable_value + line['taxable_value']" />
+											</td>
+
+											<td style="border-right: outset;padding-right: 2px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['cgst'])"/>
+												<t t-set="cgst" t-value="cgst + line['cgst']" />
+											</td>
+
+											<td style="border-right: outset;padding-right: 2px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['sgst'])"/>
+												<t t-set="sgst" t-value="sgst + line['sgst']" />
+											</td>
+
+											<td style="border-right: outset;padding-right: 2px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['igst'])"/>
+												<t t-set="igst" t-value="igst + line['igst']" />
+											</td>
+
+											<td style="border-right: outset;padding-right: 2px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['total'])"/>
+												<t t-set="total" t-value="total + line['total']" />
+											</td>
+
+											<td style="border-right: outset;padding-left: 2px">
+												<span t-esc="line['gst_no']"/>
+											</td>
+
+											<td style="border-right: outset;padding-left: 2px">
+												<span t-esc="line['name']"/>
+											</td>
+										</tr>
+									</t>
+
+					
+
+									<tr style="border-right: outset;border-left: outset;border-top: outset;" height="25">
+											
+										<td style="border-right: outset;"></td>
+										<td style="border-right: outset;"></td>
+										<td style="border-right: outset;"></td>
+										<td style="border-right: outset;" align="center"><h5><b>TOTAL</b></h5></td>
+										
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(taxable_value)" />
+										</td>
+										
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(cgst)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(sgst)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(igst)" />
+										</td>
+										
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(total)" />
+										</td>
+										<td style="border-right: outset;"></td>
+										<td style="border-right: outset;"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+
+		<record id="hrms.report_room_rent" model="ir.actions.report.xml">
+			<field name="paperformat_id" ref="hrms.paperformat_grc2" />
+		</record>
+
+	</data>
+</openerp>

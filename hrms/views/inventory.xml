@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+
+		<record id="purchase_form_action_hiworth" model="ir.actions.act_window">
+            <field name="name">Purchase</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,form,graph,calendar</field>
+            <!-- <field name="context">{}</field> -->
+            <field name="search_view_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a new purchase bills. 
+             </p>
+            </field>
+        </record>
+
+		<menuitem action="purchase_form_action_hiworth" id="purchase.menu_purchase_form_action" parent="purchase.menu_procurement_management" sequence="6" />
+
+		<record id="purchase_order_form_hrms" model="ir.ui.view">
+			<field name="name">purchase.order.form.hrms</field>
+			<field name="model">purchase.order</field>
+			<field name="inherit_id" ref="purchase.purchase_order_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//header/button[@string='Send RFQ by Email']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//header/button[@string='Re-Send RFQ by Email']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//header/button[@string='Re-Print RFQ']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//header/button[@string='Send PO by Email']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//header/button[@string='Approve Order']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//header/button[@string='Receive Invoice']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//header/button[@name='purchase_confirm']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//header/button[@name='view_picking']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//header/button[@name='view_picking']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//header/button[@name='print_quotation']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//header/field[@name='state']" position="replace">
+					 <field name="state" widget="statusbar" statusbar_visible="draft,done" readonly="1"/>
+				</xpath>
+				<xpath expr="//notebook/page[@string='RFQ &amp; Bid']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//notebook/page[@string='Deliveries &amp; Invoices']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//header/button[@name='purchase_confirm']" position="after">
+					<button name="button_confirm" string="Confirm" type="object" class="oe_highlight" states="draft"/>
+				</xpath>
+
+				<xpath expr="//notebook/page[@string='Products']//field/tree/field[@name='date_planned']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//h1/label[@string='Request for Quotation ']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//h1/label[@string='Purchase Order ']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<field name="partner_id" position="after">
+					<field name="invoice_no" />
+				</field>
+
+				<xpath expr="//div[@class='oe_chatter']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//group//field[@name='amount_untaxed']" position="after">
+					<field name="cgst" widget="monetary" options="{'currency_field': 'currency_id'}"  string="CGST" />
+					<field name="sgst" widget="monetary" options="{'currency_field': 'currency_id'}"  string="SGST" />
+					<field name="igst" widget="monetary" options="{'currency_field': 'currency_id'}" 
+						attrs="{'invisible': [('igst','=',0)]}" string="IGST" />
+				</xpath>
+				<xpath expr="//group//field[@name='amount_tax']" position="after">
+					<field name="round_off" widget="monetary" options="{'currency_field': 'currency_id'}" />
+				</xpath>
+
+				<xpath expr="//notebook//page//field[@name='order_line']//tree//field[@name='price_subtotal']" position="after">
+					<field name="gst_tax" invisible="1"/>
+					<field name="igst_tax" invisible="1"/>
+				</xpath>
+
+				<xpath expr="//notebook//page//field[@name='order_line']//tree//field[@name='product_id']" position="attributes">
+					<attribute name="required">1</attribute>
+				</xpath>
+
+
+
+			</field>
+		</record>
+
+
+		 <record id="purchase_order_2_stock_picking" model="ir.ui.view">
+            <field name="name">Purchase Picking Inherited</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_2_stock_picking"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//div/button[@name='invoice_open']" position="attributes">
+            		<attribute name="invisible">1</attribute>
+            	</xpath>
+            </field>
+        </record>
+
+        <menuitem action="account.action_invoice_tree2" id="menu_action_invoice_tree2_hiworth" parent="purchase.menu_procurement_management" sequence="10"/>
+
+
+	</data>
+</openerp>

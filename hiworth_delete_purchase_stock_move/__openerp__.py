@@ -1,0 +1,28 @@
+# -*- coding: utf-8 -*-
+{
+    'name': 'Delete Purchase And Stock Moves',
+    'version': '1.0.0',
+    'author': 'Hiworth Solutions Pvt Ltd',
+    'category': 'Purchase',
+    'website': 'http://www.hiworthsolutions.com',
+    'depends': ['purchase','stock','account'],
+    'data': [
+           'security/purchase_delete_security.xml',
+#          'security/ir.model.access.csv',
+           'purchase_order.xml',
+#          'report/report_finance_html.xml',
+#          'report/hiworth_reports.xml', 
+#          'report/hiworth_day_book.xml',
+#          'report/hiworth_ledger_report.xml',
+#      #     'views/configurable_account_chart.xml',
+#           'views/hiworth_accounting.xml',
+#           'views/hiworth_accounting_menu.xml', 
+# #           'views/financial_report_balance_sheet.xml',
+#           'views/financial_report_balance_sheet2.xml',
+#           'views/view_balance_and_pl.xml', 
+#           'views/new_balance_pl_report.xml',
+#           'wizard/balance_sheet_wizard_view.xml',    
+    ],
+    'installable': True,
+    'auto_install': False,
+}

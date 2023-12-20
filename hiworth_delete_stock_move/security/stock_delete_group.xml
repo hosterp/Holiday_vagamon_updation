@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<openerp>
+    <data noupdate="0">
+    
+        <record id="delete_done_stock_move" model="res.groups">
+            <field name="name">Delete Stock Moves</field>
+            <field name="comment"> No editing </field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
+        </record>
+
+
+
+    </data>
+</openerp>

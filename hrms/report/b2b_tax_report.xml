@@ -1,0 +1,160 @@
+<openerp>
+    <data>
+        <report id="report_tax_b2b" string="BTOB Tax Report"
+			model="tax.report.wizard" report_type="qweb-html"
+			name="hrms.report_b2b_tax_report_template" />
+
+        <template id="report_b2b_tax_report_template">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="report.external_layout">
+						<div class="page">
+							<t t-if="o.b2b">
+								<center><b><h2>BTOB Tax Report</h2></b></center>
+							</t>
+							<t t-if="o.b2c">
+							<center><b><h2>BTOC Tax Report</h2></b></center>
+							</t>
+
+
+							<t t-set="sl_no" t-value="1" />
+							<t t-set="sum_purchase_rate" t-value="0" />
+							<t t-set="sum_selling_rate" t-value="0" />
+
+							<table style="width: 100%; font-size:16px;margin-top:50px;">
+	                            <thead>
+	                                <tr style="height: 30px;">
+	                                    <td style="width: 50%;"><b>Date From:</b>
+	                                        <span t-field="o.date_from"/>
+	                                    </td>
+	                                    <td style="width: 50%;text-align: right;"><b>Date To:</b>
+	                                        <span t-field="o.date_to"/>
+	                                    </td>
+	                                </tr>
+	                            </thead>
+	                        </table>
+
+
+							<table style="font-size:12px;width: 100%;border-bottom: outset;border-top: outset;margin-top:30px;">
+								<thead style="font-size:12px;width: 100%;border-bottom: outset;border-top: outset;margin-top:30px;">
+									<tr>
+										<td style='font-size:15px'>
+											<b>Date</b>
+										</td>
+										<td style='font-size:15px'>
+											<b>Customer Name</b>
+										</td>
+										<td style='font-size:15px'>
+											<b>CGST</b>
+										</td>
+										<t t-if="not o.b2b and not o.b2c and not o.inter_state and not o.local">
+											<td style='font-size:15px'>
+											<b>IGST</b>
+										</td>
+										</t>
+										<t t-if="o.inter_state">
+											<td style='font-size:15px'>
+											<b>IGST</b>
+										</td>
+										</t>
+
+										<td style='font-size:15px'>
+											<b>SGST</b>
+										</td>
+										<td style='font-size:15px'>
+											<b>Total Tax</b>
+										</td>
+										<td style='font-size:15px'>
+											<b>Total</b>
+										</td>
+									</tr>
+
+								</thead>
+
+								<tbody style="font-size:12px;width: 100%;border-bottom: outset;border-top: outset;margin-top:30px;">
+									<t t-set="cgst_total" t-value="0"/>
+									<t t-set="sgst_total" t-value="0"/>
+									<t t-set="igst_total" t-value="0"/>
+									<t t-set="tax_total" t-value="0"/>
+									<t t-set="total" t-value="0"/>
+									<t t-foreach="o.get_tax_report_record()" t-as="line">
+										<tr>
+											<td style='font-size:15px'>
+												<span t-esc="line['date']"/>
+											</td>
+											<td style='font-size:15px'>
+												<span t-esc="line['customer_name']"/>
+											</td>
+											<t t-set="cgst_total" t-value="cgst_total+line['cgst']"/>
+											<td style='font-size:15px'>
+												<span t-esc="round(line['cgst'],2)"/>
+											</td>
+											<t t-if="not o.b2b and not o.b2c and not o.inter_state and not o.local">
+												<t t-set="igst_total" t-value="igst_total + line['igst']"/>
+												<td style='font-size:15px'>
+													<span t-esc="round(line['igst'], 2)"/>
+												</td>
+											</t>
+
+											<t t-if="o.inter_state">
+												<t t-set="igst_total" t-value="igst_total+line['igst']"/>
+												<td style='font-size:15px'>
+													<span t-esc="round(line['igst'],2)"/>
+												</td>
+											</t>
+
+											<t t-set="sgst_total" t-value="sgst_total+line['sgst']"/>
+											<td style='font-size:15px'>
+												<span t-esc="round(line['sgst'],2)"/>
+											</td>
+											<t t-set="tax_total" t-value="tax_total+line['total_tax']"/>
+											<td style='font-size:15px'>
+												<span t-esc="line['total_tax']"/>
+											</td>
+											<t t-set="total" t-value="total+line['total']"/>
+											<td style='font-size:15px'>
+												<span t-esc="line['total']"/>
+											</td>
+
+										</tr>
+									</t>
+
+								</tbody>
+									<tr>
+									<td style='font-size:15px' colspan="2">
+										<b>Total</b>
+									</td>
+									<td style='font-size:15px'>
+										<strong t-esc="round(cgst_total,2)"/>
+									</td>
+									<t t-if="not o.b2b and not o.b2c and not o.inter_state and not o.local">
+										<td style='font-size:15px'>
+											<strong t-esc="round(igst_total,2)"/>
+										</td>
+									</t>
+									<t t-if="o.inter_state">
+										<td style='font-size:15px'>
+											<strong t-esc="round(igst_total,2)"/>
+										</td>
+									</t>
+									<td style='font-size:15px'>
+										<strong t-esc="round(sgst_total,2)"/>
+									</td>
+									<td style='font-size:15px'>
+										<strong t-esc="round(tax_total,2)"/>
+									</td>
+									<td style='font-size:15px'>
+										<strong t-esc="round(total,2)"/>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+<!--    	<record id="hrms.report_tax_b2b" model="ir.actions.report.xml">-->
+<!--			<field name="paperformat_id" ref="hrms.paperformat_grc2" />-->
+<!--		</record>-->
+    </data>
+</openerp>

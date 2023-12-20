@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+<menuitem id="menu_front_office" name="Front Office" parent="hotel.hotel_management_menu"
+				  sequence="1" groups="hrms.hotel_receptionist"/>
+		<record id="inherit_view_hotel_resrevation_tree_remainder"
+			model="ir.ui.view">
+			<field name="name">Payment Remainder Tree</field>
+			<field name="model">hotel.reservation</field>
+			<field name="inherit_id" ref="hotel_reservation.view_hotel_reservation_tree" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='checkout']" position="after">
+					<field name="cutoff_date" />
+				</xpath>
+				<xpath expr="//field[@name='partner_id']" position="after">
+					<field name="company_id" />
+					<field name="room_no_list" />
+					<field name="given_rooms_ids"/>
+				</xpath>
+				<!-- <tree string="Reservation" colors="blue:state == 'draft';gray:state 
+					== 'done';lightgray:state == 'cancel';"> <field name="cutoff_date" /> </tree> -->
+				<xpath expr="//field[@name='state']" position="before">
+					<field name="remarks" />
+				</xpath>
+				<!-- <xpath expr="//field[@name='reservation_no']" position="attributes">
+					<attribute name="string">GRC No.</attribute>
+				</xpath> -->
+			</field>
+		</record>
+
+		<record id="inherit_view_hotel_resrevation_filter_remainder"
+			model="ir.ui.view">
+			<field name="name">Payment Remainder </field>
+			<field name="model">hotel.reservation</field>
+			<field name="inherit_id" ref="hotel_reservation.view_hotel_reservation_search" />
+			<field name="arch" type="xml">
+				<xpath expr="//filter[@string='Cancel']" position="after">
+					<filter string="Payment Remainder" name="group_payment_remainder"
+						domain="[('cutoff_date','>=', ((context_today()).strftime('%Y-%m-%d'))+' '+'00:00:00'),('cutoff_date','&lt;=', ((context_today()).strftime('%Y-%m-%d'))+' '+'23:59:59')]
+					" />
+					<filter string="Check In" name="group_check_in"
+						domain="[('checkin','=', ((context_today()).strftime('%Y-%m-%d')))]
+                    " />
+					<filter string="Check Out"
+						domain="[('checkout_dummy','>=', ((context_today()).strftime('%Y-%m-%d'))+' '+'00:00:00'),('checkout_dummy','&lt;=', ((context_today()).strftime('%Y-%m-%d'))+' '+'23:59:59')]
+                    " />
+					<filter string="Current Company"
+						domain="[('company_id', '=', 'user.company_id.id')]
+                    " />
+                    
+                    <filter string="Not Checked In" name="not_checked_in"
+                        domain="[('state','in',['draft','confirm','block'])]" />
+
+				</xpath>
+				<xpath expr="//group/filter[@string='Order By Month']"
+					position="after">
+					<filter string="Company" domain="[]" context="{'group_by':'company_id'}" />
+				</xpath>
+				<xpath expr="//field[@name='checkout']"
+					position="after">
+					<!-- <field name="company_id"/> -->
+					<field name="partner_order_id" string="Agency"/>
+				</xpath>
+
+			</field>
+		</record>
+		<!-- Action of hotel reservation Remainder -->
+		<record model="ir.actions.act_window" id="action_hotel_reservation_tree_all3">
+			<field name="name">Reservations</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hotel.reservation</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,gantt</field>
+			<field name="context">{"search_default_group_payment_remainder":1}
+			</field>
+			<field name="view_id" ref="inherit_view_hotel_resrevation_filter_remainder" />
+		</record>
+		<!-- <menuitem name="Payment Remainder" id="menu_action_hotel_reservation_tree_all3"
+			action="action_hotel_reservation_tree_all3" parent="hotel_reservation.menu_hotel_reservation"
+			sequence="5" /> -->
+
+		<record model="ir.actions.act_window" id="action_hotel_reservation_tree_all4">
+			<field name="name">Reservations</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hotel.reservation</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,gantt</field>
+			<field name="domain">[('state','=','confirm')]</field>
+			<field name="context">{}
+			</field>
+			<field name="view_id" ref="inherit_view_hotel_resrevation_filter_remainder" />
+		</record>
+
+
+		<menuitem name="Check In" id="menu_action_hotel_reservation_tree_all2"
+			action="action_hotel_reservation_tree_all4" parent="hrms.menu_front_office"
+			sequence="2" />
+
+
+		<record id="inherit_view_hotel_resrevation_filter_ckeck_in"
+			model="ir.ui.view">
+			<field name="name">Reservation Check In </field>
+			<field name="model">hotel.reservation</field>
+			<field name="inherit_id" ref="hotel_reservation.view_hotel_reservation_search" />
+			<field name="arch" type="xml">
+				<!-- <xpath expr="//group/filter[@string='Order By Month']" position="after"> 
+					<filter string="Traveling Agent" domain="[]" context="{'group_by':'partner_order_id'}" 
+					/> </xpath> -->
+				<xpath expr="//group/filter[@string='Order By Month']"
+					position="after">
+					<filter string="Traveling Agent" domain="[]"
+						context="{'group_by':'partner_order_id'}" />
+					<filter string="Account" domain="[]" context="{'group_by':'account_id'}" />
+					<filter domain="[('ml_plan','=','CP')]" string="CP" />
+					<filter domain="[('ml_plan','=','MAP')]" string="MAP" />
+					<filter domain="[('ml_plan','=','AP')]" string="AP" />
+				</xpath>
+				<!-- <xpath expr="//group/filter[@string='Order By Month']" position="after"> 
+					<filter domain="[('ml_plan','=','CP')]" string="CP"/> <filter domain="[('ml_plan','=','MAP')]" 
+					string="MAP"/> <filter domain="[('ml_plan','=','AP')]" string="AP"/> </xpath> -->
+
+			</field>
+		</record>
+
+		<record id="inherit_view_hotel_folio_search2" model="ir.ui.view">
+			<field name="name">Check Out </field>
+			<field name="model">hotel.folio</field>
+			<field name="inherit_id" ref="hotel.view_hotel_folio_search" />
+			<field name="arch" type="xml">
+				<xpath expr="//filter[@string='Current Booking']" position="after">
+					<filter string="Check Out" name="group_check_out"
+						domain="[('checkout_dummy','>=', ((context_today()).strftime('%Y-%m-%d'))+' '+'00:00:00'),('checkout_dummy','&lt;=', ((context_today()).strftime('%Y-%m-%d'))+' '+'23:59:59')]
+                    " />
+					<filter string="Stay Today"
+						domain="[('checkout_date','&gt;',datetime.datetime.now()),('checkin_date','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]"
+						help="Current Booking" />
+						
+					<filter string="Check In" name="check_in"
+                        domain="[('state','in',['draft'])]"
+                        help="Current Check IN" />
+                        
+                    <filter string="Not Checked Out" name="not_checked_out"
+                        domain="[('state','in',['draft','manual'])]"
+                        help="Check Out Not Completed" />
+						
+				</xpath>
+				<field name="partner_id" position="after">
+					<field name="reservation_id" string="Reservation No" />
+					<field name="room_no_list" string="Room" />
+				</field>
+				<xpath expr="//group/filter[@string='Customer']" position="after">
+					<filter domain="[('reservation_id.ml_plan','=','CP')]"
+						string="CP" />
+					<filter domain="[('reservation_id.ml_plan','=','MAP')]"
+						string="MAP" />
+					<filter domain="[('reservation_id.ml_plan','=','AP')]"
+						string="AP" />
+				</xpath>
+
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_hotel_reservation_check_out">
+			<field name="name">Check Out</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hotel.folio</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{"search_default_group_check_out":1}
+			</field>
+			<field name="view_id" ref="inherit_view_hotel_folio_search2" />
+		</record>
+		<!-- <menuitem name="Check Out" id="menu_open_hotel_folio1_form_tree_all2"
+			action="action_hotel_reservation_check_out" parent="hotel_reservation.menu_hotel_reservation"
+			sequence="30"
+			groups="hrms.hotel_receptionist,hrms.hotel_reservation,hrms.hotel_account" /> -->
+
+
+		<record model="ir.ui.view" id="view_hotel_restaurant_order_search_altered">
+			<field name="name">hotel.restaurant.order.search.altered</field>
+			<field name="model">hotel.restaurant.order</field>
+			<field name="inherit_id"
+				ref="hotel_restaurant.view_hotel_restaurant_order_search" />
+			<field name="arch" type="xml">
+				<xpath expr="//group/filter[@string='date']" position="after">
+					<filter domain="[('state','=','draft')]" string="Draft" />
+					<filter domain="[('state','=','done')]" string="Done" />
+					<filter domain="[('state','=','payed')]" string="Paid" />
+					<filter domain="[('state','=','credited')]" string="Credited" />
+					<!-- <filter name="search_date_from" context="{'o_date':self}" string="From"/> 
+					<filter name="search_date_to" context="{'o_date':08/08/2017}" string="To"/> -->
+					
+					<filter string="F &amp; B Invoice" name="f_ang_b"
+                        domain="[('state','in',['credited','payed'])]" />
+                    
+				</xpath>
+				<xpath expr="//field[@name='order_no']" position="after">
+					<field name="o_date" />
+					<!-- <field name="search_date_from" domain="[('o_date','&gt;=',self)]" string="From"/>
+					<field name="search_date_to" domain="[('o_date','&lt;=',self)]" string="To"/> -->
+				</xpath>
+
+			</field>
+		</record>
+
+
+	</data>
+</openerp>

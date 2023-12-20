@@ -1,0 +1,399 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+		<!-- Purchase Register wizard -->
+
+		<record id="form_purchase_register_wizard" model="ir.ui.view">
+			<field name="name">purchase.register.wizard.form</field>
+			<field name="model">purchase.register.wizard</field>
+			<field name="arch" type="xml">
+				<form>
+					<h1>Purchase Register</h1>
+					<group col="4">
+						<field name="date_from" />
+						<field name="date_to" />
+					</group>
+
+					<footer>
+						<button type="object" name="view_purchase_report" string="View"
+							class="oe_highlight" />
+						<button type="object" name="print_purchase_report" string="Print"
+							class="oe_highlight" />
+						<button special="cancel" string="Cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<!-- Purchase Register wizard action -->
+
+		<record id="action_purchase_register_wizard" model="ir.actions.act_window">
+			<field name="name">Purchase Register</field>
+			<field name="res_model">purchase.register.wizard</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+			<field name="view_id" ref="form_purchase_register_wizard" />
+		</record>
+
+		<menuitem id="menu_report_new" name="Reports"/>
+
+		<menuitem id="menu_purchase_report" name="Reports" parent="menu_report_new"/>
+
+		<menuitem id="menu_purchase_register_report" name="Purchase Register Report" 
+			parent="menu_purchase_report"
+			action="action_purchase_register_wizard" />
+
+		<report id="report_purchase_register" string="Purchase Register Report"
+			model="purchase.register.wizard" report_type="qweb-html"
+			name="hrms.report_purchase_register_template" />
+
+
+		<template id="report_purchase_register_template">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="report.external_layout">
+						<div class="page">
+							<center><b><h2>Purchase Register Report</h2></b></center>
+							
+
+							<t t-set="sl_no" t-value="1" />
+							<t t-set="sum_purchase_rate" t-value="0" />
+							<t t-set="sum_selling_rate" t-value="0" />
+
+							<table style="width: 100%; font-size:16px;margin-top:50px;">
+	                            <thead>
+	                                <tr style="height: 30px;">
+	                                    <td style="width: 50%;"><b>Date From:</b>
+	                                        <span t-field="o.date_from"/>
+	                                    </td>
+	                                    <td style="width: 50%;text-align: right;"><b>Date To:</b>
+	                                        <span t-field="o.date_to"/>
+	                                    </td>
+	                                </tr>
+	                            </thead>
+	                        </table>
+
+
+							<table style="font-size:12px;width: 100%;border-bottom: outset;border-top: outset;margin-top:30px;">
+								<thead>
+
+									<tr style="border-right: outset;border-left: outset;">
+										<!-- <td style="width: 5%; border-right: outset;" align="center"><h5><b>Sl No</b></h5></td> -->
+										<td style="width: 6%;border-right: outset;" align="center" rowspan="2"><h5><b>Date</b></h5></td>
+										<td style="width: 7%;border-right: outset;" align="center"><h5><b>Particulars</b></h5></td>
+										<td style="width: 6%; border-right: outset;" align="center"><h5><b>Voucher Type</b></h5></td>
+										<td style="width: 6%;border-right: outset;" align="center"><h5><b>Bill No</b></h5></td>
+										<td style="width: 6%;border-right: outset;" align="center"><h5><b>GST In</b></h5></td>
+										<td style="width: 8%;border-right: outset;" align="center"><h5><b>Bill Amount</b></h5></td>
+										<td style="width: 15%;border-bottom: outset;border-right: outset;" align="center" colspan="5"><h5><b>Taxable Value</b></h5></td>
+										<td style="width: 9%;border-bottom: outset;border-right: outset;" align="center" colspan="3"><h5><b>Input Credit - 5%</b></h5></td>
+										<td style="width: 9%;border-bottom: outset;border-right: outset;" align="center" colspan="3"><h5><b>Input Credit - 12%</b></h5></td>
+										<td style="width: 9%;border-bottom: outset;border-right: outset;" align="center" colspan="3"><h5><b>Input Credit - 18%</b></h5></td>
+										<td style="width: 9%;border-bottom: outset;border-right: outset;" align="center" colspan="3"><h5><b>Input Credit - 28%</b></h5></td>
+										<td style="width: 2%;border-right: outset;" align="center"><h5><b>Round off Amount</b></h5></td>
+										<td style="width: 8%;border-right: outset;" align="center"><h5><b>Total</b></h5></td>
+										
+									</tr>
+								</thead>
+
+								<tbody>
+									<tr style="border-bottom: outset;border-right: outset;border-left: outset;">
+										<td style="border-right: outset;"></td>
+										<td style="border-right: outset;"></td>
+										<td style="border-right: outset;"></td>
+										<td style="border-right: outset;"></td>
+										<td style="border-right: outset;"></td>
+										<td style="border-right: outset;"></td>
+										<td style="width: 3%;border-right: outset;" align="center">
+											<h6><b>0%</b></h6>
+										</td>
+										<td style="width: 3%;border-right: outset;" align="center">
+											<h6><b>5%</b></h6>
+										</td>
+										<td style="width: 3%;border-right: outset;" align="center">
+											<h6><b>12%</b></h6>
+										</td>
+										<td style="width: 3%;border-right: outset;" align="center">
+											<h6><b>18%</b></h6>
+										</td>
+										<td style="width: 3%;border-right: outset;" align="center">
+											<h6><b>28%</b></h6>
+										</td>
+										<td style="width: 3%;border-right: outset;" align="center">
+											<h6><b>CGST</b></h6>
+										</td>
+										<td style="width: 3%;border-right: outset;" align="center">
+											<h6><b>SGST</b></h6>
+										</td>
+										<td style="width: 3%;border-right: outset;" align="center">
+											<h6><b>IGST</b></h6>
+										</td>
+										<td style="width: 3%;border-right: outset;" align="center">
+											<h6><b>CGST</b></h6>
+										</td>
+										<td style="width: 3%;border-right: outset;" align="center">
+											<h6><b>SGST</b></h6>
+										</td>
+										<td style="width: 3%;border-right: outset;" align="center">
+											<h6><b>IGST</b></h6>
+										</td>
+										<td style="width: 3%;border-right: outset;" align="center">
+											<h6><b>CGST</b></h6>
+										</td>
+										<td style="width: 3%;border-right: outset;" align="center">
+											<h6><b>SGST</b></h6>
+										</td>
+										<td style="width: 3%;border-right: outset;" align="center">
+											<h6><b>IGST</b></h6>
+										</td>
+										<td style="width: 3%;border-right: outset;" align="center">
+											<h6><b>CGST</b></h6>
+										</td>
+										<td style="width: 3%;border-right: outset;" align="center">
+											<h6><b>SGST</b></h6>
+										</td>
+										<td style="width: 3%;border-right: outset;" align="center">
+											<h6><b>IGST</b></h6>
+										</td>
+										<td style="border-right: outset;"></td>
+										<td style="border-right: outset;"></td>
+									</tr>
+
+									<t t-set="bill_amt" t-value="0" />
+									<t t-set="taxable_0" t-value="0" />
+									<t t-set="taxable_5" t-value="0" />
+									<t t-set="taxable_12" t-value="0" />
+									<t t-set="taxable_18" t-value="0" />
+									<t t-set="taxable_28" t-value="0" />
+									<t t-set="cgst_5" t-value="0" />
+									<t t-set="sgst_5" t-value="0" />
+									<t t-set="igst_5" t-value="0" />
+									<t t-set="cgst_12" t-value="0" />
+									<t t-set="sgst_12" t-value="0" />
+									<t t-set="igst_12" t-value="0" />
+									<t t-set="cgst_18" t-value="0" />
+									<t t-set="sgst_18" t-value="0" />
+									<t t-set="igst_18" t-value="0" />
+									<t t-set="cgst_28" t-value="0" />
+									<t t-set="sgst_28" t-value="0" />
+									<t t-set="igst_28" t-value="0" />
+									<t t-set="round_off" t-value="0" />
+									<t t-set="total" t-value="0" />
+
+									<t t-foreach="docs.get_purchase_register()" t-as="line">
+										<tr style="border-bottom: outset;border-right: outset;border-left: outset;">
+											<td style="border-right: outset;">
+												<span t-esc="line['date']"/>
+											</td>
+											<td style="border-right: outset;">
+												<span t-esc="line['particulars']"/>
+											</td>
+											<td style="border-right: outset;">
+												<span t-esc="line['vch_type']"/>
+											</td>
+											<td style="border-right: outset;">
+												<span t-esc="line['bill_no']"/>
+											</td>
+											<td style="border-right: outset;">
+												<span t-esc="line['gst_no']"/>
+											</td>
+
+											<td style="border-right: outset;padding-right: 1px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['bill_amt'])"/>
+												<t t-set="bill_amt" t-value="bill_amt + line['bill_amt']" />
+											</td>
+
+											<td style="border-right: outset;padding-right: 1px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['taxable_0'])"/>
+												<t t-set="taxable_0" t-value="taxable_0 + line['taxable_0']" />
+											</td>
+
+											<td style="border-right: outset;padding-right: 1px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['taxable_5'])"/>
+												<t t-set="taxable_5" t-value="taxable_5 + line['taxable_5']" />
+											</td>
+
+											<td style="border-right: outset;padding-right: 1px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['taxable_12'])"/>
+												<t t-set="taxable_12" t-value="taxable_12 + line['taxable_12']" />
+											</td>
+
+											<td style="border-right: outset;padding-right: 1px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['taxable_18'])"/>
+												<t t-set="taxable_18" t-value="taxable_18 + line['taxable_18']" />
+											</td>
+											<td style="border-right: outset;padding-right: 1px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['taxable_28'])"/>
+												<t t-set="taxable_28" t-value="taxable_28 + line['taxable_28']" />
+											</td>
+
+											<td style="border-right: outset;padding-right: 1px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['cgst_5'])"/>
+												<t t-set="cgst_5" t-value="cgst_5 + line['cgst_5']" />
+											</td>
+
+											<td style="border-right: outset;padding-right: 1px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['sgst_5'])"/>
+												<t t-set="sgst_5" t-value="sgst_5 + line['sgst_5']" />
+											</td>
+
+											<td style="border-right: outset;padding-right: 1px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['igst_5'])"/>
+												<t t-set="igst_5" t-value="igst_5 + line['igst_5']" />
+											</td>
+
+											<td style="border-right: outset;padding-right: 1px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['cgst_12'])"/>
+												<t t-set="cgst_12" t-value="cgst_12 + line['cgst_12']" />
+											</td>
+
+											<td style="border-right: outset;padding-right: 1px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['sgst_12'])"/>
+												<t t-set="sgst_12" t-value="sgst_12 + line['sgst_12']" />
+											</td>
+
+											<td style="border-right: outset;padding-right: 1px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['igst_12'])"/>
+												<t t-set="igst_12" t-value="igst_12 + line['igst_12']" />
+											</td>
+
+											<td style="border-right: outset;padding-right: 1px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['cgst_18'])"/>
+												<t t-set="cgst_18" t-value="cgst_18 + line['cgst_18']" />
+											</td>
+
+											<td style="border-right: outset;padding-right: 1px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['sgst_18'])"/>
+												<t t-set="sgst_18" t-value="sgst_18 + line['sgst_18']" />
+											</td>
+
+											<td style="border-right: outset;padding-right: 1px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['igst_18'])"/>
+												<t t-set="igst_18" t-value="igst_18 + line['igst_18']" />
+											</td>
+
+											<td style="border-right: outset;padding-right: 1px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['cgst_28'])"/>
+												<t t-set="cgst_28" t-value="cgst_28 + line['cgst_28']" />
+											</td>
+											<td style="border-right: outset;padding-right: 1px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['sgst_28'])"/>
+												<t t-set="sgst_28" t-value="sgst_28 + line['sgst_28']" />
+											</td>
+
+											<td style="border-right: outset;padding-right: 1px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['igst_28'])"/>
+												<t t-set="igst_28" t-value="igst_28 + line['igst_28']" />
+											</td>
+											<td style="border-right: outset;padding-right: 1px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['round_off'])"/>
+												<t t-set="round_off" t-value="round_off + line['round_off']" />
+											</td>
+											<td style="border-right: outset;padding-right: 1px" align="right">
+												<span t-esc="'{0:,.2f}'.format(line['total'])"/>
+												<t t-set="total" t-value="total + line['total']" />
+											</td>
+										</tr>
+									</t>
+
+					
+
+									<tr style="border-right: outset;border-left: outset;border-top: outset;" height="25">
+											
+										<td style="border-right: outset;"></td>
+										<td style="border-right: outset;"></td>
+										<td style="border-right: outset;"></td>
+										<td style="border-right: outset;"></td>
+										<td style="border-right: outset;"><h5><b>TOTAL</b></h5></td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(bill_amt)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(taxable_0)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(taxable_5)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(taxable_12)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(taxable_18)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(taxable_28)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(cgst_5)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(sgst_5)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(igst_5)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(cgst_12)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(sgst_12)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(igst_12)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(cgst_18)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(sgst_18)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(igst_18)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(cgst_28)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(sgst_28)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(igst_28)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(round_off)" />
+										</td>
+										<td style="border-right: outset; padding-right: 4px;" align="right" >
+											<t t-esc="'{0:,.2f}'.format(total)" />
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+
+
+		<!-- <record id="paperformat_grc2" model="report.paperformat">
+		    <field name="name">GRC </field>
+		    <field name="default" eval="True"/>
+		    <field name="format">A4</field>
+		    <field name="orientation">Landscape</field>
+		    <field name="margin_top">30</field>
+		    <field name="margin_bottom">15</field>
+		    <field name="margin_left">6</field>
+		    <field name="margin_right">6</field>
+		    <field name="header_line" eval="False"/>
+		    <field name="header_spacing">20</field>
+		    <field name="dpi">80</field>
+		</record> -->
+
+		<record id="hrms.report_purchase_register" model="ir.actions.report.xml">
+			<field name="paperformat_id" ref="hrms.paperformat_grc2" />
+		</record>
+
+	</data>
+</openerp>
